@@ -1,0 +1,41 @@
+:root {
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 90px;
+  --header-height: 64px;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.admin-root {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #f4f6f8;
+}
+
+.main-area {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.25s ease;
+}
+
+.page-content {
+  margin-top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.main-area.collapsed {
+  margin-left: var(--sidebar-collapsed-width);
+}

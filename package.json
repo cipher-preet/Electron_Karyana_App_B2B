@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "main": "electron/main.js",
- "scripts": {
+  "scripts": {
     "dev": "concurrently \"vite\" \"npm run electron:dev\"",
     "electron:dev": "tsc -p electron && wait-on http://localhost:5173 && electron .",
     "build": "vite build && tsc -p electron",
@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.10.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

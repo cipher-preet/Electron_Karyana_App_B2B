@@ -1,0 +1,111 @@
+.category-page {
+  padding: 24px 32px;
+  background: #f6f8fb;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-btn {
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* ADD CATEGORY BUTTON – PROFESSIONAL */
+.add-category-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #ffffff;
+  color: #1e293b;
+
+  border: 1px solid #e2e8f0;
+  padding: 10px 16px;
+  border-radius: 14px;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+/* PLUS ICON */
+.add-category-btn .plus {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* HOVER */
+.add-category-btn:hover {
+  background: #f8fafc;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* ACTIVE */
+.add-category-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
