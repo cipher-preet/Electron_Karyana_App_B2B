@@ -1,72 +1,87 @@
 import React, { useState } from "react";
-import { Category } from "../../../shared/types/types";
+import { Category, CategoryApiResponse } from "../../../shared/types/types";
 import CategoryCard from "../Component/CategoryCard";
 import CategoryModal from "../Component/CategoryModal";
 import "./CategoryPage.css";
+import { useGetProductsQuery } from "@/redux/services/productsApi";
 
 interface Props {
   onOpenParent: (parent: Category) => void;
 }
 
+type parentCategories ={
+  sucess : true,
+  data : CategoryApiResponse
+}
+
+type categoryMode = "parentCategory" | "childCategory"
+
 const CategoriesPage: React.FC<Props> = ({ onOpenParent }) => {
   const [view, setView] = useState<"parent" | "child">("parent");
   const [activeParent, setActiveParent] = useState<Category | null>(null);
-
+  const [modalType,setModalType] = useState<categoryMode>("parentCategory")
   const [modalOpen, setModalOpen] = useState(false);
   const [editCategory, setEditCategory] = useState<Category | null>(null);
 
-  const categories: Category[] = [
-    {
-      id: "CAT-01",
-      name: "Staples",
-      image:
-        "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
-      status: "Active",
-    },
-    {
-      id: "CAT-02",
-      name: "Beverages",
-      image:
-        "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
-      status: "Active",
-    },
-    {
-      id: "CAT-03",
-      name: "Flour",
-      image:
-        "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
-      parentCategory: "Staples",
-      status: "Active",
-    },
-    {
-      id: "CAT-04",
-      name: "Salt",
-      image:
-        "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
-      parentCategory: "Staples",
-      status: "Inactive",
-    },
-  ];
+  const {data : response} = useGetProductsQuery<parentCategories>();
+  // console.log(response,"99999999999999")
+  // const categories = response?.data?.categories ?? []
 
-  const parentCategories = categories.filter((c) => !c.parentCategory);
-  const childCategories = categories.filter(
-    (c) => c.parentCategory === activeParent?.name
-  );
+  // const categories: Category[] = [
+  //   {
+  //     _id: "CAT-01",
+  //     name: "Staples",
+  //     images:
+  //       "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
+  //     status: "Active",
+  //   },
+  //   {
+  //     _id: "CAT-02",
+  //     name: "Beverages",
+  //     images:
+  //       "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
+  //     status: "Active",
+  //   },
+  //   {
+  //     _id: "CAT-03",
+  //     name: "Flour",
+  //     images:
+  //       "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
+  //     parentCategory: "Staples",
+  //     status: "Active",
+  //   },
+  //   {
+  //     _id: "CAT-04",
+  //     name: "Salt",
+  //     images:
+  //       "https://img.freepik.com/free-photo/dried-food-products-sold-market_181624-60209.jpg?semt=ais_hybrid&w=740&q=80",
+  //     parentCategory: "Staples",
+  //     status: "Inactive",
+  //   },
+  // ];
 
-  const openAddParent = () => {
+  // const parentCategories = response.categories.filter((c : Category) => !c.parentCategory);
+  // const childCategories = response.data.categories.filter(
+  //   (c : Category) => c.parentCategory === activeParent?.name
+  // );
+
+  const openAddParent = ({}) => {
     setEditCategory(null);
     setModalOpen(true);
+    setModalType("parentCategory")
   };
 
   const openAddChild = () => {
     if (!activeParent) return;
+    
 
     setEditCategory({
-      id: "",
+      _id: "",
       name: "",
       parentCategory: activeParent.name,
-      status: "Active",
+      isActive : true ,
     });
+    setModalType("childCategory")
     setModalOpen(true);
   };
 
@@ -102,9 +117,9 @@ const CategoriesPage: React.FC<Props> = ({ onOpenParent }) => {
       </div>
 
       <div className="category-grid">
-        {parentCategories.map((cat) => (
+        {response?.data.categories.map((cat: Category) => (
           <CategoryCard
-            key={cat.id}
+            key={cat._id}
             category={cat}
             onOpen={() => onOpenParent(cat)}
             onEdit={() => {
@@ -118,8 +133,9 @@ const CategoriesPage: React.FC<Props> = ({ onOpenParent }) => {
       {modalOpen && (
         <CategoryModal
           category={editCategory}
-          parentOptions={parentCategories}
+          parentOptions={response?.data?.categories}
           onClose={() => setModalOpen(false)}
+          formName={modalType}
         />
       )}
     </div>

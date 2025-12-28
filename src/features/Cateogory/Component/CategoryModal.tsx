@@ -6,31 +6,33 @@ interface Props {
   category: Category | null;
   parentOptions: Category[];
   onClose: () => void;
+  formName ?: "parentCategory" | "childCategory";
 }
 
 const CategoryModal: React.FC<Props> = ({
   category,
   parentOptions,
   onClose,
+  formName
 }) => {
   const [name, setName] = useState(category?.name || "");
   const [parent, setParent] = useState(category?.parentCategory || "");
-  const [status, setStatus] = useState<"Active" | "Inactive">(
-    category?.status || "Active"
-  );
-  const [image, setImage] = useState<string | undefined>(category?.image);
+  const [status, setStatus] = useState<boolean | undefined>(category?.isActive);
+  const [image, setImage] = useState<string | undefined>(category?.images);
 
   const handleImageChange = (file: File) => {
     const preview = URL.createObjectURL(file);
     setImage(preview);
   };
 
+  
+
   return (
     <div className="modal-overlay">
       <div className="category-modal">
         {/* HEADER */}
         <div className="modal-header">
-          <h3>{category?.id ? "Edit Category" : "Add Category"}</h3>
+          <h3>{category?._id ? "Edit Category" : "Add Category"}</h3>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -63,7 +65,7 @@ const CategoryModal: React.FC<Props> = ({
           />
         </div>
 
-        {parentOptions.length > 0 && (
+        {parentOptions.length > 0 && formName === "childCategory" && (
           <div className="form-group">
             <label>Parent Category</label>
             <select
@@ -72,7 +74,7 @@ const CategoryModal: React.FC<Props> = ({
             >
               <option value="">Select parent</option>
               {parentOptions.map((p) => (
-                <option key={p.id} value={p.name}>
+                <option key={p._id} value={p.name}>
                   {p.name}
                 </option>
               ))}
@@ -80,16 +82,16 @@ const CategoryModal: React.FC<Props> = ({
           </div>
         )}
 
-        <div className="form-group">
+     {parentOptions && formName === "childCategory" &&  <div className="form-group">
           <label>Status</label>
           <select
-            value={status}
+            value={status ? "Active" : "Inactive"}
             onChange={(e) => setStatus(e.target.value as any)}
           >
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>
-        </div>
+        </div>}
 
         {/* ACTIONS */}
         <div className="modal-actions">

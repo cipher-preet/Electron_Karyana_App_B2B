@@ -1,7 +1,7 @@
 export type ProductStatus = "Active" | "Inactive";
 
 export interface Product {
-  id: string;
+  _id: string;
   name: string;
   brand: string;
   category: string;
@@ -23,9 +23,19 @@ export interface Product {
 export type CategoryStatus = "Active" | "Inactive";
 
 export interface Category {
-  id: string;
+  _id: string;
   name: string;
   parentCategory?: string;
-  status: "Active" | "Inactive";
-  image?: string; 
+  // status: "Active" | "Inactive";
+  isActive : boolean;
+  images?: string; 
+}
+
+export interface CategoryApiResponse {
+  success : boolean;
+  data : {
+    categories : Category[];
+    nextCursor : string | null;
+    hasNextPage : boolean;
+  }
 }

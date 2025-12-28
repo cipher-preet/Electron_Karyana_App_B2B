@@ -15,8 +15,8 @@ const CategoryCard: React.FC<Props> = ({ category, onEdit, onOpen }) => {
     >
       {/* IMAGE */}
       <div className="category-image">
-        {category.image ? (
-          <img src={category.image} alt={category.name} />
+        {category.images ? (
+          <img src={category.images} alt={category.name} />
         ) : (
           <div className="image-placeholder">
             {category.name.charAt(0)}
@@ -28,8 +28,8 @@ const CategoryCard: React.FC<Props> = ({ category, onEdit, onOpen }) => {
       <div className="category-info">
         <div className="title-row">
           <h4>{category.name}</h4>
-          <span className={`status ${category.status.toLowerCase()}`}>
-            {category.status}
+          <span className={`${category.isActive ? "green" : "red"}`}>
+            {category.isActive ? "Active" : "Inactive"}
           </span>
         </div>
 

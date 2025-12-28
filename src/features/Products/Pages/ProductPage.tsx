@@ -4,14 +4,22 @@ import ProductCard from "../Components/card/ProductCard";
 import ProductModal from "../Components/Modal/ProductModal";
 import "./ProductPage.css";
 
+
+
+
+
+
 const ProductPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Product | null>(null);
 
- const products: Product[] =
+  
+
+
+ const products123: Product[] =
   [
   {
-    id: "SKU-101",
+    _id: "SKU-101",
     name: "Aashirvaad Atta 5kg",
     brand: "ITC",
     category: "Staples",
@@ -29,7 +37,7 @@ const ProductPage: React.FC = () => {
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa4jhxPx0jlBil2Zsn7BYcMv0GOnyg2wjbBA&s",
   },
   {
-    id: "SKU-102",
+    _id: "SKU-102",
     name: "Tata Salt 1kg",
     brand: "Tata",
     category: "Staples",
@@ -47,7 +55,7 @@ const ProductPage: React.FC = () => {
     image: "https://www.tataconsumer.com/sites/g/files/gfwrlq316/files/Tata%20salt%2B%20vitamin%20shakti.png",
   },
   {
-    id: "SKU-102",
+    _id: "SKU-102",
     name: "Tata Salt 1kg",
     brand: "Tata",
     category: "Staples",
@@ -65,7 +73,7 @@ const ProductPage: React.FC = () => {
     image: "https://www.tataconsumer.com/sites/g/files/gfwrlq316/files/Tata%20salt%2B%20vitamin%20shakti.png",
   },
   {
-    id: "SKU-102",
+    _id: "SKU-102",
     name: "Tata Salt 1kg",
     brand: "Tata",
     category: "Staples",
@@ -83,7 +91,7 @@ const ProductPage: React.FC = () => {
     image: "https://www.tataconsumer.com/sites/g/files/gfwrlq316/files/Tata%20salt%2B%20vitamin%20shakti.png",
   },
   {
-    id: "SKU-119",
+    _id: "SKU-119",
     name: "Patanjali",
     brand: "Patanjali",
     category: "Personal Care",
@@ -123,8 +131,8 @@ const ProductPage: React.FC = () => {
       </div>
 
       <div className="product-grid">
-        {products.map((p) => (
-          <ProductCard key={p.id} product={p} onEdit={handleEdit} />
+        {products123?.map((p) => (
+          <ProductCard key={p._id} product={p} onEdit={handleEdit} />
         ))}
       </div>
 

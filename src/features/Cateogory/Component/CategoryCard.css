@@ -92,3 +92,17 @@
 .edit-btn-pro:hover {
   background: #e2e8f0;
 }
+.red{
+  background-color: #991b1b;
+  color: white;
+  font-size: 0.8rem;
+  border-radius: 2rem;
+  padding: 0.4rem;
+}
+.green{
+  background-color: green;
+  color: white;
+  font-size: 0.8rem;
+  border-radius: 2rem;
+  padding: 0.4rem;
+}
