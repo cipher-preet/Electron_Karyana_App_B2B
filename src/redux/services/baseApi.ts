@@ -10,6 +10,6 @@ export const baseApi = createApi({
             return headers
         },
     }),
-tagTypes : ['parentcategories','subCategories'],
+tagTypes : ['parentcategories','childcategories','products'],
 endpoints : () =>({})
 })

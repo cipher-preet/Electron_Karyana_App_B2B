@@ -6,7 +6,7 @@ interface Props {
   onToggle: (v: boolean) => void;
 }
 
-const Sidebar = ({ collapsed, onToggle }: Props) => {
+const Sidebar = ({ collapsed , onToggle }: Props) => {
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-top">
