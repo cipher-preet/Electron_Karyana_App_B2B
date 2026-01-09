@@ -1,50 +1,75 @@
 import React, { useState } from "react";
-import { Product, ProductStatus  } from "../../../../shared/types/types";
+import {
+  useCreateProductMutation,
+  useGetUnitsQuery,
+  useGetBrandsQuery,
+  useGetParentCategoriesForFormsQuery,
+  useGetChildCategoriesForFormsQuery,
+} from "@/redux/services/productsApi";
+
+import SearchableDropdown from "../../../../assets/UI/SearchableDropdown";
 import "./ProductModal.css";
 
-interface Props {
-  product: Product | null;
-  onClose: () => void;
-}
+const ProductModal = ({ onClose }) => {
+  const [createProduct, { isLoading }] = useCreateProductMutation();
 
-const ProductModal: React.FC<Props> = ({ product, onClose }) => {
-  const [imagePreview, setImagePreview] = useState<string | undefined>(
-    product?.image
-  );
-
-  const [form, setForm] = useState<Product>({
-    id: product?.id || "",
-    name: product?.name || "",
-    brand: product?.brand || "",
-    category: product?.category || "",
-    subCategory: product?.subCategory || "",
-    barcode: product?.barcode || "",
-    price: product?.price || 0,
-    sellingPrice: product?.sellingPrice || 0,
-    gst: product?.gst || 0,
-    unit: product?.unit || "",
-    minOrderQty: product?.minOrderQty || 1,
-    stock: product?.stock || 0,
-    reorderLevel: product?.reorderLevel || 0,
-    status: product?.status || "Active",
-    description: product?.description || "",
-    image: product?.image,
+  const [form, setForm] = useState({
+    name: "",
+    sku: "",
+    categoryId: "",
+    subcategoryId: "",
+    brandId: "",
+    mrp: "",
+    marketPrice: "",
+    sellingPrice: "",
+    unit: "",
+    quantityPerUnit: "",
+    offPercentage: "",
+    tag: "",
   });
 
-  const update = <K extends keyof Product>(key: K, value: Product[K]) =>
-    setForm({ ...form, [key]: value });
+  const update = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
 
-  const onImageChange = (file: File) => {
-    const url = URL.createObjectURL(file);
-    setImagePreview(url);
-    update("image", url); // later replace with API URL
+  // BASE API CALLS
+  const units = useGetUnitsQuery()?.data?.data ?? [];
+  const brands = useGetBrandsQuery()?.data?.data ?? [];
+  const parentCategories =
+    useGetParentCategoriesForFormsQuery()?.data?.data ?? [];
+
+  // ⭐ FIXED: CHILD CATEGORY QUERY — ALWAYS PASS OBJECT
+  const { data: childApiData,isFetching: isChildLoading, } = useGetChildCategoriesForFormsQuery( form?.categoryId ,{ skip: !form.categoryId });
+
+  console.log("UNITS",units)
+
+  const childCategories = childApiData?.data ?? [];
+
+  // IMAGE HANDLING
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleImage = (file) => {
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  // SUBMIT HANDLER
+  const handleSubmit = async () => {
+    if (!imageFile) return alert("Image required");
+
+    const fd = new FormData();
+    Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+    fd.append("images", imageFile);
+
+    await createProduct(fd).unwrap();
+    onClose();
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal modern">
+        {/* HEADER */}
         <div className="modal-header">
-          <h3>{product ? "Edit Product" : "Add Product"}</h3>
+          <h3>Add Product</h3>
           <button onClick={onClose}>✕</button>
         </div>
 
@@ -58,41 +83,122 @@ const ProductModal: React.FC<Props> = ({ product, onClose }) => {
             )}
             <input
               type="file"
-              accept="image/*"
               hidden
-              onChange={(e) =>
-                e.target.files && onImageChange(e.target.files[0])
-              }
+              onChange={(e) => handleImage(e.target.files[0])}
             />
           </label>
         </div>
 
-        {/* FORM */}
+        {/* FORM FIELDS */}
         <div className="modal-grid">
-          <input placeholder="Product Name" value={form.name} onChange={e => update("name", e.target.value)} />
-          <input placeholder="Brand" value={form.brand} onChange={e => update("brand", e.target.value)} />
-          <input placeholder="SKU" value={form.id} onChange={e => update("id", e.target.value)} />
-          <input placeholder="Barcode" value={form.barcode} onChange={e => update("barcode", e.target.value)} />
-          <input placeholder="Category" value={form.category} onChange={e => update("category", e.target.value)} />
-          <input placeholder="Sub Category" value={form.subCategory} onChange={e => update("subCategory", e.target.value)} />
-          <input type="number" placeholder="MRP" value={form.price} onChange={e => update("price", +e.target.value)} />
-          <input type="number" placeholder="Selling Price" value={form.sellingPrice} onChange={e => update("sellingPrice", +e.target.value)} />
-          <input type="number" placeholder="GST %" value={form.gst} onChange={e => update("gst", +e.target.value)} />
-          <input placeholder="Unit" value={form.unit} onChange={e => update("unit", e.target.value)} />
-          <input type="number" placeholder="Min Order Qty" value={form.minOrderQty} onChange={e => update("minOrderQty", +e.target.value)} />
-          <input type="number" placeholder="Stock" value={form.stock} onChange={e => update("stock", +e.target.value)} />
-          <input type="number" placeholder="Reorder Level" value={form.reorderLevel} onChange={e => update("reorderLevel", +e.target.value)} />
-          <select value={form.status} onChange={e => update("status", e.target.value as ProductStatus)}>
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
+          <input
+            placeholder="Product Name"
+            value={form.name}
+            onChange={(e) => update("name", e.target.value)}
+          />
+
+          <input
+            placeholder="SKU"
+            value={form.sku}
+            onChange={(e) => update("sku", e.target.value)}
+          />
+
+          {/* BRAND */}
+          <SearchableDropdown
+            label="Select Brand"
+            items={brands}
+            displayKey="name"
+            valueKey="_id"
+            selected={form.brandId}
+            onSelect={(v) => update("brandId", v?._id)}
+          />
+
+          {/* PARENT CATEGORY */}
+          <SearchableDropdown
+            label="Select Category"
+            items={parentCategories}
+            displayKey="name"
+            valueKey="_id"
+            selected={form.categoryId}
+            onSelect={(v) => {
+              update("categoryId", v?._id);
+              update("subcategoryId", ""); // Reset subcategory
+            }}
+          />
+
+          {/* SUBCATEGORY */}
+          <SearchableDropdown
+            label={
+              !form.categoryId
+                ? "Select Parent Category First"
+                : isChildLoading
+                ? "Loading Subcategories..."
+                : "Select Subcategory"
+            }
+            items={childCategories}
+            displayKey="name"
+            valueKey="_id"
+            selected={form.subcategoryId}
+            onSelect={(v) => update("subcategoryId", v?._id)}
+            disabled={!form.categoryId || isChildLoading}
+          />
+
+          {/* PRICES */}
+          <input
+            placeholder="MRP"
+            value={form.mrp}
+            onChange={(e) => update("mrp", e.target.value)}
+          />
+
+          <input
+            placeholder="Market Price"
+            value={form.marketPrice}
+            onChange={(e) => update("marketPrice", e.target.value)}
+          />
+
+          <input
+            placeholder="Selling Price"
+            value={form.sellingPrice}
+            onChange={(e) => update("sellingPrice", e.target.value)}
+          />
+
+          {/* UNIT */}
+          <SearchableDropdown
+                label="Select Unit"
+                items={units}
+                displayKey="name"         
+                valueKey="name"           
+                selected={form.unit}      
+                onSelect={(item) => update("unit", item?.name)}
+              />
+
+
+
+          <input
+            placeholder="Quantity Per Unit"
+            value={form.quantityPerUnit}
+            onChange={(e) => update("quantityPerUnit", e.target.value)}
+          />
+
+          <input
+            placeholder="Off Percentage"
+            value={form.offPercentage}
+            onChange={(e) => update("offPercentage", e.target.value)}
+          />
+
+          <input
+            placeholder="Tag"
+            value={form.tag}
+            onChange={(e) => update("tag", e.target.value)}
+          />
         </div>
 
-        <textarea placeholder="Description" value={form.description} onChange={e => update("description", e.target.value)} />
-
+        {/* ACTION BUTTONS */}
         <div className="modal-actions">
-          <button className="primary">Save Product</button>
-          <button className="secondary" onClick={onClose}>Cancel</button>
+          <button disabled={isLoading} onClick={handleSubmit}>
+            {isLoading ? "Saving..." : "Save Product"}
+          </button>
+          <button onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,208 @@
+/* ============================
+   MODAL BASE STYLES
+============================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+}
+
+.modal {
+  width: 750px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.modal-header button {
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* Layout grid */
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Inputs */
+.modal-grid input {
+  height: 45px;
+  padding: 10px;
+  font-size: 0.95rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.modal-grid input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* Modal actions */
+.modal-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+button.primary {
+  background: #6366f1;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+button.primary:hover {
+  background: #4f46e5;
+}
+
+button.secondary {
+  background: #e5e7eb;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ============================
+   IMAGE UPLOAD
+============================ */
+.image-upload img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.image-upload label {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  border: 2px dashed #c7c7c7;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.image-upload span {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ============================
+   SEARCHABLE DROPDOWN
+============================ */
+
+.dropdown-container {
+  width: 100%;
+  position: relative;
+}
+
+.dropdown-header {
+  height: 45px;
+  padding: 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.dropdown-header:hover {
+  border-color: #6366f1;
+}
+
+.dropdown-header.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  z-index: 999;
+  animation: dropdownAnim 0.2s ease;
+}
+
+/* Search box inside dropdown */
+.dropdown-search {
+  width: 100%;
+  padding: 8px;
+  border-bottom: 1px solid #e4e4e4;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.dropdown-search:focus {
+  background: #f6f6ff;
+}
+
+/* Item list */
+.dropdown-list {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: 0.15s;
+}
+
+.dropdown-item:hover {
+  background: #eef2ff;
+}
+
+/* Animations */
+@keyframes dropdownAnim {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

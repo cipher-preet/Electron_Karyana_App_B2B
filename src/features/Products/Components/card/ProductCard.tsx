@@ -8,53 +8,93 @@ interface Props {
 }
 
 const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
+  const {
+    name,
+    images,
+    sku,
+    mrp,
+    marketPrice,
+    sellingPrice,
+    unit,
+    rating,
+    reviewCount,
+    isActive,
+    categoryId,
+    subcategoryId,
+    brandId,
+  } = product as any;
+
   return (
     <div className="product-card professional">
+      {/* Image */}
       <div className="card-left">
         <div className="product-image">
-          {product.image ? (
-            <img src={product.image} alt={product.name} />
+          {images ? (
+            <img src={images} alt={name} />
           ) : (
             <div className="image-placeholder">No Image</div>
           )}
         </div>
       </div>
 
+      {/* Right Content */}
       <div className="card-right">
+        {/* Header */}
         <div className="card-header">
-          <h4 title={product.name}>{product.name}</h4>
-          <span className={`status ${product.status.toLowerCase()}`}>
-            {product.status}
+          <h4 title={name}>{name}</h4>
+          <span className={`status ${isActive ? "active" : "inactive"}`}>
+            {isActive ? "Active" : "Inactive"}
           </span>
         </div>
 
+        {/* Meta Info */}
         <div className="card-meta">
           <div>
-            SKU: <span>{product.id}</span>
+            <span className="meta-label">SKU</span>
+            <span>{sku}</span>
           </div>
           <div>
-            Brand: <span>{product.brand}</span>
+            <span className="meta-label">Brand</span>
+            <span>{brandId?.name ?? "-"}</span>
           </div>
           <div>
-            Category: <span>{product.category}</span>
+            <span className="meta-label">Category</span>
+            <span>{categoryId?.name ?? "-"}</span>
+          </div>
+          <div>
+            <span className="meta-label">Subcategory</span>
+            <span>{subcategoryId?.name ?? "-"}</span>
           </div>
         </div>
 
-        <div className="card-pricing">
-          <span className="selling">₹{product.sellingPrice}</span>
-          <span className="mrp">₹{product.price}</span>
-          <span className="gst">GST {product.gst}%</span>
+        {/* Pricing Box */}
+        <div className="price-box">
+          <div className="price-item">
+            <span className="price-label">MRP</span>
+            <span className="price-value mrp-bold">₹{mrp}</span>
+          </div>
+
+          <div className="price-item">
+            <span className="price-label">Market Price</span>
+            <span className="price-value market">₹{marketPrice}</span>
+          </div>
+
+          <div className="price-item highlight">
+            <span className="price-label">Selling Price</span>
+            <span className="price-value selling">₹{sellingPrice}</span>
+          </div>
+
+          <div className="unit">Unit: {unit}</div>
         </div>
 
+        {/* Rating */}
+        <div className="card-rating">
+          ⭐ {rating} <span>({reviewCount} reviews)</span>
+        </div>
+
+        {/* Footer */}
         <div className="card-footer">
-          <span
-            className={`stock ${
-              product.stock <= product.reorderLevel ? "low" : ""
-            }`}
-          >
-            Stock: {product.stock}
-          </span>
-
+          <span className="stock">Stock: {sku}</span>
           <button onClick={() => onEdit(product)}>Edit</button>
         </div>
       </div>
