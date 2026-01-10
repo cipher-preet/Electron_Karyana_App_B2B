@@ -25,7 +25,7 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
   } = product as any;
 
   return (
-    <div className="product-card professional">
+    <div className="product-card-professional">
       {/* Image */}
       <div className="card-left">
         <div className="product-image">

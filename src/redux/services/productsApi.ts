@@ -37,33 +37,51 @@ export const productsApi = baseApi.injectEndpoints({
     }),
 
 
-    
-    getAllProducts: builder.query<
-            {
-              items: any[];
-              nextCursor: string | null;
-            },
-            { cursor?: string | null }
-          >({
-            query: ({ cursor = null }) => ({
-              url: "/dashboard/getProductsBasicDetails",
-              params: cursor ? { cursor } : {},
-            }),
 
-            serializeQueryArgs: ({ endpointName }) => endpointName,
+ getAllProducts: builder.query<
+  {
+    products: any[];
+    nextCursor: string | null;
+  },
+  { cursor?: string | null }
+>({
+  query: ({ cursor = null }) => ({
+    url: "/dashboard/getProductsBasicDetails",
+    params: cursor ? { cursor } : {},
+  }),
 
-            merge: (currentCache, newData) => {
-              currentCache.items.push(...newData.items);
-              currentCache.nextCursor = newData.nextCursor;
-            },
+  transformResponse: (response: any) => ({
+    products: response.data.products,
+    nextCursor: response.data.nextCursor,
+  }),
 
-            forceRefetch({ currentArg, previousArg }) {
-              return currentArg?.cursor !== previousArg?.cursor;
-            },
+  serializeQueryArgs: ({ endpointName }) => endpointName,
 
-            keepUnusedDataFor: 300,
-            providesTags: ["products"],
-          }),
+  merge: (currentCache, newData, { arg }) => {
+ 
+    if (arg.cursor === null) {
+      return {
+        products: newData.products,
+        nextCursor: newData.nextCursor,
+      };
+    }
+    const existingIds = new Set(currentCache.products.map((p: any) => p._id));
+    const filteredNew = newData.products.filter((p: any) => !existingIds.has(p._id));
+
+    currentCache.products.push(...filteredNew);
+    currentCache.nextCursor = newData.nextCursor;
+  },
+
+  forceRefetch({ currentArg, previousArg }) {
+    return currentArg?.cursor !== previousArg?.cursor;
+  },
+
+  keepUnusedDataFor: 300,
+
+  providesTags: ["paginationProducts"],
+}),
+
+
 
 
     editChildCategory: builder.mutation<any,FormData>({
@@ -72,7 +90,8 @@ export const productsApi = baseApi.injectEndpoints({
         method: "PUT",
         body:formData,
       }),
-    }),
+      invalidatesTags: ["childcategories"],
+      }),
       
 
     editParentCategory: builder.mutation<any,FormData>({
@@ -81,6 +100,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "PUT",
         body:formData,
       }),
+      invalidatesTags: ["parentcategories"],
     }),
 
      createProduct: builder.mutation<any, FormData>({
@@ -89,7 +109,7 @@ export const productsApi = baseApi.injectEndpoints({
           method: "POST",
           body: formData,
         }),
-        invalidatesTags: ["products"],
+        invalidatesTags: ["paginationProducts"],
       }),
 
 
@@ -121,6 +141,16 @@ export const productsApi = baseApi.injectEndpoints({
             }),
 
 
+        editProductCategory: builder.mutation<any,FormData>({
+              query: (formData) => ({
+                url: "/dashboard/editProduct",
+                method: "PUT",
+                body:formData,
+              }),
+              invalidatesTags: ["paginationProducts"],
+            }),
+
+
 
 
      
@@ -131,5 +161,5 @@ export const productsApi = baseApi.injectEndpoints({
 
 export const { useGetProductsQuery, useGetChildCategoriesQuery,useCreateChildCategoryMutation,useCreateParentCategoryMutation,
   useEditChildCategoryMutation,useEditParentCategoryMutation,useGetAllProductsQuery,useCreateProductMutation,useGetBrandsQuery,useGetChildCategoriesForFormsQuery,
-  useGetParentCategoriesForFormsQuery,useGetUnitsQuery
+  useGetParentCategoriesForFormsQuery,useGetUnitsQuery,useEditProductCategoryMutation
  } = productsApi;
