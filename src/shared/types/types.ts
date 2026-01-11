@@ -1,23 +1,43 @@
 export type ProductStatus = "Active" | "Inactive";
 
+// export interface Product {
+//   _id: string;
+//   name: string;
+//   brand: string;
+//   category: string;
+//   subCategory: string;
+//   barcode: string;
+//   price: number;
+//   sellingPrice: number;
+//   gst: number;
+//   unit: string;
+//   minOrderQty: number;
+//   stock: number;
+//   reorderLevel: number;
+//   status: ProductStatus;
+//   description: string;
+//   image?: string;
+// }
 export interface Product {
   _id: string;
   name: string;
-  brand: string;
-  category: string;
-  subCategory: string;
-  barcode: string;
-  price: number;
-  sellingPrice: number;
-  gst: number;
+  sku: string;
+  categoryId: string;
+  subcategoryId: string;
+  brandId: string;
+  mrp: number | string;
+  marketPrice?: number | string;
+  sellingPrice: number | string;
   unit: string;
-  minOrderQty: number;
-  stock: number;
-  reorderLevel: number;
-  status: ProductStatus;
-  description: string;
-  image?: string;
+  quantityPerUnit: number | string;
+  offPercentage: number | string;
+  tag?: string;
+  images: string[];               
+  existingImages?: string[];      
+  createdAt?: string;
+  updatedAt?: string;
 }
+
 
 
 export type CategoryStatus = "Active" | "Inactive";

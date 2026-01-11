@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Product } from "../../../shared/types/types";
 import ProductCard from "../Components/card/ProductCard";
 import ProductModal from "../Components/Modal/ProductModal";
 import "./ProductPage.css";
-import { useGetAllProductsQuery } from "@/redux/services/productsApi";
+import { productsApi, useGetAllProductsQuery } from "@/redux/services/productsApi";
+import { useAppDispatch } from "@/redux/app/hooks";
 
-const ProductPage: React.FC =  () => {
+const ProductPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Product | null>(null);
+  const dispatch = useAppDispatch()
 
   const [cursor, setCursor] = useState<string | null>(null);
 
-  const { data, isFetching, isLoading } =  useGetAllProductsQuery({
-    cursor,
-  });
-  // console.log("the products details",data?.data?.products)
+  const { data, isFetching, isLoading,refetch } = useGetAllProductsQuery({ cursor });
 
-  const products =   data?.data?.products ?? [];
-  const nextCursor = data?.nextCursor;
+  const products = data?.products ?? [];
+  const nextCursor = data?.nextCursor ?? null;
+
+  useEffect(() => {
+    if (!isFetching && data) {
+      console.log("New products merged:", data.products.length);
+    }
+  }, [data, isFetching]);
 
   const handleAdd = () => {
     setSelected(null);
@@ -29,11 +34,11 @@ const ProductPage: React.FC =  () => {
     setOpen(true);
   };
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     if (!isFetching && nextCursor) {
       setCursor(nextCursor);
     }
-  };
+  }, [isFetching, nextCursor]);
 
   return (
     <div className="product-page">
@@ -44,35 +49,46 @@ const ProductPage: React.FC =  () => {
         </button>
       </div>
 
-      {/* 🔹 Product Grid */}
       <div className="product-grid">
         {products.map((p) => (
           <ProductCard key={p._id} product={p} onEdit={handleEdit} />
         ))}
       </div>
 
-      {/* 🔹 Load More */}
       {nextCursor && (
-        <div className="load-more">
-          <button onClick={loadMore} disabled={isFetching}>
+        <div className="load-more-container">
+          <button
+            onClick={loadMore}
+            className="load-more-btn"
+            disabled={isFetching}
+          >
             {isFetching ? "Loading..." : "Load More"}
           </button>
         </div>
       )}
 
-      {/* 🔹 Empty / Loading states */}
-      {isLoading && <p>Loading products...</p>}
+      {isLoading && <p style={{ textAlign: "center" }}>Loading...</p>}
+
       {!isLoading && products.length === 0 && (
-        <p>No products found.</p>
+        <p style={{ textAlign: "center" }}>No products found.</p>
       )}
 
-      {/* 🔹 Modal */}
-      {open && (
-        <ProductModal
-          product={selected}
-          onClose={() => setOpen(false)}
-        />
-      )}
+     {open && (
+  <ProductModal
+    product={selected}
+    onClose={(success : boolean | undefined) => {
+      setOpen(false);
+
+      if (success) {
+        setCursor(null); 
+        setTimeout(() => {
+            refetch();      
+          }, 10);   
+      }
+    }}
+  />
+)}
+
     </div>
   );
 };
