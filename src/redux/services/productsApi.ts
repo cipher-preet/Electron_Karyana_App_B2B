@@ -27,109 +27,107 @@ export const productsApi = baseApi.injectEndpoints({
     }),
 
     // Create Child Category
-    createChildCategory: builder.mutation<any,FormData>({
+    createChildCategory: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/dashboard/addChildCategory",
         method: "POST",
-        body:formData,
+        body: formData,
       }),
       invalidatesTags: ["childcategories"],
     }),
 
-
-    
     getAllProducts: builder.query<
-            {
-              items: any[];
-              nextCursor: string | null;
-            },
-            { cursor?: string | null }
-          >({
-            query: ({ cursor = null }) => ({
-              url: "/dashboard/getProductsBasicDetails",
-              params: cursor ? { cursor } : {},
-            }),
+      {
+        items: any[];
+        nextCursor: string | null;
+      },
+      { cursor?: string | null }
+    >({
+      query: ({ cursor = null }) => ({
+        url: "/dashboard/getProductsBasicDetails",
+        params: cursor ? { cursor } : {},
+      }),
 
-            serializeQueryArgs: ({ endpointName }) => endpointName,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
 
-            merge: (currentCache, newData) => {
-              currentCache.items.push(...newData.items);
-              currentCache.nextCursor = newData.nextCursor;
-            },
+      merge: (currentCache, newData) => {
+        currentCache.items.push(...newData.items);
+        currentCache.nextCursor = newData.nextCursor;
+      },
 
-            forceRefetch({ currentArg, previousArg }) {
-              return currentArg?.cursor !== previousArg?.cursor;
-            },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.cursor !== previousArg?.cursor;
+      },
 
-            keepUnusedDataFor: 300,
-            providesTags: ["products"],
-          }),
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
 
-
-    editChildCategory: builder.mutation<any,FormData>({
+    editChildCategory: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/dashboard/editChildCategory",
         method: "PUT",
-        body:formData,
+        body: formData,
       }),
     }),
-      
 
-    editParentCategory: builder.mutation<any,FormData>({
+    editParentCategory: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/dashboard/editParentCategory",
         method: "PUT",
-        body:formData,
+        body: formData,
       }),
     }),
 
-     createProduct: builder.mutation<any, FormData>({
-        query: (formData) => ({
-          url: "/dashboard/addNewProduct",
-          method: "POST",
-          body: formData,
-        }),
-        invalidatesTags: ["products"],
+    createProduct: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: "/dashboard/addNewProduct",
+        method: "POST",
+        body: formData,
       }),
+      invalidatesTags: ["products"],
+    }),
 
+    //this api is to get unit  in
 
-      //this api is to get unit  in 
+    getUnits: builder.query<any[], void>({
+      query: () => "/dashboard/getUnit",
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
 
-        getUnits: builder.query<any[], void>({
-          query: () => "/dashboard/getUnit",
-          keepUnusedDataFor: 300,
-          providesTags: ["products"],
-        }),
+    getBrands: builder.query<any[], void>({
+      query: () => "/dashboard/getBrandsForForms",
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
 
-        getBrands: builder.query<any[], void>({
-          query: () => "/dashboard/getBrandsForForms",
-          keepUnusedDataFor: 300,
-          providesTags: ["products"],
-        }),
+    getParentCategoriesForForms: builder.query<any[], void>({
+      query: () => "/dashboard/getParentCategoriesForForms",
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
 
-         getParentCategoriesForForms: builder.query<any[], void>({
-          query: () => "/dashboard/getParentCategoriesForForms",
-          keepUnusedDataFor: 300,
-          providesTags: ["products"],
-        }),
-
-        getChildCategoriesForForms: builder.query<any[], string>({
-              query: (parentCategoryId) =>
-                `/dashboard/getchildCategoriesForForms?ParentCategoryId=${parentCategoryId}`,
-              keepUnusedDataFor: 300,
-              providesTags: ["products"],
-            }),
-
-
-
-
-     
-
-
+    getChildCategoriesForForms: builder.query<any[], string>({
+      query: (parentCategoryId) =>
+        `/dashboard/getchildCategoriesForForms?ParentCategoryId=${parentCategoryId}`,
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useGetChildCategoriesQuery,useCreateChildCategoryMutation,useCreateParentCategoryMutation,
-  useEditChildCategoryMutation,useEditParentCategoryMutation,useGetAllProductsQuery,useCreateProductMutation,useGetBrandsQuery,useGetChildCategoriesForFormsQuery,
-  useGetParentCategoriesForFormsQuery,useGetUnitsQuery
- } = productsApi;
+export const {
+  useGetProductsQuery,
+  useGetChildCategoriesQuery,
+  useCreateChildCategoryMutation,
+  useCreateParentCategoryMutation,
+  useEditChildCategoryMutation,
+  useEditParentCategoryMutation,
+  useGetAllProductsQuery,
+  useCreateProductMutation,
+  useGetBrandsQuery,
+  useGetChildCategoriesForFormsQuery,
+  useGetParentCategoriesForFormsQuery,
+  useGetUnitsQuery,
+} = productsApi;
