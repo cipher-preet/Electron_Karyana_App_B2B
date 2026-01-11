@@ -20,7 +20,7 @@ const ProductPage: React.FC = () => {
 
   useEffect(() => {
     if (!isFetching && data) {
-      console.log("New products merged:", data.products.length);
+      console.log("New products merged:", data?.products?.length);
     }
   }, [data, isFetching]);
 
