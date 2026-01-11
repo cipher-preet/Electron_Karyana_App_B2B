@@ -23,7 +23,9 @@ const Sidebar = ({ collapsed , onToggle }: Props) => {
       <nav className="nav">
         <NavItem to="/dashboard" label="Dashboard" collapsed={collapsed} />
         <NavItem to="/products" label="Products" collapsed={collapsed} />
-        <NavItem to="/category" label="category" collapsed={collapsed} />
+        <NavItem to="/category" label="Category" collapsed={collapsed} />
+        <NavItem to="/unit" label="Unit" collapsed={collapsed} />
+        <NavItem to="/brandpage" label="Brand" collapsed={collapsed} />
       </nav>
     </aside>
   );

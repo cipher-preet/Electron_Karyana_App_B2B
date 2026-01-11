@@ -5,6 +5,8 @@ import Dashboard from "@/features/Dashboard/Pages/Dashboard"
 import ProductPage from "@/features/Products/Pages/ProductPage";
 import CategoryPage from "@/features/Cateogory/Page/CategoryPage";
 import CategoriesContainer from "@/features/Cateogory/Page/CategoriesContainer";
+import UnitPage from "@/features/Units/Pages/UnitPage";
+import BrandPage from "@/features/Brand/Pages/BrandPage";
 
 const AppRoutes = () => {
   return (
@@ -14,6 +16,8 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/products" element={<ProductPage />} />
         <Route path="/category" element={<CategoriesContainer />} />
+        <Route path="/unit" element={<UnitPage />} />
+        <Route path="/brandpage" element={<BrandPage />} />
       </Route>
     </Routes>
   );

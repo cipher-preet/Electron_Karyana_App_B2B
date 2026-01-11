@@ -1,0 +1,47 @@
+.unit-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.unit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.unit-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* Button */
+.unit-add-btn {
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.unit-add-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .unit-page {
+    padding: 16px;
+  }
+}

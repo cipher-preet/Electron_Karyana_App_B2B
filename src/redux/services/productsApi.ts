@@ -27,15 +27,16 @@ export const productsApi = baseApi.injectEndpoints({
     }),
 
     // Create Child Category
-    createChildCategory: builder.mutation<any,FormData>({
+    createChildCategory: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/dashboard/addChildCategory",
         method: "POST",
-        body:formData,
+        body: formData,
       }),
       invalidatesTags: ["childcategories"],
     }),
 
+<<<<<<< HEAD
 
 
  getAllProducts: builder.query<
@@ -82,27 +83,59 @@ export const productsApi = baseApi.injectEndpoints({
 }),
 
 
+=======
+    getAllProducts: builder.query<
+      {
+        items: any[];
+        nextCursor: string | null;
+      },
+      { cursor?: string | null }
+    >({
+      query: ({ cursor = null }) => ({
+        url: "/dashboard/getProductsBasicDetails",
+        params: cursor ? { cursor } : {},
+      }),
 
+      serializeQueryArgs: ({ endpointName }) => endpointName,
 
-    editChildCategory: builder.mutation<any,FormData>({
+      merge: (currentCache, newData) => {
+        currentCache.items.push(...newData.items);
+        currentCache.nextCursor = newData.nextCursor;
+      },
+
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.cursor !== previousArg?.cursor;
+      },
+
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
+>>>>>>> 5f8ea2fe699b3294e67242726436d234566f2add
+
+    editChildCategory: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/dashboard/editChildCategory",
         method: "PUT",
-        body:formData,
+        body: formData,
       }),
+<<<<<<< HEAD
       invalidatesTags: ["childcategories"],
       }),
       
+=======
+    }),
+>>>>>>> 5f8ea2fe699b3294e67242726436d234566f2add
 
-    editParentCategory: builder.mutation<any,FormData>({
+    editParentCategory: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: "/dashboard/editParentCategory",
         method: "PUT",
-        body:formData,
+        body: formData,
       }),
       invalidatesTags: ["parentcategories"],
     }),
 
+<<<<<<< HEAD
      createProduct: builder.mutation<any, FormData>({
         query: (formData) => ({
           url: "/dashboard/addNewProduct",
@@ -110,11 +143,26 @@ export const productsApi = baseApi.injectEndpoints({
           body: formData,
         }),
         invalidatesTags: ["paginationProducts"],
+=======
+    createProduct: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: "/dashboard/addNewProduct",
+        method: "POST",
+        body: formData,
+>>>>>>> 5f8ea2fe699b3294e67242726436d234566f2add
       }),
+      invalidatesTags: ["products"],
+    }),
 
+    //this api is to get unit  in
 
-      //this api is to get unit  in 
+    getUnits: builder.query<any[], void>({
+      query: () => "/dashboard/getUnit",
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
 
+<<<<<<< HEAD
         getUnits: builder.query<any[], void>({
           query: () => "/dashboard/getUnit",
           keepUnusedDataFor: 300,
@@ -154,12 +202,47 @@ export const productsApi = baseApi.injectEndpoints({
 
 
      
+=======
+    getBrands: builder.query<any[], void>({
+      query: () => "/dashboard/getBrandsForForms",
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
+>>>>>>> 5f8ea2fe699b3294e67242726436d234566f2add
 
+    getParentCategoriesForForms: builder.query<any[], void>({
+      query: () => "/dashboard/getParentCategoriesForForms",
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
 
+    getChildCategoriesForForms: builder.query<any[], string>({
+      query: (parentCategoryId) =>
+        `/dashboard/getchildCategoriesForForms?ParentCategoryId=${parentCategoryId}`,
+      keepUnusedDataFor: 300,
+      providesTags: ["products"],
+    }),
   }),
 });
 
+<<<<<<< HEAD
 export const { useGetProductsQuery, useGetChildCategoriesQuery,useCreateChildCategoryMutation,useCreateParentCategoryMutation,
   useEditChildCategoryMutation,useEditParentCategoryMutation,useGetAllProductsQuery,useCreateProductMutation,useGetBrandsQuery,useGetChildCategoriesForFormsQuery,
   useGetParentCategoriesForFormsQuery,useGetUnitsQuery,useEditProductCategoryMutation
  } = productsApi;
+=======
+export const {
+  useGetProductsQuery,
+  useGetChildCategoriesQuery,
+  useCreateChildCategoryMutation,
+  useCreateParentCategoryMutation,
+  useEditChildCategoryMutation,
+  useEditParentCategoryMutation,
+  useGetAllProductsQuery,
+  useCreateProductMutation,
+  useGetBrandsQuery,
+  useGetChildCategoriesForFormsQuery,
+  useGetParentCategoriesForFormsQuery,
+  useGetUnitsQuery,
+} = productsApi;
+>>>>>>> 5f8ea2fe699b3294e67242726436d234566f2add

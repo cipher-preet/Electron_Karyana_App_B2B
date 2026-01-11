@@ -1,0 +1,164 @@
+.unit-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  background: #fff;
+  transition: box-shadow 0.2s ease;
+}
+
+.unit-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.unit-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.unit-card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.unit-short {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  margin-top:6px
+}
+
+/* Edit button */
+.unit-edit-btn {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  cursor: pointer;
+}
+
+.unit-edit-btn:hover {
+  background: #f9fafb;
+}
+
+
+/* Status row */
+.unit-status-row {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Status text */
+.status-text {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-text.active {
+  color: #16a34a;
+}
+
+.status-text.inactive {
+  color: #9ca3af;
+}
+
+/* Display-only switch */
+.switch-display {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  position: relative;
+  opacity: 0.9;
+}
+
+.switch-display.on {
+  background: #22c55e;
+}
+
+.switch-thumb {
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s ease;
+}
+
+.switch-display.on .switch-thumb {
+  transform: translateX(20px);
+}
+
+/* Optional: visually show it is not clickable */
+.switch-display {
+  cursor: not-allowed;
+}
+
+
+/* Status row */
+.unit-status-row {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Status text */
+.status-text {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-text.active {
+  color: #16a34a;
+}
+
+.status-text.inactive {
+  color: #9ca3af;
+}
+
+/* Switch button */
+.switch-btn {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.switch-btn.on {
+  background: #22c55e;
+}
+
+.switch-thumb {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s ease;
+}
+
+.switch-btn.on .switch-thumb {
+  transform: translateX(20px);
+}
+
+/* Focus accessibility */
+.switch-btn:focus {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
