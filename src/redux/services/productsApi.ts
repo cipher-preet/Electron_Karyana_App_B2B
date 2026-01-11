@@ -38,7 +38,7 @@ export const productsApi = baseApi.injectEndpoints({
 
     getAllProducts: builder.query<
       {
-        items: any[];
+        products: any[];
         nextCursor: string | null;
       },
       { cursor?: string | null }
@@ -48,10 +48,28 @@ export const productsApi = baseApi.injectEndpoints({
         params: cursor ? { cursor } : {},
       }),
 
+      transformResponse: (response: any) => ({
+        products: response.data.products,
+        nextCursor: response.data.nextCursor,
+      }),
+
       serializeQueryArgs: ({ endpointName }) => endpointName,
 
-      merge: (currentCache, newData) => {
-        currentCache.items.push(...newData.items);
+      merge: (currentCache, newData, { arg }) => {
+        if (arg.cursor === null) {
+          return {
+            products: newData.products,
+            nextCursor: newData.nextCursor,
+          };
+        }
+        const existingIds = new Set(
+          currentCache.products.map((p: any) => p._id)
+        );
+        const filteredNew = newData.products.filter(
+          (p: any) => !existingIds.has(p._id)
+        );
+
+        currentCache.products.push(...filteredNew);
         currentCache.nextCursor = newData.nextCursor;
       },
 
@@ -60,7 +78,8 @@ export const productsApi = baseApi.injectEndpoints({
       },
 
       keepUnusedDataFor: 300,
-      providesTags: ["products"],
+
+      providesTags: ["paginationProducts"],
     }),
 
     editChildCategory: builder.mutation<any, FormData>({
@@ -69,6 +88,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "PUT",
         body: formData,
       }),
+      invalidatesTags: ["childcategories"],
     }),
 
     editParentCategory: builder.mutation<any, FormData>({
@@ -86,7 +106,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["products"],
+      invalidatesTags: ["paginationProducts"],
     }),
 
     //this api is to get unit  in
@@ -116,15 +136,14 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["products"],
     }),
 
-      editProductCategory: builder.mutation<any,FormData>({
-              query: (formData) => ({
-                url: "/dashboard/editProduct",
-                method: "PUT",
-                body:formData,
-              }),
-              invalidatesTags: ["paginationProducts"],
-            }),
-
+    editProductCategory: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: "/dashboard/editProduct",
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["paginationProducts"],
+    }),
   }),
 });
 
@@ -141,5 +160,5 @@ export const {
   useGetChildCategoriesForFormsQuery,
   useGetParentCategoriesForFormsQuery,
   useGetUnitsQuery,
-  useEditProductCategoryMutation
+  useEditProductCategoryMutation,
 } = productsApi;

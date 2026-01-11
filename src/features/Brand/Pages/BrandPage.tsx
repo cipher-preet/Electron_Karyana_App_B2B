@@ -44,9 +44,9 @@ const BrandPage = () => {
   return (
     <div className="unit-page">
       <div className="unit-header">
-        <h2>Units</h2>
+        <h2>Brand</h2>
         <button className="unit-add-btn" onClick={() => setOpenModal(true)}>
-          + Add Unit
+          + Add Brand
         </button>
       </div>
       <div className="unit-grid">

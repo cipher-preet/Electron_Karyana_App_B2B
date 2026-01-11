@@ -1,4 +1,4 @@
-import { useCreateBrandMutation } from "@/redux/services/UnitBrandApi";
+import { useCreateBrandMutation, useEditBrandMutation } from "@/redux/services/UnitBrandApi";
 import React, { useState } from "react";
 
 interface Brand {
@@ -18,32 +18,55 @@ const BrandModal: React.FC<BrandModalProps> = ({
   onSave,
   initialData,
 }) => {
-  const [createBrand, { isLoading, error }] = useCreateBrandMutation();
+  const [createBrand, { isLoading: creating }] =
+    useCreateBrandMutation();
+
+  const [EditBrand, { isLoading: updating }] =
+    useEditBrandMutation();
+
+  const isEditMode = Boolean(initialData?._id);
+
+  console.log("this is edited data ------->> ", isEditMode);
+  console.log("this is intial data  data ------->> ", initialData);
+  console.log("this is intial data  data ------->> ", EditBrand);
 
   const [name, setName] = useState(initialData?.name || "");
   const [description, setDescription] = useState(
     initialData?.description || ""
   );
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
     if (!name || !description) return;
-    const payload: Brand = {
-      _id: initialData?._id,
-      name,
-      description,
-    };
+
     try {
-      await createBrand(payload).unwrap();
-      onSave?.(payload);
+      let response: Brand;
+
+      if (isEditMode && initialData?._id) {
+        response = await EditBrand({
+            _id:initialData._id,
+            name,
+            description,
+            isActive: true,
+        }).unwrap();
+        console.log(response)
+      } else {
+        response = await createBrand({
+          name,
+          description,
+          isActive: true,
+        }).unwrap();
+      }
+
+      onSave(response);
       onClose();
     } catch (err) {
-      console.error("Failed to save unit:", err);
+      console.error("Failed to save brand:", err);
     }
   };
   return (
     <div className="unit-modal-backdrop">
       <div className="unit-modal">
-        <h3>{initialData ? "Edit Unit" : "Add Unit"}</h3>
+        <h3>{isEditMode ? "Edit Brand" : "Add Brand"}</h3>
 
         <input
           placeholder="Brand Name"
@@ -64,9 +87,9 @@ const BrandModal: React.FC<BrandModalProps> = ({
           <button
             className="unit-save-btn"
             onClick={handleSubmit}
-            disabled={isLoading}
+            disabled={creating || updating}
           >
-            {isLoading ? "Saving..." : "Save"}
+             {creating || updating ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

@@ -59,6 +59,16 @@ const UnitBrandApiForDashboard = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["brand"],
     }),
+
+    EditBrand: builder.mutation<any, any>({
+      query: (EditBrand) => ({
+        url: "/dashboard/editBrand",
+        method: "PUT",
+        body: EditBrand,
+      }),
+      invalidatesTags: ["brand"],
+    }),
+
   }),
 });
 
@@ -66,5 +76,6 @@ export const {
   useGetUnitsForDashboardQuery,
   useCreateUnitMutation,
   useCreateBrandMutation,
+  useEditBrandMutation,
   useGetBrandsForDashboardQuery,
 } = UnitBrandApiForDashboard;
