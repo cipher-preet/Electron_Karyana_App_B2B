@@ -5,8 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 9999; /* FIX: ensure above modal */
   animation: fadeIn 0.2s ease;
+
+  pointer-events: auto; /* FIX */
 }
 
 .confirm-box {
@@ -18,6 +20,8 @@
   text-align: center;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   animation: scaleIn 0.25s ease;
+
+  pointer-events: auto; /* FIX: allow clicking */
 }
 
 .confirm-box h3 {
@@ -45,6 +49,7 @@
   border: none;
   cursor: pointer;
   min-width: 100px;
+  pointer-events: auto; /* FIX */
 }
 
 .btn.cancel {
@@ -75,3 +80,4 @@
   from { transform: scale(0.9); opacity: 0 }
   to { transform: scale(1); opacity: 1 }
 }
+

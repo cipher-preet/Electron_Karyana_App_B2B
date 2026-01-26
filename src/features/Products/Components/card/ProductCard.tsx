@@ -10,7 +10,7 @@ interface Props {
 const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
   const {
     name,
-    images,
+    image,
     sku,
     mrp,
     marketPrice,
@@ -29,8 +29,8 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
       {/* Image */}
       <div className="card-left">
         <div className="product-image">
-          {images ? (
-            <img src={images} alt={name} />
+          {image ? (
+            <img src={image} alt={name} />
           ) : (
             <div className="image-placeholder">No Image</div>
           )}
