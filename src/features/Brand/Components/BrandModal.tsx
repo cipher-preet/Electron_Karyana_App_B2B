@@ -26,10 +26,6 @@ const BrandModal: React.FC<BrandModalProps> = ({
 
   const isEditMode = Boolean(initialData?._id);
 
-  console.log("this is edited data ------->> ", isEditMode);
-  console.log("this is intial data  data ------->> ", initialData);
-  console.log("this is intial data  data ------->> ", EditBrand);
-
   const [name, setName] = useState(initialData?.name || "");
   const [description, setDescription] = useState(
     initialData?.description || ""
@@ -48,7 +44,6 @@ const BrandModal: React.FC<BrandModalProps> = ({
             description,
             isActive: true,
         }).unwrap();
-        console.log(response)
       } else {
         response = await createBrand({
           name,

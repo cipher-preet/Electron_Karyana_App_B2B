@@ -3,17 +3,17 @@ import { Product } from "../../../shared/types/types";
 import ProductCard from "../Components/card/ProductCard";
 import ProductModal from "../Components/Modal/ProductModal";
 import "./ProductPage.css";
-import { productsApi, useGetAllProductsQuery } from "@/redux/services/productsApi";
-import { useAppDispatch } from "@/redux/app/hooks";
+import { useGetAllProductsQuery } from "@/redux/services/productsApi";
 
 const ProductPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Product | null>(null);
-  const dispatch = useAppDispatch()
 
   const [cursor, setCursor] = useState<string | null>(null);
 
-  const { data, isFetching, isLoading,refetch } = useGetAllProductsQuery({ cursor });
+  const { data, isFetching, isLoading, refetch } = useGetAllProductsQuery({
+    cursor,
+  });
 
   const products = data?.products ?? [];
   const nextCursor = data?.nextCursor ?? null;
@@ -73,22 +73,21 @@ const ProductPage: React.FC = () => {
         <p style={{ textAlign: "center" }}>No products found.</p>
       )}
 
-     {open && (
-  <ProductModal
-    product={selected}
-    onClose={(success : boolean | undefined) => {
-      setOpen(false);
+      {open && (
+        <ProductModal
+          product={selected}
+          onClose={(success: boolean | undefined) => {
+            setOpen(false);
 
-      if (success) {
-        setCursor(null); 
-        setTimeout(() => {
-            refetch();      
-          }, 10);   
-      }
-    }}
-  />
-)}
-
+            if (success) {
+              setCursor(null);
+              setTimeout(() => {
+                refetch();
+              }, 10);
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

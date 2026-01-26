@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "./UnitModal.css";
-import { useCreateUnitMutation } from "@/redux/services/UnitBrandApi";
+import {
+  useCreateUnitMutation,
+  useEditUnitMutation,
+} from "@/redux/services/UnitBrandApi";
 
 export interface unitData {
-  _id: string;
+  _id?: string;
   name: string;
   shortName: string;
   baseUnit: string;
@@ -31,7 +34,10 @@ const UnitModal: React.FC<UnitCardProps> = ({
   onSave,
   initialData,
 }) => {
-  const [createUnit, { isLoading, error }] = useCreateUnitMutation();
+  const isEditMode = Boolean(initialData?._id);
+
+  const [createUnit, { isLoading: creating }] = useCreateUnitMutation();
+  const [EditUnit, { isLoading: updating }] = useEditUnitMutation();
 
   const [name, setName] = useState(initialData?.name || "");
   const [shortName, setShortName] = useState(initialData?.shortName || "");
@@ -45,18 +51,29 @@ const UnitModal: React.FC<UnitCardProps> = ({
 
   const handleSubmit = async () => {
     if (!name || !shortName) return;
-    const payload: UnitSavePayload = {
-      _id: initialData?._id,
-      name,
-      shortName,
-      baseUnit,
-      multiplier,
-      isActive,
-    };
-
     try {
-      await createUnit(payload).unwrap();
-      onSave?.(payload);
+      let response: unitData;
+
+      if (isEditMode && initialData?._id) {
+        response = await EditUnit({
+          _id: initialData._id,
+          name,
+          shortName,
+          baseUnit,
+          multiplier,
+          isActive,
+        }).unwrap();;
+      } else {
+        response = await createUnit({
+          name,
+          shortName,
+          baseUnit,
+          multiplier,
+          isActive,
+        }).unwrap();;
+      }
+
+      onSave(response);
       onClose();
     } catch (err) {
       console.error("Failed to save unit:", err);
@@ -99,9 +116,9 @@ const UnitModal: React.FC<UnitCardProps> = ({
           <button
             className="unit-save-btn"
             onClick={handleSubmit}
-            disabled={isLoading}
+            disabled={creating || updating}
           >
-            {isLoading ? "Saving..." : "Save"}
+            {creating || updating ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
