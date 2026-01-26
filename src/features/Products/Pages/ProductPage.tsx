@@ -17,6 +17,7 @@ const ProductPage: React.FC = () => {
 
   const products = data?.products ?? [];
   const nextCursor = data?.nextCursor ?? null;
+  console.log("++++++++++++++++++++",products)
 
   useEffect(() => {
     if (!isFetching && data) {
