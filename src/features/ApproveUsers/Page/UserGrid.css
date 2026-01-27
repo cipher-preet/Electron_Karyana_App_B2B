@@ -1,0 +1,35 @@
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.user-grid {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .user-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 16px;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-grid {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 16px;
+  }
+}

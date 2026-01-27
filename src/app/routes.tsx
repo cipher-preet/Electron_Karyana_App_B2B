@@ -7,6 +7,7 @@ import CategoryPage from "@/features/Cateogory/Page/CategoryPage";
 import CategoriesContainer from "@/features/Cateogory/Page/CategoriesContainer";
 import UnitPage from "@/features/Units/Pages/UnitPage";
 import BrandPage from "@/features/Brand/Pages/BrandPage";
+import ApproveUserPage from "@/features/ApproveUsers/Page/ApproveUserPage";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
         <Route path="/category" element={<CategoriesContainer />} />
         <Route path="/unit" element={<UnitPage />} />
         <Route path="/brandpage" element={<BrandPage />} />
+        <Route path="/approveusers" element={<ApproveUserPage />} />
       </Route>
     </Routes>
   );

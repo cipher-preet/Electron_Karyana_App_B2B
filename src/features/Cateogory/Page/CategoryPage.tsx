@@ -18,26 +18,20 @@ const CategoriesPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editCategory, setEditCategory] = useState<Category | null>(null);
 
-
-
-
   /* ---------------- API CALLS ---------------- */
 
   const { data: parentResponse } = useGetProductsQuery();
 
-  const { data: childResponse } =
-    useGetChildCategoriesQuery(activeParent?._id!, {
+  const { data: childResponse } = useGetChildCategoriesQuery(
+    activeParent?._id!,
+    {
       skip: !activeParent,
-    });
+    },
+  );
 
-  const parentCategories =
-    parentResponse?.data?.categories ?? [];
+  const parentCategories = parentResponse?.data?.categories ?? [];
 
-  const childCategories =
-    childResponse?.data?.categories ?? [];
-
-  /* ---------------- ACTIONS ---------------- */
-  console.log("999999999999", childCategories)
+  const childCategories = childResponse?.data?.categories ?? [];
 
   const openAddParent = () => {
     setEditCategory(null);
@@ -48,13 +42,7 @@ const CategoriesPage: React.FC = () => {
   const openAddChild = () => {
     if (!activeParent) return;
 
-    // setEditCategory({
-    //   _id: "",
-    //   name: "",
-    //   parentCategory: activeParent._id,
-    //   isActive: true,
-    // });
-    setEditCategory(null)
+    setEditCategory(null);
 
     setModalType("childCategory");
     setModalOpen(true);
@@ -65,12 +53,10 @@ const CategoriesPage: React.FC = () => {
     setView("child");
   };
 
-  const listToRender =
-    view === "parent" ? parentCategories : childCategories;
+  const listToRender = view === "parent" ? parentCategories : childCategories;
 
   return (
     <div className="category-page">
-      {/* HEADER */}
       <div className="page-header">
         <div className="header-left">
           {view === "child" && (
@@ -86,41 +72,30 @@ const CategoriesPage: React.FC = () => {
           )}
 
           <h2>
-            {view === "parent"
-              ? "Parent Categories"
-              : activeParent?.name}
+            {view === "parent" ? "Parent Categories" : activeParent?.name}
           </h2>
         </div>
 
         <button
           className="add-category-btn"
-          onClick={
-            view === "parent"
-              ? openAddParent
-              : openAddChild
-          }
+          onClick={view === "parent" ? openAddParent : openAddChild}
         >
           <span className="plus">＋</span>
           <span>
-            {view === "parent"
-              ? "Add Parent Category"
-              : "Add Category"}
+            {view === "parent" ? "Add Parent Category" : "Add Category"}
           </span>
         </button>
       </div>
 
-      {/* CATEGORY LIST */}
       <div className="category-grid">
-        {listToRender.map((cat) => (
+        {listToRender.map((cat: any) => (
           <CategoryCard
             key={cat._id}
             category={cat}
             onOpen={() => {
               if (view === "parent") {
-                // Only parents should open child view
                 handleParentClick(cat);
               } else {
-                // Child category → open edit modal
                 setEditCategory(cat);
                 setModalType("childCategory");
                 setModalOpen(true);
@@ -129,7 +104,6 @@ const CategoriesPage: React.FC = () => {
             onEdit={() => {
               setEditCategory(cat);
 
-              // ✅ Fix: Use the current 'view' state to determine the mode
               if (view === "child") {
                 setModalType("childCategory");
               } else {
@@ -139,11 +113,9 @@ const CategoriesPage: React.FC = () => {
               setModalOpen(true);
             }}
           />
-
         ))}
       </div>
 
-      {/* MODAL */}
       {modalOpen && (
         <CategoryModal
           category={editCategory}

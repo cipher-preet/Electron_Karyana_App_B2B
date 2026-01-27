@@ -26,6 +26,7 @@ const Sidebar = ({ collapsed , onToggle }: Props) => {
         <NavItem to="/category" label="Category" collapsed={collapsed} />
         <NavItem to="/unit" label="Unit" collapsed={collapsed} />
         <NavItem to="/brandpage" label="Brand" collapsed={collapsed} />
+        <NavItem to="/approveusers" label="ApproveUsers" collapsed={collapsed} />
       </nav>
     </aside>
   );
