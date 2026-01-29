@@ -1,0 +1,14 @@
+.user-details-layout {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: #f7f8fa;
+  min-height: 100vh;
+}
+
+.details-content {
+  flex: 1;
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+}

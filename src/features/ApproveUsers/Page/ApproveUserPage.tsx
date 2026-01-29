@@ -1,6 +1,5 @@
 import UserCard from "../Components/UserCard";
-import "./UserGrid.css"
-
+import "./UserGrid.css";
 
 const users = [
   { name: "Rahul Sharma", email: "rahul@gmail.com", role: "Admin" },
@@ -18,7 +17,6 @@ const users = [
   { name: "Rohit Kumar", email: "rohit@gmail.com", role: "User" },
 ];
 
-
 const ApproveUserPage = () => {
   return (
     <div className="page-container">
@@ -32,4 +30,3 @@ const ApproveUserPage = () => {
 };
 
 export default ApproveUserPage;
-

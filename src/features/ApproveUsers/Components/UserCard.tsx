@@ -1,4 +1,5 @@
 import "./UserCard.css";
+import { useNavigate } from "react-router-dom";
 
 interface UserCardProps {
   name: string;
@@ -7,8 +8,9 @@ interface UserCardProps {
 }
 
 const UserCard = ({ name, email, role }: UserCardProps) => {
+   const navigate = useNavigate();
   return (
-    <div className="user-card">
+    <div className="user-card"  onClick={() => navigate("/users/1")}>
       <div className="card-header">
         <div className="avatar">{name.charAt(0)}</div>
       </div>
