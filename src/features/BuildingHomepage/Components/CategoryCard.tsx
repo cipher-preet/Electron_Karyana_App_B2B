@@ -1,10 +1,16 @@
 import "./CategoryCard.css";
 
-const CategoryCard = ({ name }) => {
+type CategoryCardProps = {
+  id: string;
+  name: string;
+  onAdd: (id: string, name: string) => void;
+};
+
+const CategoryCard = ({ id, name, onAdd }: CategoryCardProps) => {
   return (
     <div className="category-card">
       <span>{name}</span>
-      <button>Add</button>
+      <button onClick={() => onAdd(id, name)}>Add</button>
     </div>
   );
 };

@@ -1,16 +1,31 @@
-import "./PreviewSection.css";
+import "../Components/PreviewSection.css";
 
-const PreviewSection = ({title}) => {
+export type Product = {
+  id: string;
+  name: string;
+  price: string;
+};
+
+type PreviewSectionProps = {
+  title: string;
+  products: Product[];
+};
+
+const PreviewSection = ({ title, products }: PreviewSectionProps) => {
   return (
     <div className="preview-section">
       <h3>{title}</h3>
+
       <div className="preview-grid">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="preview-card" />
+        {products.map((p) => (
+          <div key={p.id} className="preview_card">
+            <strong className="product-name">{p.name}</strong>
+            <small className="product-price">₹{p.price}</small>
+          </div>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PreviewSection
+export default PreviewSection;

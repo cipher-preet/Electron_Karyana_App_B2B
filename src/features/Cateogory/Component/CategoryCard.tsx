@@ -13,7 +13,6 @@ const CategoryCard: React.FC<Props> = ({ category, onEdit, onOpen }) => {
       className="category-card-pro"
       onClick={() => onOpen && onOpen()}
     >
-      {/* IMAGE */}
       <div className="category-image">
         {category.images ? (
           <img src={category.images} alt={category.name} />
@@ -24,7 +23,6 @@ const CategoryCard: React.FC<Props> = ({ category, onEdit, onOpen }) => {
         )}
       </div>
 
-      {/* CONTENT */}
       <div className="category-info">
         <div className="title-row">
           <h4>{category.name}</h4>
@@ -36,7 +34,6 @@ const CategoryCard: React.FC<Props> = ({ category, onEdit, onOpen }) => {
         <p className="sub-text">Sub Category</p>
       </div>
 
-      {/* ACTION */}
       <button
         className="edit-btn-pro"
         onClick={(e) => {
