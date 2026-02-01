@@ -9,10 +9,10 @@ import UnitPage from "@/features/Units/Pages/UnitPage";
 import BrandPage from "@/features/Brand/Pages/BrandPage";
 import ApproveUserPage from "@/features/ApproveUsers/Page/ApproveUserPage";
 import UserDetailsPage from "@/features/ApproveUsers/Components/UserDetailsPage";
-import ProfileSection from "@/features/ApproveUsers/Components/UserDetails/ProfileSection";
 import CartInfoPage from "@/features/ApproveUsers/Components/CartInfo/CartInfoPage";
 import OrderInfoPage from "@/features/ApproveUsers/Components/OrderInfo/OrderInfoPage";
 import ShopInfoPage from "@/features/ApproveUsers/Components/ShopInfo/ShopInfoPage";
+import BuildingHomePage from "@/features/BuildingHomepage/Page/BuildingHomePage";
 
 const AppRoutes = () => {
   return (
@@ -26,11 +26,11 @@ const AppRoutes = () => {
         <Route path="/brandpage" element={<BrandPage />} />
         <Route path="/approveusers" element={<ApproveUserPage />} />
         <Route path="/users/:id" element={<UserDetailsPage />}>
-          <Route index element={<ProfileSection />} />
-          <Route path="shopInfo" element={<ShopInfoPage />} />
+          <Route index element={<ShopInfoPage />} />
           <Route path="orderInfo" element={<OrderInfoPage />} />
           <Route path="cartInfo" element={<CartInfoPage />} />
         </Route>
+        <Route path="buildHomepage" element={<BuildingHomePage />} />
       </Route>
     </Routes>
   );

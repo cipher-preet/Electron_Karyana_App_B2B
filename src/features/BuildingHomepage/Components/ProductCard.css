@@ -1,0 +1,93 @@
+.product-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+/* Hover feedback (subtle, admin-friendly) */
+.product-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Image placeholder */
+.product-card .img {
+  width: 100%;
+  height: 110px;
+  background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+  border-radius: 12px;
+  margin-bottom: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+/* Product name */
+.product-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+  text-align: center;
+
+  /* Prevent long names from breaking UI */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* Price */
+.product-price {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+/* Add button */
+.add-btn {
+  margin-top: auto;
+  width: 50%;
+  padding: 8px 1px;
+  border-radius: 10px;
+  border: 1px solid #111827;
+  background: #111827;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Button hover */
+.add-btn:hover {
+  background: #000000;
+  border-color: #000000;
+}
+
+/* Button active */
+.add-btn:active {
+  transform: scale(0.98);
+}
+
+/* Disabled state (future ready) */
+.add-btn:disabled {
+  background: #e5e7eb;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+

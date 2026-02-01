@@ -1,0 +1,16 @@
+.category-card {
+border: 1px solid #e5e7eb;
+border-radius: 12px;
+padding: 16px;
+display: flex;
+justify-content: space-between;
+}
+
+
+.category-card button {
+background: #111827;
+color: #fff;
+border: none;
+padding: 6px 12px;
+border-radius: 8px;
+}

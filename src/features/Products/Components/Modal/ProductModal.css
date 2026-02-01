@@ -141,3 +141,14 @@ textarea {
   z-index: 10000; /* HIGHER than overlay */
   pointer-events: auto;
 }
+
+
+.add-btns {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}

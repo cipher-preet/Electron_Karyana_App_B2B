@@ -1,0 +1,13 @@
+.hp-card {
+background: #fff;
+padding: 24px;
+border-radius: 16px;
+margin-bottom: 32px;
+}
+
+
+.hp-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 16px;
+}

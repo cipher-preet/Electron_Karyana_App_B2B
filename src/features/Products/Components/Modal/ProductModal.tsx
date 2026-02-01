@@ -303,11 +303,11 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
 
           {/* ACTION BUTTONS */}
           <div className="modal-actions">
-            <button onClick={openConfirm}>
+            <button className="add-btns" onClick={openConfirm}>
               {isEdit ? "Update Product" : "Save Product"}
             </button>
 
-            <button onClick={() => onClose(false)}>Cancel</button>
+            <button className="add-btns" onClick={() => onClose(false)}>Cancel</button>
           </div>
         </div>
       </div>

@@ -17,7 +17,6 @@ const ProductPage: React.FC = () => {
 
   const products = data?.products ?? [];
   const nextCursor = data?.nextCursor ?? null;
-  console.log("++++++++++++++++++++",products)
 
   useEffect(() => {
     if (!isFetching && data) {
@@ -45,7 +44,7 @@ const ProductPage: React.FC = () => {
     <div className="product-page">
       <div className="page-header">
         <h2>Products</h2>
-        <button className="add-btn" onClick={handleAdd}>
+        <button className="add-btns" onClick={handleAdd}>
           + Add Product
         </button>
       </div>

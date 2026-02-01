@@ -2,8 +2,7 @@ import { NavLink, useParams } from "react-router-dom";
 import "./SettingsSidebar.css";
 
 const menu = [
-  { label: "My Profile", path: "" },
-  { label: "Shop Info", path: "shopInfo" },
+  { label: "Shop Info", path: "" },
   { label: "Order Info ", path: "orderInfo" },
   { label: "Cart Info", path: "cartInfo" },
 ];
