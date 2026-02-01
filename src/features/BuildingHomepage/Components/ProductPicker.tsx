@@ -1,9 +1,11 @@
 import ProductCard from "./ProductCard";
+import { useGetProductBasicInfoByChildCategoryIdQuery } from "@/redux/services/BuidHomeApi";
 
 export type Product = {
-  id: string;
+  _id: string;
   name: string;
-  price: string;
+  mrp: number;
+  images?:string;
 };
 
 type ProductPickerProps = {
@@ -13,14 +15,26 @@ type ProductPickerProps = {
 };
 
 const ProductPicker = ({
+  categoryId,
   categoryName,
   onProductAdd,
 }: ProductPickerProps) => {
-  
-  const products: Product[] = [
-    { id: "1", name: "iPhone 15", price: "79,999" },
-    { id: "2", name: "Samsung TV", price: "45,999" },
-  ];
+
+  console.log("this is cat id ", categoryId)
+
+  const { data, isLoading } = useGetProductBasicInfoByChildCategoryIdQuery(categoryId);
+
+  console.log("this is data ", data);
+
+ const products: Product[] =
+  data?.data.map((p) => ({
+    _id: p._id,
+    name: p.name,
+    mrp: p.mrp,
+    image: p.images,
+  })) ?? [];
+
+  console.log("}}}}}}}}}}}} ", products);
 
   return (
     <section className="hp-card">
@@ -28,11 +42,7 @@ const ProductPicker = ({
 
       <div className="hp-grid">
         {products.map((p) => (
-          <ProductCard
-            key={p.id}
-            {...p}
-            onAdd={() => onProductAdd(p)}
-          />
+          <ProductCard key={p._id} {...p} onAdd={() => onProductAdd(p)} />
         ))}
       </div>
     </section>

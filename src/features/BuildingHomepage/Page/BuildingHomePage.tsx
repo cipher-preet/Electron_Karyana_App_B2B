@@ -7,9 +7,10 @@ import ProductPicker from "../Components/ProductPicker";
 import HomePreview from "../Components/HomePreview";
 
 export type Product = {
-  id: string;
+  _id: string;
   name: string;
-  price: string;
+  mrp: number;
+  images?:string;
 };
 
 export type PreviewSectionType = {

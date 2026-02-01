@@ -8,12 +8,14 @@ type Category = {
 type GetAllCategoriesResponse = {
   data: Category[];
 };
-
+type GetProductsBasicResponse = {
+  data: getproductsBasic[];
+};
 type getproductsBasic = {
   _id: string;
   name: string;
-  images: [string];
   mrp: number;
+  images?: string;
 };
 
 export const BuildHomeApi = baseApi.injectEndpoints({
@@ -24,13 +26,14 @@ export const BuildHomeApi = baseApi.injectEndpoints({
       providesTags: ["buildhomecategory"],
     }),
 
-    getProductBasicInfoByChildCategoryId: builder.query<getproductsBasic, void>(
-      {
-        query: (childCategoryId) =>
-          `/dashboard/getProductBasicInfoByChildCategoryId?childCategoryId=${childCategoryId}`,
-        providesTags: ["buildhomecategory"],
-      },
-    ),
+    getProductBasicInfoByChildCategoryId: builder.query<
+      GetProductsBasicResponse,
+      String
+    >({
+      query: (childCategoryId) =>
+        `/dashboard/getProductBasicInfoByChildCategoryId?childCategoryId=${childCategoryId}`,
+      providesTags: ["buildhomecategory"],
+    }),
   }),
 });
 

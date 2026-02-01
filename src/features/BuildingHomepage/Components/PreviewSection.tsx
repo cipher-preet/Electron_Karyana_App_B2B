@@ -1,11 +1,11 @@
 import "../Components/PreviewSection.css";
 
 export type Product = {
-  id: string;
+   _id: string;
   name: string;
-  price: string;
+  mrp: number;
+  images?:string
 };
-
 type PreviewSectionProps = {
   title: string;
   products: Product[];
@@ -18,9 +18,9 @@ const PreviewSection = ({ title, products }: PreviewSectionProps) => {
 
       <div className="preview-grid">
         {products.map((p) => (
-          <div key={p.id} className="preview_card">
+          <div key={p._id} className="preview_card">
             <strong className="product-name">{p.name}</strong>
-            <small className="product-price">₹{p.price}</small>
+            <small className="product-price">₹{p.mrp}</small>
           </div>
         ))}
       </div>

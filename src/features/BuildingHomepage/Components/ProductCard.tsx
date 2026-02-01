@@ -1,22 +1,25 @@
 import "./ProductCard.css";
 
 export type Product = {
-  id: string;
+  _id: string;
   name: string;
-  price: string;
+  mrp: number;
+  images?: string;
 };
 
 type ProductCardProps = Product & {
   onAdd: () => void;
 };
 
-const ProductCard = ({ name, price, onAdd }: ProductCardProps) => {
+const ProductCard = ({ name, mrp, images, onAdd }: ProductCardProps) => {
   return (
     <div className="product-card">
       <div className="img" />
 
+      {/* <image src={images}></image> */}
+
       <strong className="product-name">{name}</strong>
-      <small className="product-price">₹{price}</small>
+      <small className="product-price">₹{mrp}</small>
 
       <button className="add-btn" onClick={onAdd}>
         Add

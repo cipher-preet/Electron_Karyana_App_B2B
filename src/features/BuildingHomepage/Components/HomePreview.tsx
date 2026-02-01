@@ -1,10 +1,11 @@
 
 import PreviewSection from "./PreviewSection";
 
-type Product = {
-  id: string;
+export type Product = {
+   _id: string;
   name: string;
-  price: string;
+  mrp: number;
+  images?:string
 };
 
 type PreviewSectionType = {
