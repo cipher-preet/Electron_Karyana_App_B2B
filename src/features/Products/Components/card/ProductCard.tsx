@@ -26,7 +26,6 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
 
   return (
     <div className="product-card-professional">
-      {/* Image */}
       <div className="card-left">
         <div className="product-image">
           {image ? (
@@ -37,9 +36,7 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
         </div>
       </div>
 
-      {/* Right Content */}
       <div className="card-right">
-        {/* Header */}
         <div className="card-header">
           <h4 title={name}>{name}</h4>
           <span className={`status ${isActive ? "active" : "inactive"}`}>
@@ -47,7 +44,6 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
           </span>
         </div>
 
-        {/* Meta Info */}
         <div className="card-meta">
           <div>
             <span className="meta-label">SKU</span>
@@ -67,7 +63,6 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
           </div>
         </div>
 
-        {/* Pricing Box */}
         <div className="price-box">
           <div className="price-item">
             <span className="price-label">MRP</span>
@@ -87,12 +82,10 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
           <div className="unit">Unit: {unit}</div>
         </div>
 
-        {/* Rating */}
         <div className="card-rating">
           ⭐ {rating} <span>({reviewCount} reviews)</span>
         </div>
 
-        {/* Footer */}
         <div className="card-footer">
           <span className="stock">Stock: {sku}</span>
           <button onClick={() => onEdit(product)}>Edit</button>

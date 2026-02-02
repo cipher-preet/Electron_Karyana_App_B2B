@@ -14,9 +14,7 @@ type ProductCardProps = Product & {
 const ProductCard = ({ name, mrp, images, onAdd }: ProductCardProps) => {
   return (
     <div className="product-card">
-      <div className="img" />
-
-      {/* <image src={images}></image> */}
+      <img className="img" src={images} alt={name} />
 
       <strong className="product-name">{name}</strong>
       <small className="product-price">₹{mrp}</small>

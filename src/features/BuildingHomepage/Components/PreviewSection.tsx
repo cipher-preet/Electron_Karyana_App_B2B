@@ -19,6 +19,7 @@ const PreviewSection = ({ title, products }: PreviewSectionProps) => {
       <div className="preview-grid">
         {products.map((p) => (
           <div key={p._id} className="preview_card">
+            <img className="img" src={p.images} alt={p.name} />
             <strong className="product-name">{p.name}</strong>
             <small className="product-price">₹{p.mrp}</small>
           </div>

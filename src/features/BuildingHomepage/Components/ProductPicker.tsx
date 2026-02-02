@@ -5,7 +5,7 @@ export type Product = {
   _id: string;
   name: string;
   mrp: number;
-  images?:string;
+  images?: string;
 };
 
 type ProductPickerProps = {
@@ -19,22 +19,22 @@ const ProductPicker = ({
   categoryName,
   onProductAdd,
 }: ProductPickerProps) => {
+  console.log("this is cat id ", categoryId);
 
-  console.log("this is cat id ", categoryId)
+  const { data, isLoading } =
+    useGetProductBasicInfoByChildCategoryIdQuery(categoryId);
 
-  const { data, isLoading } = useGetProductBasicInfoByChildCategoryIdQuery(categoryId);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  console.log("this is data ", data);
-
- const products: Product[] =
-  data?.data.map((p) => ({
-    _id: p._id,
-    name: p.name,
-    mrp: p.mrp,
-    image: p.images,
-  })) ?? [];
-
-  console.log("}}}}}}}}}}}} ", products);
+  const products: Product[] =
+    data?.data.map((p) => ({
+      _id: p._id,
+      name: p.name,
+      mrp: p.mrp,
+      images: p.images?.[0] ?? "",
+    })) ?? [];
 
   return (
     <section className="hp-card">
