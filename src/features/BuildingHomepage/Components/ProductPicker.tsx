@@ -19,8 +19,6 @@ const ProductPicker = ({
   categoryName,
   onProductAdd,
 }: ProductPickerProps) => {
-  console.log("this is cat id ", categoryId);
-
   const { data, isLoading } =
     useGetProductBasicInfoByChildCategoryIdQuery(categoryId);
 

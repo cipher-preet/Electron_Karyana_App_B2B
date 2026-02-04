@@ -34,10 +34,22 @@ export const BuildHomeApi = baseApi.injectEndpoints({
         `/dashboard/getProductBasicInfoByChildCategoryId?childCategoryId=${childCategoryId}`,
       providesTags: ["buildhomecategory"],
     }),
+
+    createHomePage: builder.mutation<any, any>({
+      query: (homePageData) => ({
+        url: "/dashboard/buildHomePage",
+        method: "POST",
+        body: homePageData,
+        providesTags: ["buildhomecategory"],
+      }),
+    }),
+
+    
   }),
 });
 
 export const {
   useGetAllCategoriesQuery,
   useGetProductBasicInfoByChildCategoryIdQuery,
+  useCreateHomePageMutation,
 } = BuildHomeApi;

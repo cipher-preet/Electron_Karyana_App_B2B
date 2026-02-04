@@ -1,36 +1,47 @@
-
+import "./HomePreview.css";
 import PreviewSection from "./PreviewSection";
 
-export type Product = {
-   _id: string;
-  name: string;
-  mrp: number;
-  images?:string
-};
-
-type PreviewSectionType = {
-  categoryId: string;
-  categoryName: string;
-  products: Product[];
-};
-
 type HomePreviewProps = {
-  sections: PreviewSectionType[];
+  sections: {
+    categoryId: string;
+    categoryName: string;
+    products: any[];
+  }[];
+  onRemoveProduct: (categoryId: string, productId: string) => void;
+  onBuildHome: () => void;
+  isLoading: boolean;
 };
 
-const HomePreview = ({ sections }: HomePreviewProps) => {
+const HomePreview = ({
+  sections,
+  onRemoveProduct,
+  onBuildHome,
+  isLoading,
+}: HomePreviewProps) => {
   return (
-    <section className="hp-card">
+    <>
       <h2>Homepage Preview</h2>
-
-      {sections.map((s) => (
+      {sections.map((section) => (
         <PreviewSection
-          key={s.categoryId}
-          title={s.categoryName}
-          products={s.products}
+          key={section.categoryId}
+          categoryId={section.categoryId}
+          title={section.categoryName}
+          products={section.products}
+          onRemoveProduct={onRemoveProduct}
         />
       ))}
-    </section>
+
+      <div className="footer_home">
+        <button
+          className="button-43"
+          role="button"
+          onClick={onBuildHome}
+          disabled={isLoading || sections.length === 0}
+        >
+          Build Home
+        </button>
+      </div>
+    </>
   );
 };
 
