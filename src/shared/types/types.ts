@@ -1,23 +1,5 @@
 export type ProductStatus = "Active" | "Inactive";
 
-// export interface Product {
-//   _id: string;
-//   name: string;
-//   brand: string;
-//   category: string;
-//   subCategory: string;
-//   barcode: string;
-//   price: number;
-//   sellingPrice: number;
-//   gst: number;
-//   unit: string;
-//   minOrderQty: number;
-//   stock: number;
-//   reorderLevel: number;
-//   status: ProductStatus;
-//   description: string;
-//   image?: string;
-// }
 export interface Product {
   _id: string;
   name: string;
@@ -32,13 +14,11 @@ export interface Product {
   quantityPerUnit: number | string;
   offPercentage: number | string;
   tag?: string;
-  images: string[];               
-  existingImages?: string[];      
+  images: string[];
+  existingImages?: string[];
   createdAt?: string;
   updatedAt?: string;
 }
-
-
 
 export type CategoryStatus = "Active" | "Inactive";
 
@@ -47,15 +27,28 @@ export interface Category {
   name: string;
   parentCategory?: string;
   // status: "Active" | "Inactive";
-  isActive : boolean;
-  images?: string; 
+  isActive: boolean;
+  images?: string;
 }
 
 export interface CategoryApiResponse {
-  success : boolean;
-  data : {
-    categories : Category[];
-    nextCursor : string | null;
-    hasNextPage : boolean;
-  }
+  success: boolean;
+  data: {
+    categories: Category[];
+    nextCursor: string | null;
+    hasNextPage: boolean;
+  };
+}
+
+
+
+export interface BannerCarouselConfig {
+  _id: string;
+  banners: string[];
+  carosels: string[];
+}
+
+export interface ApiResponse {
+  success: boolean;
+  data: BannerCarouselConfig[];
 }

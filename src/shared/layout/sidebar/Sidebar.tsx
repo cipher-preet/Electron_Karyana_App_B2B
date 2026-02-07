@@ -6,16 +6,13 @@ interface Props {
   onToggle: (v: boolean) => void;
 }
 
-const Sidebar = ({ collapsed , onToggle }: Props) => {
+const Sidebar = ({ collapsed, onToggle }: Props) => {
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-top">
         <span className="brand">LALA</span>
 
-        <button
-          className="hamburger"
-          onClick={() => onToggle(!collapsed)}
-        >
+        <button className="hamburger" onClick={() => onToggle(!collapsed)}>
           ☰
         </button>
       </div>
@@ -28,6 +25,11 @@ const Sidebar = ({ collapsed , onToggle }: Props) => {
         <NavItem to="/brandpage" label="Brand" collapsed={collapsed} />
         <NavItem to="/approveusers" label="ApproveUser" collapsed={collapsed} />
         <NavItem to="/buildHomepage" label="BuildHome" collapsed={collapsed} />
+        <NavItem
+          to="/bannersAndCrouser"
+          label="Banners"
+          collapsed={collapsed}
+        />
       </nav>
     </aside>
   );
@@ -44,9 +46,7 @@ const NavItem = ({
 }) => (
   <NavLink
     to={to}
-    className={({ isActive }) =>
-      `nav-item ${isActive ? "active" : ""}`
-    }
+    className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
   >
     {!collapsed && label}
   </NavLink>

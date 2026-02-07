@@ -13,6 +13,7 @@ import CartInfoPage from "@/features/ApproveUsers/Components/CartInfo/CartInfoPa
 import OrderInfoPage from "@/features/ApproveUsers/Components/OrderInfo/OrderInfoPage";
 import ShopInfoPage from "@/features/ApproveUsers/Components/ShopInfo/ShopInfoPage";
 import BuildingHomePage from "@/features/BuildingHomepage/Page/BuildingHomePage";
+import BannersAndCrouser from "@/features/BannersAndCarosuls/Pages/BannersAndCrouser";
 
 const AppRoutes = () => {
   return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
           <Route path="cartInfo" element={<CartInfoPage />} />
         </Route>
         <Route path="buildHomepage" element={<BuildingHomePage />} />
+        <Route path="bannersAndCrouser" element={<BannersAndCrouser />} />
       </Route>
     </Routes>
   );
