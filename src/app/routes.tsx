@@ -26,7 +26,8 @@ const AppRoutes = () => {
         <Route path="/brandpage" element={<BrandPage />} />
         <Route path="/approveusers" element={<ApproveUserPage />} />
         <Route path="/users/:id" element={<UserDetailsPage />}>
-          <Route index element={<ShopInfoPage />} />
+          <Route index element={<Navigate to="shop-info" replace />} />
+          <Route path="shop-info" element={<ShopInfoPage />} />
           <Route path="orderInfo" element={<OrderInfoPage />} />
           <Route path="cartInfo" element={<CartInfoPage />} />
         </Route>

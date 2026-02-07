@@ -33,3 +33,24 @@
     gap: 16px;
   }
 }
+
+.load-more-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.load-more-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.load-more-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}

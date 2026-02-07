@@ -21,6 +21,13 @@ const HomePreview = ({
   return (
     <>
       <h2>Homepage Preview</h2>
+
+      {sections.length === 0 && (
+        <p style={{ opacity: 0.6 }}>
+          No sections added yet
+        </p>
+      )}
+
       {sections.map((section) => (
         <PreviewSection
           key={section.categoryId}
@@ -34,11 +41,10 @@ const HomePreview = ({
       <div className="footer_home">
         <button
           className="button-43"
-          role="button"
           onClick={onBuildHome}
           disabled={isLoading || sections.length === 0}
         >
-          Build Home
+          {isLoading ? "Saving..." : "Build Home"}
         </button>
       </div>
     </>

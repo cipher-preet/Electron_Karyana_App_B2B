@@ -2,24 +2,38 @@ import "./UserCard.css";
 import { useNavigate } from "react-router-dom";
 
 interface UserCardProps {
-  name: string;
-  email: string;
-  role: string;
+  userId: string;
+  shopName: string;
+  ownerName: string;
+  address: string;
+  image?: string;
 }
 
-const UserCard = ({ name, email, role }: UserCardProps) => {
-   const navigate = useNavigate();
+const UserCard = ({
+  userId,
+  shopName,
+  ownerName,
+  address,
+  image,
+}: UserCardProps) => {
+  const navigate = useNavigate();
   return (
-    <div className="user-card"  onClick={() => navigate("/users/1")}>
+    <div className="user-card" onClick={() => navigate(`/users/${userId}`)}>
       <div className="card-header">
-        <div className="avatar">{name.charAt(0)}</div>
+        <div className="avatar">
+          {image ? (
+            <img src={image} alt={`${shopName} avatar`} />
+          ) : (
+            <div className="placeholder-avatar">{shopName.charAt(0)}</div>
+          )}
+        </div>
       </div>
 
-      <h3 className="user-name">{name}</h3>
-      <p className="user-email">{email}</p>
+      <h3 className="user-name">{shopName}</h3>
+      <p className="user-email">{ownerName}</p>
 
       <div className="card-footer">
-        <span className="role">{role}</span>
+        <span className="role">{address}</span>
       </div>
     </div>
   );

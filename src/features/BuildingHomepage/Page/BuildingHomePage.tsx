@@ -1,11 +1,17 @@
 import "./BuildingHomePage.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import HomePageBuilderHeader from "../Components/HomePageBuilderHeader";
 import CategoryPicker from "../Components/CategoryPicker";
 import ProductPicker from "../Components/ProductPicker";
 import HomePreview from "../Components/HomePreview";
-import { useCreateHomePageMutation } from "@/redux/services/BuidHomeApi";
+
+import {
+  useCreateHomePageMutation,
+  useGetHomePageDetailsForDashboardQuery,
+} from "@/redux/services/BuidHomeApi";
+
+/* ---------------- TYPES ---------------- */
 
 export type Product = {
   _id: string;
@@ -21,6 +27,11 @@ export type PreviewSectionType = {
 };
 
 const BuildingHomePage = () => {
+  const { data: homePageDetails, isLoading: isHomePageDetailsLoading } =
+    useGetHomePageDetailsForDashboardQuery();
+
+  const [createHomePage, { isLoading }] = useCreateHomePageMutation();
+
   const [activeCategory, setActiveCategory] = useState<{
     id: string;
     name: string;
@@ -30,26 +41,22 @@ const BuildingHomePage = () => {
     [],
   );
 
-  const [createHomePage, { isLoading }] = useCreateHomePageMutation();
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  const handleBuildHome = async () => {
-    try {
-      const payload = {
-        homepageDetails: previewSections.map((section) => ({
-          categoryId: section.categoryId,
-          categoryName: section.categoryName,
-          products: section.products.map((p) => p._id),
-        })),
-      };
+  useEffect(() => {
+    if (!homePageDetails?.data || isHydrated) return;
 
-      await createHomePage(payload);
+    const formatted: PreviewSectionType[] = homePageDetails.data.map(
+      (section: any) => ({
+        categoryId: section.categoryId,
+        categoryName: section.categoryName,
+        products: section.products,
+      }),
+    );
 
-      alert("Homepage built successfully");
-    } catch (error) {
-      console.error("Failed to build home", error);
-      alert("Failed to build homepage");
-    }
-  };
+    setPreviewSections(formatted);
+    setIsHydrated(true);
+  }, [homePageDetails, isHydrated]);
 
   const handleCategoryAdd = (id: string, name: string) => {
     setActiveCategory({ id, name });
@@ -59,22 +66,24 @@ const BuildingHomePage = () => {
     if (!activeCategory) return;
 
     setPreviewSections((prev) => {
-      const section = prev.find((s) => s.categoryId === activeCategory.id);
+      const existingSection = prev.find(
+        (s) => s.categoryId === activeCategory.id,
+      );
 
-      if (section) {
-        const alreadyExists = section.products.some(
+      if (existingSection) {
+        const alreadyExists = existingSection.products.some(
           (p) => p._id === product._id,
         );
 
         if (alreadyExists) return prev;
 
-        return prev.map((s) =>
-          s.categoryId === activeCategory.id
+        return prev.map((section) =>
+          section.categoryId === activeCategory.id
             ? {
-                ...s,
-                products: [...s.products, product].slice(0, 6),
+                ...section,
+                products: [...section.products, product].slice(0, 6),
               }
-            : s,
+            : section,
         );
       }
 
@@ -104,6 +113,25 @@ const BuildingHomePage = () => {
     );
   };
 
+  const handleBuildHome = async () => {
+    try {
+      const payload = {
+        homepageDetails: previewSections.map((section) => ({
+          categoryId: section.categoryId,
+          categoryName: section.categoryName,
+          products: section.products.map((p) => p._id),
+        })),
+      };
+
+      await createHomePage(payload).unwrap();
+
+      alert("Homepage built successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to build homepage");
+    }
+  };
+
   return (
     <div className="hp-layout">
       <HomePageBuilderHeader />
@@ -122,7 +150,7 @@ const BuildingHomePage = () => {
         sections={previewSections}
         onRemoveProduct={handleProductRemove}
         onBuildHome={handleBuildHome}
-        isLoading={isLoading}
+        isLoading={isLoading || isHomePageDetailsLoading}
       />
     </div>
   );
