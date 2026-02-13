@@ -1,71 +1,56 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { MediaItem } from "../../../shared/types/types";
 
-interface CarouselsProps {
-  carousels: string[];
+interface Props {
+  carousels: MediaItem[];
+  setCarousels: React.Dispatch<React.SetStateAction<MediaItem[]>>;
 }
 
-const Carousels = ({ carousels }: CarouselsProps) => {
+const Carousels = ({ carousels, setCarousels }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const [localCarousels, setLocalCarousels] = useState<string[]>(carousels);
 
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
 
-    const previews = Array.from(files).map((file) => URL.createObjectURL(file));
+    const newItems: MediaItem[] = Array.from(files).map((file) => ({
+      type: "new",
+      file,
+      url: URL.createObjectURL(file),
+    }));
 
-    setLocalCarousels((prev) => [...prev, ...previews]);
-
-    console.log("Upload carousels:", files);
+    setCarousels((prev) => [...prev, ...newItems]);
   };
 
   return (
-    <div>
-      <div
-        className="bc-upload-zone"
-        onClick={() => inputRef.current?.click()}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          handleFiles(e.dataTransfer.files);
-        }}
-      >
+    <>
+      <div className="bc-upload-zone" onClick={() => inputRef.current?.click()}>
         <p>Click or drag image here to upload carousel</p>
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
           multiple
+          accept="image/*"
           hidden
           onChange={(e) => handleFiles(e.target.files)}
         />
       </div>
 
       <div className="bc-grid">
-        {localCarousels.filter(Boolean).map((url, index) => (
-          <div className="bc-card" key={`${url}-${index}`}>
+        {carousels.map((c, i) => (
+          <div className="bc-card" key={i}>
             <button
               className="bc-delete-icon"
               onClick={() =>
-                setLocalCarousels((prev) => prev.filter((item) => item !== url))
+                setCarousels((prev) => prev.filter((_, idx) => idx !== i))
               }
             >
               ✕
             </button>
-
-            <img src={url} alt={`carousel-${index}`} />
+            <img src={c.url} />
           </div>
         ))}
       </div>
-
-      <div className="bc-proceed">
-        <button
-          onClick={() => console.log("Proceed carousels", localCarousels)}
-        >
-          Proceed
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

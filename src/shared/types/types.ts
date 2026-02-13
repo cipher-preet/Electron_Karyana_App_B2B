@@ -40,8 +40,6 @@ export interface CategoryApiResponse {
   };
 }
 
-
-
 export interface BannerCarouselConfig {
   _id: string;
   banners: string[];
@@ -52,3 +50,15 @@ export interface ApiResponse {
   success: boolean;
   data: BannerCarouselConfig[];
 }
+
+export type MediaItem =
+  | {
+      type: "existing";
+      key: string;
+      url: string;
+    }
+  | {
+      type: "new";
+      file: File;
+      url: string;
+    };

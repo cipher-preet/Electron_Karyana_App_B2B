@@ -14,6 +14,8 @@ import OrderInfoPage from "@/features/ApproveUsers/Components/OrderInfo/OrderInf
 import ShopInfoPage from "@/features/ApproveUsers/Components/ShopInfo/ShopInfoPage";
 import BuildingHomePage from "@/features/BuildingHomepage/Page/BuildingHomePage";
 import BannersAndCrouser from "@/features/BannersAndCarosuls/Pages/BannersAndCrouser";
+import PendingApprovalUser from "@/features/PendingApproveUsers/Page/PendingApprovalUser";
+import ApprovalUserPage from "@/features/PendingApproveUsers/Components/ApprovalUserPage";
 
 const AppRoutes = () => {
   return (
@@ -34,6 +36,8 @@ const AppRoutes = () => {
         </Route>
         <Route path="buildHomepage" element={<BuildingHomePage />} />
         <Route path="bannersAndCrouser" element={<BannersAndCrouser />} />
+        <Route path="pendingapprovaluser" element={<PendingApprovalUser />} />
+        <Route path="/pendingusers/:id" element={<ApprovalUserPage />}></Route>
       </Route>
     </Routes>
   );

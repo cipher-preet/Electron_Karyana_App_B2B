@@ -24,6 +24,7 @@ const Sidebar = ({ collapsed, onToggle }: Props) => {
         <NavItem to="/unit" label="Unit" collapsed={collapsed} />
         <NavItem to="/brandpage" label="Brand" collapsed={collapsed} />
         <NavItem to="/approveusers" label="ApproveUser" collapsed={collapsed} />
+        <NavItem to="/pendingapprovaluser" label="PendingUser" collapsed={collapsed} />
         <NavItem to="/buildHomepage" label="BuildHome" collapsed={collapsed} />
         <NavItem
           to="/bannersAndCrouser"

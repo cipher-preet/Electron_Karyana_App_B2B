@@ -27,11 +27,9 @@ const CategoryModal: React.FC<Props> = ({
   const isChild = formName === "childCategory";
 
   const [name, setName] = useState(category?.name || "");
-  // const [parentId, setParentId] = useState(
-  //   category?.parentCategory || ""
-  // );
+
   const [imagePreview, setImagePreview] = useState<string | undefined>(
-    category?.images
+    category?.images,
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -47,76 +45,28 @@ const CategoryModal: React.FC<Props> = ({
     setShowConfirm(true);
   };
 
-  // Image handler
   const handleImageChange = (file: File) => {
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   };
-
-  //   const handleConfirmSave = async () => {
-  //   try {
-  //     const formData = new FormData();
-
-  //     formData.append("name", name);
-
-  //     if (isEdit && category?._id) {
-  //       formData.append("id", category._id);
-  //     }
-
-  //     if (imageFile) {
-  //       formData.append("images", imageFile);
-  //     }
-
-  //     // ✅ ONLY for creating child
-  //     if (isChild && !isEdit && parentId) {
-  //       formData.append("parentcategoryId", parentId);
-  //     }
-
-  //     if (isChild) {
-  //       isEdit
-  //         ? await editChildCategory(formData).unwrap()
-  //         : await createChildCategory(formData).unwrap();
-  //     } else {
-  //       isEdit
-  //         ? await editParentCategory(formData).unwrap()
-  //         : await createParentCategory(formData).unwrap();
-  //     }
-
-  //     setShowConfirm(false);
-  //     onClose();
-  //   } catch (error) {
-  //     console.error("Category save failed", error);
-  //   }
-  // };
 
   const handleConfirmSave = async () => {
     try {
       const formData = new FormData();
       formData.append("name", name);
 
-      // 1. Log for debugging
-      console.log("Saving Category:", {
-        isEdit,
-        isChild,
-        categoryId: category?._id,
-      });
-
-      // 2. Handle ID (Ensure "id" is what your backend expects)
       if (isEdit && category?._id) {
         formData.append("id", category._id);
       }
 
-      // 3. Handle Image
       if (imageFile) {
         formData.append("images", imageFile);
       }
 
-      // 4. Handle Parent ID (Only for new children)
       if (isChild && !isEdit && parentId) {
         formData.append("parentcategoryId", parentId);
       }
 
-      // 5. Execution
       if (isChild) {
         if (isEdit) {
           await editChildCategory(formData).unwrap();
@@ -149,8 +99,8 @@ const CategoryModal: React.FC<Props> = ({
                 ? "Edit Child Category"
                 : "Edit Parent Category"
               : isChild
-              ? "Add Child Category"
-              : "Add Parent Category"}
+                ? "Add Child Category"
+                : "Add Parent Category"}
           </h3>
 
           <button onClick={onClose}>✕</button>
@@ -185,25 +135,6 @@ const CategoryModal: React.FC<Props> = ({
           />
         </div>
 
-        {/* PARENT SELECT */}
-        {/* {isChild && (
-          <div className="form-group">
-            <label>Parent Category</label>
-            <select
-              value={parentId}
-              onChange={(e) => setParentId(e.target.value)}
-            >
-              <option value="">Select Parent</option>
-              {parentOptions.map((p) => (
-                <option key={p._id} value={p._id}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )} */}
-
-        {/* ACTIONS */}
         <div className="modal-actions">
           <button className="primary-btn" onClick={handleSaveClick}>
             Save
@@ -222,8 +153,8 @@ const CategoryModal: React.FC<Props> = ({
                 ? "Are you sure you want to update this child category?"
                 : "Are you sure you want to update this parent category?"
               : isChild
-              ? "Are you sure you want to create this child category?"
-              : "Are you sure you want to create this parent category?"
+                ? "Are you sure you want to create this child category?"
+                : "Are you sure you want to create this parent category?"
           }
           confirmText={isEdit ? "Update" : "Create"}
           cancelText="Cancel"

@@ -1,72 +1,56 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { MediaItem } from "../../../shared/types/types";
 
-interface BannersProps {
-  banners: string[];
+interface Props {
+  banners: MediaItem[];
+  setBanners: React.Dispatch<React.SetStateAction<MediaItem[]>>;
 }
 
-const Banners = ({ banners }: BannersProps) => {
+const Banners = ({ banners, setBanners }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const [localBanners, setLocalBanners] = useState<string[]>(banners);
 
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
 
-    const previews = Array.from(files).map((file) => URL.createObjectURL(file));
+    const newItems: MediaItem[] = Array.from(files).map((file) => ({
+      type: "new",
+      file,
+      url: URL.createObjectURL(file),
+    }));
 
-    setLocalBanners((prev) => [...prev, ...previews]);
-
-    console.log("Upload banners:", files);
+    setBanners((prev) => [...prev, ...newItems]);
   };
 
   return (
-    <div>
-      {/* Upload Zone */}
-      <div
-        className="bc-upload-zone"
-        onClick={() => inputRef.current?.click()}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          handleFiles(e.dataTransfer.files);
-        }}
-      >
+    <>
+      <div className="bc-upload-zone" onClick={() => inputRef.current?.click()}>
         <p>Click or drag image here to upload banner</p>
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
           multiple
+          accept="image/*"
           hidden
           onChange={(e) => handleFiles(e.target.files)}
         />
       </div>
 
-      {/* Banners */}
       <div className="bc-grid">
-        {localBanners.filter(Boolean).map((url, index) => (
-          <div className="bc-card" key={`${url}-${index}`}>
+        {banners.map((b, i) => (
+          <div className="bc-card" key={i}>
             <button
               className="bc-delete-icon"
               onClick={() =>
-                setLocalBanners((prev) => prev.filter((item) => item !== url))
+                setBanners((prev) => prev.filter((_, idx) => idx !== i))
               }
             >
               ✕
             </button>
-
-            <img src={url} alt={`banner-${index}`} />
+            <img src={b.url} />
           </div>
         ))}
       </div>
-
-      {/* Proceed */}
-      <div className="bc-proceed">
-        <button onClick={() => console.log("Proceed banners", localBanners)}>
-          Proceed
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

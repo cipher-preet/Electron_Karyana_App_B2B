@@ -1,0 +1,168 @@
+.approval-wrapper {
+  max-width: 1300px;
+  margin: auto;
+  padding: 32px;
+  color: #0f172a;
+  background: linear-gradient(180deg, #f8fafc, #eef2f7);
+  min-height: 100vh;
+}
+
+.approval-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.approval-header h1 {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.approval-header p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.pending {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.approval-layout {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 24px;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+}
+
+.sticky-card {
+  position: sticky;
+  top: 24px;
+  height: fit-content;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.info-section {
+  margin-bottom: 10px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.info-value {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+  margin: 20px 0;
+}
+
+.document-frame {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.document-frame img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.doc-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+.approval-actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #475569;
+}
+
+.btn-ghost:hover {
+  background: #f1f5f9;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .approval-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .approval-actions {
+    justify-content: center;
+  }
+}

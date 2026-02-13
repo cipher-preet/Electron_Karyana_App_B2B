@@ -89,11 +89,50 @@ export const BuildHomeApi = baseApi.injectEndpoints({
       },
     }),
 
+    //-------------------- get pending user card in dashboard ----------------------
+    getPendingUserProfileCardInDashboardSection: builder.query<
+      GetUserProfileCardInDashboardResponse,
+      { cursor?: string }
+    >({
+      query: ({ cursor }) => ({
+        url: "/dashboard/getPendingApprovalProfileCardsInDashboard",
+        params: cursor ? { cursor } : {},
+      }),
+
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+
+      merge: (currentCache, newData) => {
+        if (!currentCache?.data?.users) {
+          return newData;
+        }
+
+        const existingIds = new Set(
+          currentCache.data.users.map((u: any) => u._id),
+        );
+
+        const freshUsers = newData.data.users.filter(
+          (u: any) => !existingIds.has(u._id),
+        );
+
+        currentCache.data.users.push(...freshUsers);
+        currentCache.data.nextCursor = newData.data.nextCursor;
+        currentCache.data.hasNextPage = newData.data.hasNextPage;
+      },
+
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.cursor !== previousArg?.cursor;
+      },
+    }),
+    //------------------------------------------------------------------------------
+
     getUserAdditionalProfileDetails: builder.query<any, string>({
       query: (userId) => ({
         url: `/dashboard/getUserAdditionalProfileDetail?_id=${userId}`,
       }),
       keepUnusedDataFor: 300,
+      providesTags: ["buildhomecategory"],
     }),
 
     // ----------- here is the mutation starts -------------
@@ -114,6 +153,15 @@ export const BuildHomeApi = baseApi.injectEndpoints({
       providesTags: ["buildhomecategory"],
     }),
 
+    //-----------------  approval shop -----------------------------
+    approveshop: builder.mutation<any, any>({
+      query: (shopId) => ({
+        url: "/dashboard/approveshop",
+        method: "POST",
+        body: {shopId},
+      }),
+      invalidatesTags: ["buildhomecategory"],
+    }),
   }),
 });
 
@@ -124,4 +172,6 @@ export const {
   useGetProductBasicInfoByChildCategoryIdQuery,
   useCreateHomePageMutation,
   useGetHomePageDetailsForDashboardQuery,
+  useGetPendingUserProfileCardInDashboardSectionQuery,
+  useApproveshopMutation,
 } = BuildHomeApi;
