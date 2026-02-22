@@ -16,6 +16,7 @@ import BuildingHomePage from "@/features/BuildingHomepage/Page/BuildingHomePage"
 import BannersAndCrouser from "@/features/BannersAndCarosuls/Pages/BannersAndCrouser";
 import PendingApprovalUser from "@/features/PendingApproveUsers/Page/PendingApprovalUser";
 import ApprovalUserPage from "@/features/PendingApproveUsers/Components/ApprovalUserPage";
+import ProductInfoPage from "@/features/Products/Components/ProductInfoPage/ProductInfoPage";
 
 const AppRoutes = () => {
   return (
@@ -34,6 +35,7 @@ const AppRoutes = () => {
           <Route path="orderInfo" element={<OrderInfoPage />} />
           <Route path="cartInfo" element={<CartInfoPage />} />
         </Route>
+        <Route path="productInfo/:id" element={<ProductInfoPage/>}/>
         <Route path="buildHomepage" element={<BuildingHomePage />} />
         <Route path="bannersAndCrouser" element={<BannersAndCrouser />} />
         <Route path="pendingapprovaluser" element={<PendingApprovalUser />} />
