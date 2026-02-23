@@ -63,10 +63,10 @@ export const productsApi = baseApi.injectEndpoints({
           };
         }
         const existingIds = new Set(
-          currentCache.products.map((p: any) => p._id)
+          currentCache.products.map((p: any) => p._id),
         );
         const filteredNew = newData.products.filter(
-          (p: any) => !existingIds.has(p._id)
+          (p: any) => !existingIds.has(p._id),
         );
 
         currentCache.products.push(...filteredNew);
@@ -144,6 +144,25 @@ export const productsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["paginationProducts"],
     }),
+
+    // ----------- add extra info in product page ------------------
+    addproductimagesAndhighlights: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: "/dashboard/addProductImagsAndHiglights",
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags:["productandimagehighlights"]
+    }),
+    getproductimagesandhighlights: builder.query<any, String>({
+      query: (productId) => ({
+        url: `/dashboard/getProductImagesAndHighlights?productId=${productId}`,
+        keepUnusedDataFor:300,
+        providesTags:["productandimagehighlights"]
+      }),
+    }),
+
+
   }),
 });
 
