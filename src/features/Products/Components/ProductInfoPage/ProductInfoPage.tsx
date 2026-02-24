@@ -1,22 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductInfoPage.css";
+import { useParams } from "react-router-dom";
+import {
+  useAddproductimagesAndhighlightsMutation,
+  useGetproductimagesandhighlightsQuery,
+} from "@/redux/services/productsApi";
 
+interface ImageItem {
+  preview: string;
+  file?: File;
+  isExisting?: boolean;
+}
 const ProductInfoPage = () => {
-  const [highlights, setHighlights] = useState([
-    { heading: "Brand", description: "Nestle" },
-    { heading: "Weight", description: "500g" },
-    { heading: "Type", description: "Organic Coffee" },
-  ]);
+  const { id } = useParams();
 
-  const [extraImages, setExtraImages] = useState<string[]>([
-    "https://images.unsplash.com/photo-1580910051074-3eb694886505",
-    "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
-    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
-  ]);
+  const { data, isLoading, isError } =
+    useGetproductimagesandhighlightsQuery(id);
+
+  const [addProductDetailAndImages, { isLoading: adding }] =
+    useAddproductimagesAndhighlightsMutation();
+
+  const [highlights, setHighlights] = useState<any[]>([]);
+
+  const [extraImages, setExtraImages] = useState<ImageItem[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const addHighlight = () => {
     setHighlights([...highlights, { heading: "", description: "" }]);
   };
+
+  useEffect(() => {
+    if (data?.data?.data) {
+      const apiData = data.data.data;
+      setHighlights(apiData.heighlights || []);
+      const existingImages =
+        apiData.images?.map((img: string) => ({
+          preview: img,
+          isExisting: true,
+        })) || [];
+
+      setExtraImages(existingImages);
+    }
+  }, [data]);
 
   const removeHighlight = (index: number) => {
     const updated = highlights.filter((_, i) => i !== index);
@@ -34,17 +59,36 @@ const ProductInfoPage = () => {
   };
 
   const removeImage = (index: number) => {
-    setExtraImages((prev) => {
-      URL.revokeObjectURL(prev[index]);
+    setExtraImages((prev) => prev.filter((_, i) => i !== index));
+
+    setPreviewImages((prev) => {
+      const urlToRemove = prev[index];
+      if (urlToRemove) {
+        URL.revokeObjectURL(urlToRemove);
+      }
       return prev.filter((_, i) => i !== index);
     });
   };
 
-  const handleSubmit = () => {
-    console.log({
-      highlights,
-      extraImages,
-    });
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("productId", id || "");
+
+      formData.append("heighlights", JSON.stringify(highlights));
+
+      extraImages.forEach((img) => {
+        if (img.file) {
+          formData.append("images", img.file);
+        }
+      });
+      const response = await addProductDetailAndImages(formData).unwrap();
+      alert("Product info saved successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong!");
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,10 +96,15 @@ const ProductInfoPage = () => {
 
     const files = Array.from(e.target.files);
 
-    const newImageUrls = files.map((file) => URL.createObjectURL(file));
+    const newImages: ImageItem[] = files.map((file) => ({
+      preview: URL.createObjectURL(file),
+      file: file,
+    }));
 
-    setExtraImages((prev) => [...prev, ...newImageUrls]);
+    setExtraImages((prev) => [...prev, ...newImages]);
   };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="product-info-container">
@@ -79,7 +128,7 @@ const ProductInfoPage = () => {
         <div className="image-preview-grid">
           {extraImages.map((img, index) => (
             <div key={index} className="image-wrapper">
-              <img src={img} alt="preview" />
+              <img src={img.preview} alt="preview" />
               <button onClick={() => removeImage(index)}>✕</button>
             </div>
           ))}
@@ -116,8 +165,8 @@ const ProductInfoPage = () => {
         </button>
       </div>
 
-      <button className="save-btn" onClick={handleSubmit}>
-        Save Product Info
+      <button className="save-btn" onClick={handleSubmit} disabled={adding}>
+        {adding ? "Saving..." : "Save Product Info"}
       </button>
     </div>
   );

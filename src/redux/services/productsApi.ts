@@ -152,17 +152,15 @@ export const productsApi = baseApi.injectEndpoints({
         method: "PUT",
         body: formData,
       }),
-      invalidatesTags:["productandimagehighlights"]
+      invalidatesTags: ["productandimagehighlights"],
     }),
-    getproductimagesandhighlights: builder.query<any, String>({
+    getproductimagesandhighlights: builder.query<any, any>({
       query: (productId) => ({
         url: `/dashboard/getProductImagesAndHighlights?productId=${productId}`,
-        keepUnusedDataFor:300,
-        providesTags:["productandimagehighlights"]
+        keepUnusedDataFor: 300,
+        providesTags: ["productandimagehighlights"],
       }),
     }),
-
-
   }),
 });
 
@@ -180,4 +178,6 @@ export const {
   useGetParentCategoriesForFormsQuery,
   useGetUnitsQuery,
   useEditProductCategoryMutation,
+  useAddproductimagesAndhighlightsMutation,
+  useGetproductimagesandhighlightsQuery
 } = productsApi;
