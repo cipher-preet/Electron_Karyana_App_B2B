@@ -179,5 +179,5 @@ export const {
   useGetUnitsQuery,
   useEditProductCategoryMutation,
   useAddproductimagesAndhighlightsMutation,
-  useGetproductimagesandhighlightsQuery
+  useGetproductimagesandhighlightsQuery,
 } = productsApi;

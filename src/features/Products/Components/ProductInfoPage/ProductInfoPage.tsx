@@ -8,14 +8,14 @@ import {
 
 interface ImageItem {
   preview: string;
+  key?: string;
   file?: File;
   isExisting?: boolean;
 }
 const ProductInfoPage = () => {
   const { id } = useParams();
 
-  const { data, isLoading, isError } =
-    useGetproductimagesandhighlightsQuery(id);
+  const { data, isLoading } = useGetproductimagesandhighlightsQuery(id);
 
   const [addProductDetailAndImages, { isLoading: adding }] =
     useAddproductimagesAndhighlightsMutation();
@@ -32,14 +32,18 @@ const ProductInfoPage = () => {
   useEffect(() => {
     if (data?.data?.data) {
       const apiData = data.data.data;
-      setHighlights(apiData.heighlights || []);
-      const existingImages =
-        apiData.images?.map((img: string) => ({
-          preview: img,
-          isExisting: true,
-        })) || [];
 
-      setExtraImages(existingImages);
+      setHighlights(apiData.heighlights || []);
+
+      const formattedImages: ImageItem[] = (apiData.images || []).map(
+        (key: string, index: number) => ({
+          key: key,
+          preview: apiData.url[index],
+          isExisting: true,
+        }),
+      );
+
+      setExtraImages(formattedImages);
     }
   }, [data]);
 
@@ -78,12 +82,19 @@ const ProductInfoPage = () => {
 
       formData.append("heighlights", JSON.stringify(highlights));
 
+      const existingImages = extraImages
+        .filter((img) => img.isExisting)
+        .map((img) => img.key);
+
+      formData.append("existingImages", JSON.stringify(existingImages));
+
       extraImages.forEach((img) => {
         if (img.file) {
           formData.append("images", img.file);
         }
       });
-      const response = await addProductDetailAndImages(formData).unwrap();
+
+      await addProductDetailAndImages(formData).unwrap();
       alert("Product info saved successfully!");
     } catch (error) {
       console.error(error);
