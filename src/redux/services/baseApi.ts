@@ -21,6 +21,7 @@ export const baseApi = createApi({
     "buildhomecategory",
     "bannersandcarosels",
     "productandimagehighlights",
+    "contactquerydetail"
   ],
   endpoints: () => ({}),
 });

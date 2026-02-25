@@ -1,0 +1,150 @@
+.dashboard-container {
+  padding: 30px;
+  background: #f8fafc;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.dashboard-header {
+  margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.dashboard-header p {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.table-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+}
+
+.query-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.query-table thead {
+  background: #f3f4f6;
+  position: sticky;
+  top: 0;
+}
+
+.query-table th {
+  padding: 18px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.query-table td {
+  padding: 20px 16px;
+  font-size: 15px;
+  color: #4b5563;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.query-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.name-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-cell span {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.message-cell {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.complaint {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.inquiry {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.query {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pending {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.resolved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.action-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #111827;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.action-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+
+  .table-wrapper {
+    padding: 20px;
+  }
+}

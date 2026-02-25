@@ -17,6 +17,7 @@ import BannersAndCrouser from "@/features/BannersAndCarosuls/Pages/BannersAndCro
 import PendingApprovalUser from "@/features/PendingApproveUsers/Page/PendingApprovalUser";
 import ApprovalUserPage from "@/features/PendingApproveUsers/Components/ApprovalUserPage";
 import ProductInfoPage from "@/features/Products/Components/ProductInfoPage/ProductInfoPage";
+import Contactus from "@/features/ContactUsPage/Page/Contactus";
 
 const AppRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const AppRoutes = () => {
         <Route path="bannersAndCrouser" element={<BannersAndCrouser />} />
         <Route path="pendingapprovaluser" element={<PendingApprovalUser />} />
         <Route path="/pendingusers/:id" element={<ApprovalUserPage />}></Route>
+        <Route path="/contactus" element={< Contactus/>}></Route>
       </Route>
     </Routes>
   );
