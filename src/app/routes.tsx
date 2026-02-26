@@ -18,6 +18,7 @@ import PendingApprovalUser from "@/features/PendingApproveUsers/Page/PendingAppr
 import ApprovalUserPage from "@/features/PendingApproveUsers/Components/ApprovalUserPage";
 import ProductInfoPage from "@/features/Products/Components/ProductInfoPage/ProductInfoPage";
 import Contactus from "@/features/ContactUsPage/Page/Contactus";
+import TagPages from "@/features/TagSection/Pages/TagPages";
 
 const AppRoutes = () => {
   return (
@@ -42,6 +43,7 @@ const AppRoutes = () => {
         <Route path="pendingapprovaluser" element={<PendingApprovalUser />} />
         <Route path="/pendingusers/:id" element={<ApprovalUserPage />}></Route>
         <Route path="/contactus" element={< Contactus/>}></Route>
+        <Route path="/tags" element={< TagPages/>}></Route>
       </Route>
     </Routes>
   );

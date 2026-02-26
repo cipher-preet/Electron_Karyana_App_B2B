@@ -30,7 +30,7 @@ export const contactUsApi = baseApi.injectEndpoints({
       query: (body) => ({
         url: `/dashboard/markasreadincontactus`,
         method: "POST",
-        body
+        body,
       }),
       invalidatesTags: ["contactquerydetail"],
     }),

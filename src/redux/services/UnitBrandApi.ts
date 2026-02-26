@@ -28,6 +28,16 @@ interface BrandResponse {
   data: Brand[];
 }
 
+interface Tags {
+  _id: string;
+  name: string;
+  isActive: boolean;
+}
+interface TagResponse {
+  success: boolean;
+  data: Tags[];
+}
+
 const UnitBrandApiForDashboard = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUnitsForDashboard: builder.query<UnitApiResponse, void>({
@@ -41,6 +51,33 @@ const UnitBrandApiForDashboard = baseApi.injectEndpoints({
       keepUnusedDataFor: 300,
       providesTags: ["brand"],
     }),
+
+    //------------------tags setup --------------------------
+    getallTagsForDashboard: builder.query<TagResponse, void>({
+      query: () => "/dashboard/getAllTags",
+      keepUnusedDataFor: 300,
+      providesTags: ["tag"],
+    }),
+
+    createTag: builder.mutation<any, any>({
+      query: (createTag) => ({
+        url: "/dashboard/addTags",
+        method: "POST",
+        body: createTag,
+      }),
+      invalidatesTags: ["tag"],
+    }),
+
+    EditTags: builder.mutation<any, any>({
+      query: (EditTags) => ({
+        url: "/dashboard/editTags",
+        method: "PUT",
+        body: EditTags,
+      }),
+      invalidatesTags: ["tag"],
+    }),
+
+    //-------------------------------------------------------
 
     createUnit: builder.mutation<any, any>({
       query: (createUnit) => ({
@@ -77,7 +114,6 @@ const UnitBrandApiForDashboard = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["unit"],
     }),
-
   }),
 });
 
@@ -88,4 +124,7 @@ export const {
   useEditBrandMutation,
   useEditUnitMutation,
   useGetBrandsForDashboardQuery,
+  useGetallTagsForDashboardQuery,
+  useCreateTagMutation,
+  useEditTagsMutation,
 } = UnitBrandApiForDashboard;

@@ -88,7 +88,14 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
 
         <div className="card-footer">
           <span className="stock">Stock: {sku}</span>
-          <button onClick={() => onEdit(product)}>Edit</button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(product);
+            }}
+          >
+            Edit
+          </button>
         </div>
       </div>
     </div>

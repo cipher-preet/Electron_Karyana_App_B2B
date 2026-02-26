@@ -1,54 +1,49 @@
 import {
-  useCreateBrandMutation,
-  useEditBrandMutation,
+  useCreateTagMutation,
+  useEditTagsMutation,
 } from "@/redux/services/UnitBrandApi";
 import React, { useState } from "react";
 
-interface Brand {
-  _id?: string;
+interface Tags {
+  _id: string;
   name: string;
-  description: string;
-  isActive?: boolean;
-}
-interface BrandModalProps {
-  initialData: Brand | null;
-  onClose: () => void;
-  onSave: (payload: Brand) => void;
+  isActive: boolean;
 }
 
-const BrandModal: React.FC<BrandModalProps> = ({
+interface TagsCardProps {
+  initialData: Tags | null;
+  onClose: () => void;
+  onSave: (payload: Tags) => void;
+}
+
+const TagModal: React.FC<TagsCardProps> = ({
   onClose,
   onSave,
   initialData,
 }) => {
-  const [createBrand, { isLoading: creating }] = useCreateBrandMutation();
+  const [createBrand, { isLoading: creating }] = useCreateTagMutation();
 
-  const [EditBrand, { isLoading: updating }] = useEditBrandMutation();
+  const [EditBrand, { isLoading: updating }] = useEditTagsMutation();
 
   const isEditMode = Boolean(initialData?._id);
 
   const [name, setName] = useState(initialData?.name || "");
-  const [description, setDescription] = useState(
-    initialData?.description || "",
-  );
 
   const handleSubmit = async () => {
-    if (!name || !description) return;
+    if (!name) return;
 
     try {
-      let response: Brand;
+      let response: Tags;
 
       if (isEditMode && initialData?._id) {
         response = await EditBrand({
           _id: initialData._id,
           name,
-          description,
           isActive: true,
         }).unwrap();
       } else {
         response = await createBrand({
           name,
-          description,
           isActive: true,
         }).unwrap();
       }
@@ -69,13 +64,6 @@ const BrandModal: React.FC<BrandModalProps> = ({
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-
-        <input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
         <div className="unit-modal-actions">
           <button className="unit-cancel-btn" onClick={onClose}>
             Cancel
@@ -93,4 +81,4 @@ const BrandModal: React.FC<BrandModalProps> = ({
   );
 };
 
-export default BrandModal;
+export default TagModal;
