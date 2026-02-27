@@ -19,6 +19,9 @@ import ApprovalUserPage from "@/features/PendingApproveUsers/Components/Approval
 import ProductInfoPage from "@/features/Products/Components/ProductInfoPage/ProductInfoPage";
 import Contactus from "@/features/ContactUsPage/Page/Contactus";
 import TagPages from "@/features/TagSection/Pages/TagPages";
+import TrendPage from "@/features/SetTrends/Pages/TrendPage";
+import TrendManagementPage from "@/features/TrendManagement/Pages/TrendManagementPage";
+import TrendModulePage from "@/features/TrendManagement/Pages/TrendModulePage";
 
 const AppRoutes = () => {
   return (
@@ -44,6 +47,8 @@ const AppRoutes = () => {
         <Route path="/pendingusers/:id" element={<ApprovalUserPage />}></Route>
         <Route path="/contactus" element={< Contactus/>}></Route>
         <Route path="/tags" element={< TagPages/>}></Route>
+        <Route path="/settrends" element={< TrendPage/>}></Route>
+        <Route path="/trendmanagement" element={< TrendModulePage/>}></Route>
       </Route>
     </Routes>
   );

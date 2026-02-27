@@ -31,6 +31,8 @@ const Sidebar = ({ collapsed, onToggle }: Props) => {
           collapsed={collapsed}
         />
         <NavItem to="/buildHomepage" label="BuildHome" collapsed={collapsed} />
+        {/* <NavItem to="/settrends" label="BuildTrends" collapsed={collapsed} /> */}
+        <NavItem to="/trendmanagement" label="Manage Trends" collapsed={collapsed} />
         <NavItem
           to="/bannersAndCrouser"
           label="Banners"

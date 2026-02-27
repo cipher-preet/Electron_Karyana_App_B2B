@@ -1,0 +1,15 @@
+.trend-container {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+.trend-left {
+  flex: 2;
+}
+
+.trend-right {
+  flex: 1;
+}
