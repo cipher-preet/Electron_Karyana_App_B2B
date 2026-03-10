@@ -20,7 +20,7 @@ const SetTrendPage = () => {
   return (
     <div className="trend-container">
       <div className="trend-left">
-        <TrendForm />
+        <TrendForm selectedProducts={selectedProducts} />
         <ProductSelector addProduct={addProduct} />
       </div>
 

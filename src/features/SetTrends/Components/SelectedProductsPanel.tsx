@@ -22,7 +22,7 @@ const SelectedProductsPanel: React.FC<Props> = ({
         <div key={product._id} className="selected-item">
           <div>
             <h4>{product.name}</h4>
-            <p>₹ {product.price}</p>
+            <p>₹ {product.mrp}</p>
           </div>
           <button onClick={() => removeProduct(product._id)}>Remove</button>
         </div>
