@@ -7,8 +7,16 @@ export const SetTrendApi = baseApi.injectEndpoints({
         `/dashboard/getProductsForTrendBuilding?cursor=${cursor || ""}&search=${search}`,
       keepUnusedDataFor: 300,
     }),
+
+    createTrend: builder.mutation<any, any>({
+      query: (trendData) => ({
+        url: "/dashboard/creteTrends",
+        method: "POST",
+        body: trendData,
+      }),
+    }),
   }),
 });
 
-
-export const { useGetproductsForTrendsQuery } = SetTrendApi;
+export const { useGetproductsForTrendsQuery, useCreateTrendMutation } =
+  SetTrendApi;
