@@ -1,44 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TrendManagementPage.css";
 import TrendList from "../Components/TrendList";
 import TrendEditModal from "../Components/TrendEditModal";
+import {
+  useGetTrendsForDashboardQuery,
+  useDeleteTrendsMutation,
+  useEditTrendsMutation,
+} from "@/redux/services/SetTrend";
 
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+}
 
-const dummyTrends = [
-  {
-    _id: "1",
-    name: "Summer Sale",
-    products: [
-      { _id: "p1", name: "Product 1", price: 120 },
-      { _id: "p2", name: "Product 2", price: 200 },
-    ],
-  },
-  {
-    _id: "2",
-    name: "Top Selling",
-    products: [
-      { _id: "p3", name: "Product 3", price: 150 },
-    ],
-  },
-];
+interface Trend {
+  _id: string;
+  name: string;
+  products: Product[];
+}
 
 const TrendManagementPage = () => {
-  const [trends, setTrends] = useState(dummyTrends);
+  const { data, isLoading, isError } = useGetTrendsForDashboardQuery();
+  const [editTrendApi] = useEditTrendsMutation();
+
+  const [deleteTrendApi] = useDeleteTrendsMutation();
+
+  const [trends, setTrends] = useState<Trend[]>([]);
   const [showTrends, setShowTrends] = useState(false);
-  const [editingTrend, setEditingTrend] = useState<any>(null);
+  const [editingTrend, setEditingTrend] = useState<Trend | null>(null);
 
-  const deleteTrend = (id: string) => {
-    setTrends(prev => prev.filter(trend => trend._id !== id));
+  useEffect(() => {
+    if (data?.data) {
+      setTrends(data.data);
+    }
+  }, [data]);
+
+  const deleteTrend = async (id: string) => {
+    try {
+      await deleteTrendApi({ trendId: id }).unwrap();
+
+      setTrends((prev) => prev.filter((trend) => trend._id !== id));
+    } catch (error) {
+      console.error("Failed to delete trend", error);
+    }
   };
+  const updateTrend = async (updatedTrend: any) => {
+    const productIds = updatedTrend.products.map((p: any) => p._id);
 
-  const updateTrend = (updatedTrend: any) => {
-    setTrends(prev =>
-      prev.map(trend =>
-        trend._id === updatedTrend._id ? updatedTrend : trend
-      )
+    await editTrendApi({
+      trendId: updatedTrend._id,
+      productId: productIds,
+    }).unwrap();
+
+    setTrends((prev) =>
+      prev.map((trend) =>
+        trend._id === updatedTrend._id ? updatedTrend : trend,
+      ),
     );
     setEditingTrend(null);
   };
+
+  if (isLoading) return <p>Loading trends...</p>;
+  if (isError) return <p>Failed to load trends</p>;
 
   return (
     <div className="trend-page">

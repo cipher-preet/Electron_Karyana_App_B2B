@@ -22,7 +22,8 @@ export const baseApi = createApi({
     "bannersandcarosels",
     "productandimagehighlights",
     "contactquerydetail",
-    "tag"
+    "tag",
+    "trend",
   ],
   endpoints: () => ({}),
 });

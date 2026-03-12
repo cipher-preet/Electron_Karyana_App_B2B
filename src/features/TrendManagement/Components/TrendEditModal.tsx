@@ -11,7 +11,7 @@ const TrendEditModal: React.FC<Props> = ({ trend, onClose, onSave }) => {
   const [products, setProducts] = useState(trend.products);
 
   const removeProduct = (id: string) => {
-    setProducts(prev => prev.filter((p: any) => p._id !== id));
+    setProducts((prev: any) => prev.filter((p: any) => p._id !== id));
   };
 
   const handleSave = () => {
@@ -21,14 +21,12 @@ const TrendEditModal: React.FC<Props> = ({ trend, onClose, onSave }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Edit {trend.name}</h3>
+        <h3>Edit {trend.trendname}</h3>
 
         {products.map((product: any) => (
           <div key={product._id} className="modal-product">
             <span>{product.name}</span>
-            <button onClick={() => removeProduct(product._id)}>
-              Remove
-            </button>
+            <button onClick={() => removeProduct(product._id)}>Remove</button>
           </div>
         ))}
 
