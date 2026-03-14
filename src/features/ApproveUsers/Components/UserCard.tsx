@@ -7,6 +7,7 @@ interface UserCardProps {
   ownerName: string;
   address: string;
   image?: string;
+  actualUserId: string;
 }
 
 const UserCard = ({
@@ -15,10 +16,14 @@ const UserCard = ({
   ownerName,
   address,
   image,
+  actualUserId,
 }: UserCardProps) => {
   const navigate = useNavigate();
   return (
-    <div className="user-card" onClick={() => navigate(`/users/${userId}`)}>
+    <div
+      className="user-card"
+      onClick={() => navigate(`/users/${userId}/${actualUserId}`)}
+    >
       <div className="card-header">
         <div className="avatar">
           {image ? (

@@ -8,13 +8,13 @@ const menu = [
 ];
 
 const SettingsSidebar = () => {
-  const { id } = useParams();
+  const { id, actualUserId } = useParams();
   return (
     <div className="settings-sidebar">
       {menu.map((item) => (
-       <NavLink
+        <NavLink
           key={item.label}
-          to={`/users/${id}/${item.path}`}
+          to={`/users/${id}/${actualUserId}/${item.path}`}
           className={({ isActive }) => `menu-item ${isActive ? "active" : ""}`}
         >
           {item.label}

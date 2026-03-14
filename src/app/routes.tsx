@@ -34,21 +34,21 @@ const AppRoutes = () => {
         <Route path="/unit" element={<UnitPage />} />
         <Route path="/brandpage" element={<BrandPage />} />
         <Route path="/approveusers" element={<ApproveUserPage />} />
-        <Route path="/users/:id" element={<UserDetailsPage />}>
+        <Route path="/users/:id/:actualUserId" element={<UserDetailsPage />}>
           <Route index element={<Navigate to="shop-info" replace />} />
           <Route path="shop-info" element={<ShopInfoPage />} />
           <Route path="orderInfo" element={<OrderInfoPage />} />
           <Route path="cartInfo" element={<CartInfoPage />} />
         </Route>
-        <Route path="productInfo/:id" element={<ProductInfoPage/>}/>
+        <Route path="productInfo/:id" element={<ProductInfoPage />} />
         <Route path="buildHomepage" element={<BuildingHomePage />} />
         <Route path="bannersAndCrouser" element={<BannersAndCrouser />} />
         <Route path="pendingapprovaluser" element={<PendingApprovalUser />} />
         <Route path="/pendingusers/:id" element={<ApprovalUserPage />}></Route>
-        <Route path="/contactus" element={< Contactus/>}></Route>
-        <Route path="/tags" element={< TagPages/>}></Route>
-        <Route path="/settrends" element={< TrendPage/>}></Route>
-        <Route path="/trendmanagement" element={< TrendModulePage/>}></Route>
+        <Route path="/contactus" element={<Contactus />}></Route>
+        <Route path="/tags" element={<TagPages />}></Route>
+        <Route path="/settrends" element={<TrendPage />}></Route>
+        <Route path="/trendmanagement" element={<TrendModulePage />}></Route>
       </Route>
     </Routes>
   );

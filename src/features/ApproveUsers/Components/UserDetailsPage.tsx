@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet,useParams } from "react-router-dom";
 import SettingsSidebar from "./UserDetails/SettingsSidebar";
 import "./UserDetailsPage.css";
 

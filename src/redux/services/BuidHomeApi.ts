@@ -158,9 +158,16 @@ export const BuildHomeApi = baseApi.injectEndpoints({
       query: (shopId) => ({
         url: "/dashboard/approveshop",
         method: "POST",
-        body: {shopId},
+        body: { shopId },
       }),
       invalidatesTags: ["buildhomecategory"],
+    }),
+
+    getUserCartInfo: builder.query<any, string>({
+      query: (userId) => ({
+        url: `/dashboard/getuserCartDataForDashboard?userId=${userId}`,
+        keepUnusedDataFor: 300,
+      }),
     }),
   }),
 });
@@ -174,4 +181,5 @@ export const {
   useGetHomePageDetailsForDashboardQuery,
   useGetPendingUserProfileCardInDashboardSectionQuery,
   useApproveshopMutation,
+  useGetUserCartInfoQuery,
 } = BuildHomeApi;

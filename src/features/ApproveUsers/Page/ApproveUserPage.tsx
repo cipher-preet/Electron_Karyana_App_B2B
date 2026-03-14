@@ -10,7 +10,6 @@ const ApproveUserPage = () => {
 
   const { data, isLoading, isFetching, isError } =
     useGetUserOProfileCardInDashboardQuery({ cursor });
-
   useEffect(() => {
     if (!data?.data?.users?.length) return;
 
@@ -51,6 +50,7 @@ const ApproveUserPage = () => {
           <UserCard
             key={user._id}
             userId={user._id}
+            actualUserId={user.userId}
             shopName={user.shopName}
             ownerName={user.ownerName}
             address={user.address}
