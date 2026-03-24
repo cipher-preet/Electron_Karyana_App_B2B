@@ -6,7 +6,6 @@ import "./ProductPage.css";
 import { useGetAllProductsQuery } from "@/redux/services/productsApi";
 import { useNavigate } from "react-router-dom";
 
-
 const ProductPage: React.FC = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -43,8 +42,6 @@ const ProductPage: React.FC = () => {
     }
   }, [isFetching, nextCursor]);
 
-
-
   return (
     <div className="product-page">
       <div className="page-header">
@@ -54,10 +51,13 @@ const ProductPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="product-grid" >
+      <div className="product-grid">
         {products.map((p) => (
-          <div onClick={() => navigate(`/productInfo/${p._id}`)} style={{cursor:"pointer"}}>
-          <ProductCard key={p._id} product={p} onEdit={handleEdit} />
+          <div
+            onClick={() => navigate(`/productInfo/${p._id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <ProductCard key={p._id} product={p} onEdit={handleEdit} />
           </div>
         ))}
       </div>

@@ -19,6 +19,7 @@ const Sidebar = ({ collapsed, onToggle }: Props) => {
 
       <nav className="nav">
         <NavItem to="/dashboard" label="Dashboard" collapsed={collapsed} />
+        <NavItem to="/orderdetail" label="Orders" collapsed={collapsed} />
         <NavItem to="/products" label="Products" collapsed={collapsed} />
         <NavItem to="/category" label="Category" collapsed={collapsed} />
         <NavItem to="/unit" label="Unit" collapsed={collapsed} />
@@ -32,7 +33,11 @@ const Sidebar = ({ collapsed, onToggle }: Props) => {
         />
         <NavItem to="/buildHomepage" label="BuildHome" collapsed={collapsed} />
         {/* <NavItem to="/settrends" label="BuildTrends" collapsed={collapsed} /> */}
-        <NavItem to="/trendmanagement" label="Manage Trends" collapsed={collapsed} />
+        <NavItem
+          to="/trendmanagement"
+          label="Manage Trends"
+          collapsed={collapsed}
+        />
         <NavItem
           to="/bannersAndCrouser"
           label="Banners"
