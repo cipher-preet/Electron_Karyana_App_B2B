@@ -23,6 +23,7 @@ import TrendPage from "@/features/SetTrends/Pages/TrendPage";
 import TrendManagementPage from "@/features/TrendManagement/Pages/TrendManagementPage";
 import TrendModulePage from "@/features/TrendManagement/Pages/TrendModulePage";
 import OrderDetailPage from "@/features/OrderDetailPage/Page/OrderDetailPage";
+import DeliveredOrdersPage from "@/features/OrderDetailPage/Components/DeliveredOrdersPage";
 
 const AppRoutes = () => {
   return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/products" element={<ProductPage />} />
         <Route path="/orderdetail" element={<OrderDetailPage />} />
+        <Route path="/delivered-orders" element={<DeliveredOrdersPage />} />
         <Route path="/category" element={<CategoriesContainer />} />
         <Route path="/unit" element={<UnitPage />} />
         <Route path="/brandpage" element={<BrandPage />} />

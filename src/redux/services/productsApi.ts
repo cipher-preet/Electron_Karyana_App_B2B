@@ -1,4 +1,3 @@
-// import { Product } from "@/shared/types/types";
 import { baseApi } from "./baseApi";
 
 export const productsApi = baseApi.injectEndpoints({

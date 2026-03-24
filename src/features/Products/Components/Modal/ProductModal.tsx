@@ -10,7 +10,6 @@ import {
 
 import SearchableDropdown from "../../../../assets/UI/SearchableDropdown";
 import "./ProductModal.css";
-import { Product } from "@/shared/types/types";
 import ConfirmAlert from "@/assets/UI/ConfirmAlert/ConfirmAlert";
 import { useGetallTagsForDashboardQuery } from "@/redux/services/UnitBrandApi";
 
@@ -89,7 +88,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     setExistingImages(rawPaths);
   }, [product]);
 
-  // ---------------- API DATA ----------------
   const unitsRes: any = useGetUnitsQuery();
   const brandsRes: any = useGetBrandsQuery();
   const parentRes: any = useGetParentCategoriesForFormsQuery();
@@ -98,7 +96,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
   const units = unitsRes?.data?.data || [];
   const brands = brandsRes?.data?.data || [];
   const tags = tagRes?.data?.data || [];
-
   const parentCategories = parentRes?.data?.data || [];
 
   const childRes: any = useGetChildCategoriesForFormsQuery(form.categoryId, {
@@ -135,7 +132,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     try {
       if (isEdit) {
         fd.append("productId", product!._id);
-
         await editProduct(fd).unwrap();
         alert("Product updated successfully!");
         onClose(true);
@@ -155,6 +151,21 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
       alert("Something went wrong. Please try again.");
     }
   };
+
+  const InputField = ({
+    value,
+    onChange,
+    label,
+  }: {
+    value: string;
+    onChange: (e: any) => void;
+    label: string;
+  }) => (
+    <div className="form-group">
+      <input placeholder=" " value={value} onChange={onChange} />
+      <label>{label}</label>
+    </div>
+  );
 
   return (
     <>
@@ -187,7 +198,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
               ) : (
                 <span>Upload Product Image</span>
               )}
-
               <input
                 type="file"
                 hidden
@@ -200,16 +210,15 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
           </div>
 
           <div className="modal-grid">
-            <input
-              placeholder="Product Name"
+            <InputField
+              label="Product Name"
               value={form.name}
-              onChange={(e) => update("name", e.target.value)}
+              onChange={(e: any) => update("name", e.target.value)}
             />
-
-            <input
-              placeholder="SKU"
+            <InputField
+              label="SKU"
               value={form.sku}
-              onChange={(e) => update("sku", e.target.value)}
+              onChange={(e: any) => update("sku", e.target.value)}
             />
 
             <SearchableDropdown
@@ -243,22 +252,20 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
               disabled={!form.categoryId}
             />
 
-            <input
-              placeholder="MRP"
+            <InputField
+              label="MRP"
               value={form.mrp}
-              onChange={(e) => update("mrp", e.target.value)}
+              onChange={(e: any) => update("mrp", e.target.value)}
             />
-
-            <input
-              placeholder="Market Price"
+            <InputField
+              label="Market Price"
               value={form.marketPrice}
-              onChange={(e) => update("marketPrice", e.target.value)}
+              onChange={(e: any) => update("marketPrice", e.target.value)}
             />
-
-            <input
-              placeholder="Selling Price"
+            <InputField
+              label="Selling Price"
               value={form.sellingPrice}
-              onChange={(e) => update("sellingPrice", e.target.value)}
+              onChange={(e: any) => update("sellingPrice", e.target.value)}
             />
 
             <SearchableDropdown
@@ -270,16 +277,15 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
               onSelect={(item) => update("unit", item?.name)}
             />
 
-            <input
-              placeholder="Quantity Per Unit"
+            <InputField
+              label="Quantity Per Unit"
               value={form.quantityPerUnit}
-              onChange={(e) => update("quantityPerUnit", e.target.value)}
+              onChange={(e: any) => update("quantityPerUnit", e.target.value)}
             />
-
-            <input
-              placeholder="Off Percentage"
+            <InputField
+              label="Off Percentage"
               value={form.offPercentage}
-              onChange={(e) => update("offPercentage", e.target.value)}
+              onChange={(e: any) => update("offPercentage", e.target.value)}
             />
 
             <SearchableDropdown

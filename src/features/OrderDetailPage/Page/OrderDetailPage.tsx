@@ -1,8 +1,18 @@
-
 import React, { useState } from "react";
 import "./OrderDetailPage.css";
+import {
+  useGetOrdersForDashboardQuery,
+  useUpdateOrderStatusMutation,
+} from "@/redux/services/OrderManagementApi";
+import { useNavigate } from "react-router-dom";
+import { printInvoice } from "@/shared/utils/helper";
 
-type OrderStatus = "packing" | "packed" | "outForDelivery";
+type OrderStatus =
+  | "Recieved"
+  | "packing"
+  | "packed"
+  | "outForDelivery"
+  | "Delivered";
 
 interface OrderItem {
   name: string;
@@ -19,205 +29,54 @@ interface Order {
   total: number;
   items: OrderItem[];
 }
-
-const initialOrders: Order[] = [
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-    ],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-      { name: "Scrambled Eggs", qty: 1, price: 16.99 },
-    ],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#925",
-    customer: "Ariel Hikmat",
-    type: "Dine In",
-    time: "06:12 PM",
-    status: "packing",
-    total: 87.34,
-    items: [{ name: "Scrambled Eggs", qty: 1, price: 16.99 }],
-  },
-  {
-    id: "#921",
-    customer: "Denis Freeman",
-    type: "Takeaway",
-    time: "06:18 PM",
-    status: "packed",
-    total: 57.87,
-    items: [{ name: "Burger", qty: 2, price: 10.99 }],
-  },
-  {
-    id: "#919",
-    customer: "Morgan Cox",
-    type: "Delivery",
-    time: "06:25 PM",
-    status: "outForDelivery",
-    total: 120,
-    items: [{ name: "Pizza", qty: 1, price: 120 }],
-  },
-  {
-    id: "#919",
-    customer: "Morgan Cox",
-    type: "Delivery",
-    time: "06:25 PM",
-    status: "outForDelivery",
-    total: 120,
-    items: [{ name: "Pizza", qty: 1, price: 120 }],
-  },
+const statusFlow: OrderStatus[] = [
+  "Recieved",
+  "packing",
+  "packed",
+  "outForDelivery",
+  "Delivered",
 ];
 
-const statusFlow: OrderStatus[] = ["packing", "packed", "outForDelivery"];
-
 const OrderPage: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const navigate = useNavigate();
+  const { data, isLoading } = useGetOrdersForDashboardQuery({});
+
+  const [updateOrderStatus] = useUpdateOrderStatusMutation();
+
+  const orders: Order[] =
+    data?.data?.map((order: any) => ({
+      id: order.id,
+      customer: order.customer,
+      type: order.type,
+      time: order.time,
+      status: order.status === "Recieved" ? "packing" : order.status,
+      total: order.total,
+
+      items: order.items.map((item: any) => ({
+        name: item.name,
+        qty: item.quantity,
+        price: item.price,
+      })),
+    })) || [];
+
   const [filter, setFilter] = useState<string>("All");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  const handleStatusChange = (id: string, status: OrderStatus) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+  const handleStatusChange = async (id: string, status: OrderStatus) => {
+    try {
+      const data = {
+        id,
+        status,
+      };
+      await updateOrderStatus(data).unwrap();
+    } catch (err) {
+      console.error("Failed to update status", err);
+    }
   };
-
   const filteredOrders =
-    filter === "All" ? orders : orders.filter((o) => o.status === filter);
+    filter === "All"
+      ? orders.filter((o) => o.status !== "Delivered")
+      : orders.filter((o) => o.status === filter);
 
   const getCount = (type: string) => {
     if (type === "All") return orders.length;
@@ -247,6 +106,10 @@ const OrderPage: React.FC = () => {
 
     const allChecked = checkedItems.length === order.items.length;
 
+    if (isLoading) {
+      return <div style={{ padding: 20 }}>Loading orders...</div>;
+    }
+
     return (
       <div className="order-drawer-overlay" onClick={onClose}>
         <div className="order-drawer" onClick={(e) => e.stopPropagation()}>
@@ -254,7 +117,7 @@ const OrderPage: React.FC = () => {
             <div>
               <h3>{order.customer}</h3>
               <p>
-                {order.id} • {order.type}
+                #{order.id.slice(0, 6).toUpperCase()} • {order.type}
               </p>
             </div>
             <button className="order-drawer-close" onClick={onClose}>
@@ -295,6 +158,10 @@ const OrderPage: React.FC = () => {
             >
               Move to Next Step →
             </button>
+
+            <button className="print-btn" onClick={() => printInvoice(order)}>
+              🖨 Print Invoice
+            </button>
           </div>
         </div>
       </div>
@@ -305,7 +172,12 @@ const OrderPage: React.FC = () => {
     <div className="order-page">
       <div className="order-header">
         <h1>Orders</h1>
-        <span>Today</span>
+        <span
+          className="delivered-link"
+          onClick={() => navigate("/delivered-orders")}
+        >
+          Delivered
+        </span>
       </div>
 
       <div className="order-filters">
@@ -335,7 +207,7 @@ const OrderPage: React.FC = () => {
                 <div>
                   <h3>{order.customer}</h3>
                   <p>
-                    {order.id} • {order.type}
+                    #{order.id.slice(0, 6).toUpperCase()} • {order.type}
                   </p>
                 </div>
                 <span className={`status ${order.status}`}>{order.status}</span>
@@ -361,9 +233,12 @@ const OrderPage: React.FC = () => {
               {nextStatus && (
                 <button
                   className="primary-btn"
-                  onClick={() => handleStatusChange(order.id, nextStatus)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedOrder(order);
+                  }}
                 >
-                  Move → {nextStatus}
+                  Process Order →
                 </button>
               )}
             </div>
