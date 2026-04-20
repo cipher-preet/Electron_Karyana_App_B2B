@@ -54,10 +54,11 @@ const ProductPage: React.FC = () => {
       <div className="product-grid">
         {products.map((p) => (
           <div
+            key={p._id} // ✅ FIX HERE
             onClick={() => navigate(`/productInfo/${p._id}`)}
             style={{ cursor: "pointer" }}
           >
-            <ProductCard key={p._id} product={p} onEdit={handleEdit} />
+            <ProductCard product={p} onEdit={handleEdit} />
           </div>
         ))}
       </div>

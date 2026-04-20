@@ -29,9 +29,9 @@ const CategoriesPage: React.FC = () => {
     },
   );
 
-  const parentCategories = parentResponse?.data?.categories ?? [];
+  const parentCategories = (parentResponse as any)?.data?.categories ?? [];
 
-  const childCategories = childResponse?.data?.categories ?? [];
+  const childCategories = (childResponse as any)?.data?.categories ?? [];
 
   const openAddParent = () => {
     setEditCategory(null);

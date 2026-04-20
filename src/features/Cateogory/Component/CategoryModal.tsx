@@ -1,6 +1,6 @@
+import "./CategoryModal.css";
 import React, { useState } from "react";
 import { Category } from "../../../shared/types/types";
-import "./CategoryModal.css";
 import {
   useCreateChildCategoryMutation,
   useCreateParentCategoryMutation,
@@ -125,13 +125,11 @@ const CategoryModal: React.FC<Props> = ({
           </label>
         </div>
 
-        {/* NAME */}
         <div className="form-group">
-          <label>Name</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Category name"
+            placeholder="Enter category name"
           />
         </div>
 

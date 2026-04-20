@@ -17,6 +17,8 @@
   padding: 20px;
   overflow-y: auto;
   animation: fadeIn 0.3s ease;
+    overflow-y: visible; /* 🔥 FIX */
+
 }
 
 .modal-header {
@@ -41,7 +43,7 @@
 
 .modal-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 🔥 FIX */
   gap: 14px;
 }
 
@@ -116,6 +118,7 @@ button.secondary {
 .dropdown-container {
   width: 100%;
   position: relative;
+  min-width: 0;
 }
 
 .dropdown-header {
@@ -149,6 +152,7 @@ button.secondary {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   z-index: 999;
   animation: dropdownAnim 0.2s ease;
+   max-width: 100%;
 }
 
 .dropdown-search {
@@ -174,10 +178,9 @@ button.secondary {
   cursor: pointer;
   font-size: 0.95rem;
   transition: 0.15s;
-}
-
-.dropdown-item:hover {
-  background: #eef2ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes dropdownAnim {

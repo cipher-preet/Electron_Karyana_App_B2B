@@ -9,17 +9,12 @@ interface Props {
 
 const CategoryCard: React.FC<Props> = ({ category, onEdit, onOpen }) => {
   return (
-    <div
-      className="category-card-pro"
-      onClick={() => onOpen && onOpen()}
-    >
+    <div className="category-card-pro" onClick={() => onOpen && onOpen()}>
       <div className="category-image">
         {category.images ? (
           <img src={category.images} alt={category.name} />
         ) : (
-          <div className="image-placeholder">
-            {category.name.charAt(0)}
-          </div>
+          <div className="image-placeholder">{category.name.charAt(0)}</div>
         )}
       </div>
 

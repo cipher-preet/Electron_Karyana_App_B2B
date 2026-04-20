@@ -18,6 +18,28 @@ interface ModalProps {
   onClose: (success?: boolean) => void;
 }
 
+/* ✅ MOVE OUTSIDE (IMPORTANT) */
+const InputField = ({
+  value,
+  onChange,
+  label,
+}: {
+  value: string;
+  onChange: (e: any) => void;
+  label: string;
+}) => {
+  return (
+    <div className="form-group">
+      <input
+        placeholder=" "
+        value={value || ""}
+        onChange={onChange}
+      />
+      <label>{label}</label>
+    </div>
+  );
+};
+
 const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
   const [createProduct] = useCreateProductMutation();
   const [editProduct] = useEditProductCategoryMutation();
@@ -39,6 +61,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     tag: "",
   });
 
+  /* ✅ SIMPLE UPDATE (NO CALLBACK) */
   const update = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
@@ -47,46 +70,57 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
 
+  /* ✅ FIXED: ONLY RUN WHEN PRODUCT ID CHANGES */
   useEffect(() => {
-    if (!product) return;
+    if (product?._id) {
+      setForm({
+        name: product.name ?? "",
+        sku: String(product.sku ?? ""),
+        categoryId:
+          typeof product.categoryId === "object"
+            ? product.categoryId._id
+            : product.categoryId ?? "",
+        subcategoryId:
+          typeof product.subcategoryId === "object"
+            ? product.subcategoryId._id
+            : product.subcategoryId ?? "",
+        brandId:
+          typeof product.brandId === "object"
+            ? product.brandId._id
+            : product.brandId ?? "",
+        mrp: String(product.mrp ?? ""),
+        marketPrice: String(product.marketPrice ?? ""),
+        sellingPrice: String(product.sellingPrice ?? ""),
+        unit:
+          typeof product.unit === "object"
+            ? product.unit.name
+            : product.unit ?? "",
+        quantityPerUnit: String(product.quantityPerUnit ?? ""),
+        offPercentage: String(product.offPercentage ?? ""),
+        tag: product.tag ?? "",
+      });
 
-    setForm({
-      name: product.name ?? "",
-      sku: String(product.sku ?? ""),
-      categoryId:
-        typeof product.categoryId === "object"
-          ? product.categoryId._id
-          : (product.categoryId ?? ""),
-      subcategoryId:
-        typeof product.subcategoryId === "object"
-          ? product.subcategoryId._id
-          : (product.subcategoryId ?? ""),
-      brandId:
-        typeof product.brandId === "object"
-          ? product.brandId._id
-          : (product.brandId ?? ""),
-      mrp: String(product.mrp ?? ""),
-      marketPrice: String(product.marketPrice ?? ""),
-      sellingPrice: String(product.sellingPrice ?? ""),
-      unit:
-        typeof product.unit === "object"
-          ? product.unit.name
-          : (product.unit ?? ""),
-      quantityPerUnit: String(product.quantityPerUnit ?? ""),
-      offPercentage: String(product.offPercentage ?? ""),
-      tag: product.tag ?? "",
-    });
+      setPreview(product.image ? [product.image] : []);
+    } else {
+      /* ✅ RESET ONLY ON ADD */
+      setForm({
+        name: "",
+        sku: "",
+        categoryId: "",
+        subcategoryId: "",
+        brandId: "",
+        mrp: "",
+        marketPrice: "",
+        sellingPrice: "",
+        unit: "",
+        quantityPerUnit: "",
+        offPercentage: "",
+        tag: "",
+      });
 
-    setPreview(product.image ? [product.image] : []);
-
-    const rawPaths = Array.isArray(product.images)
-      ? [...product.images]
-      : product?.images
-        ? [product.images]
-        : [];
-
-    setExistingImages(rawPaths);
-  }, [product]);
+      setPreview([]);
+    }
+  }, [product?._id]);
 
   const unitsRes: any = useGetUnitsQuery();
   const brandsRes: any = useGetBrandsQuery();
@@ -124,10 +158,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     });
 
     newImages.forEach((img) => fd.append("images", img));
-
-    existingImages.forEach((path) => {
-      fd.append("existingImages[]", path);
-    });
+    existingImages.forEach((path) => fd.append("existingImages[]", path));
 
     try {
       if (isEdit) {
@@ -152,21 +183,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     }
   };
 
-  const InputField = ({
-    value,
-    onChange,
-    label,
-  }: {
-    value: string;
-    onChange: (e: any) => void;
-    label: string;
-  }) => (
-    <div className="form-group">
-      <input placeholder=" " value={value} onChange={onChange} />
-      <label>{label}</label>
-    </div>
-  );
-
   return (
     <>
       {showConfirm && (
@@ -184,120 +200,130 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
         />
       )}
 
-      <div className="modal-overlay">
-        <div className="modal modern">
+      <div className="product-modal-overlay">
+        <div className="product-modal">
+
+          {/* HEADER */}
           <div className="modal-header">
             <h3>{isEdit ? "Edit Product" : "Add Product"}</h3>
             <button onClick={() => onClose(false)}>✕</button>
           </div>
 
-          <div className="image-upload">
-            <label>
-              {preview.length > 0 ? (
-                <img src={preview[0]} alt="preview" />
-              ) : (
-                <span>Upload Product Image</span>
-              )}
-              <input
-                type="file"
-                hidden
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files) handleImage(e.target.files[0]);
+          {/* BODY */}
+          <div className="modal-body">
+
+            {/* IMAGE */}
+            <div className="image-upload">
+              <label>
+                {preview.length > 0 ? (
+                  <img src={preview[0]} alt="preview" />
+                ) : (
+                  <span>Upload Product Image</span>
+                )}
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files) handleImage(e.target.files[0]);
+                  }}
+                />
+              </label>
+            </div>
+
+            {/* FORM */}
+            <div className="modal-grid">
+              <InputField
+                label="Product Name"
+                value={form.name}
+                onChange={(e: any) => update("name", e.target.value)}
+              />
+              <InputField
+                label="SKU"
+                value={form.sku}
+                onChange={(e: any) => update("sku", e.target.value)}
+              />
+
+              <SearchableDropdown
+                label="Select Brand"
+                items={brands}
+                displayKey="name"
+                valueKey="_id"
+                selected={form.brandId}
+                onSelect={(v) => update("brandId", v?._id)}
+              />
+
+              <SearchableDropdown
+                label="Select Category"
+                items={parentCategories}
+                displayKey="name"
+                valueKey="_id"
+                selected={form.categoryId}
+                onSelect={(v) => {
+                  update("categoryId", v?._id);
+                  update("subcategoryId", "");
                 }}
               />
-            </label>
+
+              <SearchableDropdown
+                label="Select Subcategory"
+                items={childCategories}
+                displayKey="name"
+                valueKey="_id"
+                selected={form.subcategoryId}
+                onSelect={(v) => update("subcategoryId", v?._id)}
+                disabled={!form.categoryId}
+              />
+
+              <InputField
+                label="MRP"
+                value={form.mrp}
+                onChange={(e: any) => update("mrp", e.target.value)}
+              />
+              <InputField
+                label="Market Price"
+                value={form.marketPrice}
+                onChange={(e: any) => update("marketPrice", e.target.value)}
+              />
+              <InputField
+                label="Selling Price"
+                value={form.sellingPrice}
+                onChange={(e: any) => update("sellingPrice", e.target.value)}
+              />
+
+              <SearchableDropdown
+                label="Select Unit"
+                items={units}
+                displayKey="name"
+                valueKey="name"
+                selected={form.unit}
+                onSelect={(item) => update("unit", item?.name)}
+              />
+
+              <InputField
+                label="Quantity Per Unit"
+                value={form.quantityPerUnit}
+                onChange={(e: any) => update("quantityPerUnit", e.target.value)}
+              />
+              <InputField
+                label="Off Percentage"
+                value={form.offPercentage}
+                onChange={(e: any) => update("offPercentage", e.target.value)}
+              />
+
+              <SearchableDropdown
+                label="Select Tags"
+                items={tags}
+                displayKey="name"
+                valueKey="name"
+                selected={form.tag}
+                onSelect={(item) => update("tag", item?.name)}
+              />
+            </div>
+
           </div>
 
-          <div className="modal-grid">
-            <InputField
-              label="Product Name"
-              value={form.name}
-              onChange={(e: any) => update("name", e.target.value)}
-            />
-            <InputField
-              label="SKU"
-              value={form.sku}
-              onChange={(e: any) => update("sku", e.target.value)}
-            />
-
-            <SearchableDropdown
-              label="Select Brand"
-              items={brands}
-              displayKey="name"
-              valueKey="_id"
-              selected={form.brandId}
-              onSelect={(v) => update("brandId", v?._id)}
-            />
-
-            <SearchableDropdown
-              label="Select Category"
-              items={parentCategories}
-              displayKey="name"
-              valueKey="_id"
-              selected={form.categoryId}
-              onSelect={(v) => {
-                update("categoryId", v?._id);
-                update("subcategoryId", "");
-              }}
-            />
-
-            <SearchableDropdown
-              label="Select Subcategory"
-              items={childCategories}
-              displayKey="name"
-              valueKey="_id"
-              selected={form.subcategoryId}
-              onSelect={(v) => update("subcategoryId", v?._id)}
-              disabled={!form.categoryId}
-            />
-
-            <InputField
-              label="MRP"
-              value={form.mrp}
-              onChange={(e: any) => update("mrp", e.target.value)}
-            />
-            <InputField
-              label="Market Price"
-              value={form.marketPrice}
-              onChange={(e: any) => update("marketPrice", e.target.value)}
-            />
-            <InputField
-              label="Selling Price"
-              value={form.sellingPrice}
-              onChange={(e: any) => update("sellingPrice", e.target.value)}
-            />
-
-            <SearchableDropdown
-              label="Select Unit"
-              items={units}
-              displayKey="name"
-              valueKey="name"
-              selected={form.unit}
-              onSelect={(item) => update("unit", item?.name)}
-            />
-
-            <InputField
-              label="Quantity Per Unit"
-              value={form.quantityPerUnit}
-              onChange={(e: any) => update("quantityPerUnit", e.target.value)}
-            />
-            <InputField
-              label="Off Percentage"
-              value={form.offPercentage}
-              onChange={(e: any) => update("offPercentage", e.target.value)}
-            />
-
-            <SearchableDropdown
-              label="Select Tags"
-              items={tags}
-              displayKey="name"
-              valueKey="name"
-              selected={form.tag}
-              onSelect={(item) => update("tag", item?.name)}
-            />
-          </div>
-
+          {/* ACTIONS */}
           <div className="modal-actions">
             <button className="add-btns" onClick={openConfirm}>
               {isEdit ? "Update Product" : "Save Product"}
@@ -307,6 +333,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
               Cancel
             </button>
           </div>
+
         </div>
       </div>
     </>

@@ -1,8 +1,8 @@
 import "../../Units/Pages/UnitPages.css";
 import { useEffect, useState } from "react";
 import { useGetallTagsForDashboardQuery } from "@/redux/services/UnitBrandApi";
-import Tagcard from "../Compoonents/tagcard";
-import TagModal from "../Compoonents/tagModal";
+import Tagcard from "../Compoonents/TagCards";
+import TagModal from "../Compoonents/TagModal";
 
 interface Tags {
   _id: string;
@@ -37,20 +37,20 @@ const TagPages = () => {
     );
   };
 
-  if (isLoading) return <div>Loading brands...</div>;
-  if (error) return <div>Failed to load brands</div>;
+  if (isLoading) return <div>Loading Tags...</div>;
+  if (error) return <div>Failed to load Tags</div>;
 
   return (
     <div className="unit-page">
       <div className="unit-header">
-        <h2>Brand</h2>
+        <h2>Tags</h2>
         <button className="unit-add-btn" onClick={() => setOpenModal(true)}>
-          + Add Brand
+          + Add Tags
         </button>
       </div>
       <div className="unit-grid">
         {Tags.length === 0 ? (
-          <div>No units found</div>
+          <div>No Tags found</div>
         ) : (
           Tags.map((Tags) => (
             <Tagcard

@@ -60,7 +60,7 @@ const TagModal: React.FC<TagsCardProps> = ({
         <h3>{isEditMode ? "Edit Brand" : "Add Brand"}</h3>
 
         <input
-          placeholder="Brand Name"
+          placeholder="Tag Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
