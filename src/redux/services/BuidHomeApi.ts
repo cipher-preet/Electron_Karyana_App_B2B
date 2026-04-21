@@ -169,6 +169,13 @@ export const BuildHomeApi = baseApi.injectEndpoints({
         keepUnusedDataFor: 300,
       }),
     }),
+
+    getUserOrderHistoryByUserId: builder.query<any, string>({
+      query: (userId) => ({
+        url: `/dashboard/getUserOrderHistoryByUserId?userId=${userId}`,
+        keepUnusedDataFor: 300,
+      }),
+    }),
   }),
 });
 
@@ -182,4 +189,5 @@ export const {
   useGetPendingUserProfileCardInDashboardSectionQuery,
   useApproveshopMutation,
   useGetUserCartInfoQuery,
+  useGetUserOrderHistoryByUserIdQuery,
 } = BuildHomeApi;

@@ -1,4 +1,3 @@
-import React from "react";
 import "./CartInfoPage.css";
 import { useGetUserCartInfoQuery } from "@/redux/services/BuidHomeApi";
 import { useParams } from "react-router-dom";
