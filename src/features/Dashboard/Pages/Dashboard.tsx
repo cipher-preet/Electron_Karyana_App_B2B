@@ -1,3 +1,7 @@
+import {
+  useGetGraphsStatsForDashboardQuery,
+  useGetOrderStatsForDashboardQuery,
+} from "@/redux/services/DashboardStats";
 import "./Dashboard.css";
 import {
   LineChart,
@@ -11,35 +15,32 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  // 🔥 Charts Data
-  const salesData = [
-    { day: "Mon", sales: 1200 },
-    { day: "Tue", sales: 2100 },
-    { day: "Wed", sales: 1800 },
-    { day: "Thu", sales: 2400 },
-    { day: "Fri", sales: 3000 },
-    { day: "Sat", sales: 2800 },
-    { day: "Sun", sales: 3500 },
-  ];
+  const {
+    data: graphStats,
+    isLoading: graphLoading,
+    isError: graphError,
+  } = useGetGraphsStatsForDashboardQuery();
 
-  const ordersData = [
-    { day: "Mon", orders: 20 },
-    { day: "Tue", orders: 35 },
-    { day: "Wed", orders: 28 },
-    { day: "Thu", orders: 40 },
-    { day: "Fri", orders: 55 },
-    { day: "Sat", orders: 48 },
-    { day: "Sun", orders: 60 },
-  ];
+  const {
+    data: orderStats,
+    isLoading: orderLoading,
+    isError: orderError,
+  } = useGetOrderStatsForDashboardQuery();
 
-  // 🔥 Dynamic Data (replace with API later)
-  const recentOrders = [
-    { id: "#12345", amount: 560, status: "paid" },
-    { id: "#12346", amount: 320, status: "pending" },
-    { id: "#12347", amount: 890, status: "paid" },
-    { id: "#12348", amount: 120, status: "pending" },
-    { id: "#12349", amount: 760, status: "paid" },
-  ];
+  const orderData = (orderStats as any)?.data?.[0] || {};
+
+  const salesData = (graphStats as any)?.data?.salesData || [];
+  const ordersData = (graphStats as any)?.data?.ordersData || [];
+
+  const topOrders = orderData.topOrders || [];
+  const totalOrders = orderData.totalCount || 0;
+  const last30DaysSales = orderData.last30DaysSales || 0;
+
+  // ✅ Loading State
+  if (graphLoading || orderLoading) return <p>Loading dashboard...</p>;
+
+  // ✅ Error State
+  if (graphError || orderError) return <p>Something went wrong</p>;
 
   const topProducts = [
     { name: "Aloo Bhujia", sold: 120 },
@@ -65,7 +66,7 @@ const Dashboard = () => {
         </div>
         <div className="kpi">
           <p>Orders</p>
-          <h2>85</h2>
+          <h2>{totalOrders}</h2>
         </div>
         <div className="kpi warning">
           <p>Pending</p>
@@ -104,7 +105,7 @@ const Dashboard = () => {
 
         <div className="card">
           <h3>Last 30 Days</h3>
-          <h2>₹2,45,000</h2>
+          <h2>₹{last30DaysSales}</h2>
           <p className="growth">+12% growth</p>
         </div>
       </div>
@@ -117,10 +118,10 @@ const Dashboard = () => {
           </div>
 
           <div className="list scroll">
-            {recentOrders.map((order) => (
-              <div key={order.id}>
-                <span>{order.id}</span>
-                <span>₹{order.amount}</span>
+            {topOrders.map((order: any) => (
+              <div key={order._id}>
+                <span>#{order._id.slice(0, 5)}</span>
+                <span>₹{order.totalAmount}</span>
                 <span className={order.status}>{order.status}</span>
               </div>
             ))}
