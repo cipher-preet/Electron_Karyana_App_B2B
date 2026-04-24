@@ -13,6 +13,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import AppLoader from "@/shared/Apploader/AppLoader";
 
 const Dashboard = () => {
   const {
@@ -36,10 +37,8 @@ const Dashboard = () => {
   const totalOrders = orderData.totalCount || 0;
   const last30DaysSales = orderData.last30DaysSales || 0;
 
-  // ✅ Loading State
-  if (graphLoading || orderLoading) return <p>Loading dashboard...</p>;
+  if (graphLoading || orderLoading) return <><AppLoader/></>;
 
-  // ✅ Error State
   if (graphError || orderError) return <p>Something went wrong</p>;
 
   const topProducts = [

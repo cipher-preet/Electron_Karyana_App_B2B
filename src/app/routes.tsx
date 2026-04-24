@@ -1,32 +1,34 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminLayout from "@/shared/layout/AdminLayout";
+import { lazy, Suspense } from "react";
+import AppLoader from "@/shared/Apploader/AppLoader";
 
-import Dashboard from "@/features/Dashboard/Pages/Dashboard";
-import ProductPage from "@/features/Products/Pages/ProductPage";
-import CategoryPage from "@/features/Cateogory/Page/CategoryPage";
-import CategoriesContainer from "@/features/Cateogory/Page/CategoriesContainer";
-import UnitPage from "@/features/Units/Pages/UnitPage";
-import BrandPage from "@/features/Brand/Pages/BrandPage";
-import ApproveUserPage from "@/features/ApproveUsers/Page/ApproveUserPage";
-import UserDetailsPage from "@/features/ApproveUsers/Components/UserDetailsPage";
-import CartInfoPage from "@/features/ApproveUsers/Components/CartInfo/CartInfoPage";
-import OrderInfoPage from "@/features/ApproveUsers/Components/OrderInfo/OrderInfoPage";
-import ShopInfoPage from "@/features/ApproveUsers/Components/ShopInfo/ShopInfoPage";
-import BuildingHomePage from "@/features/BuildingHomepage/Page/BuildingHomePage";
-import BannersAndCrouser from "@/features/BannersAndCarosuls/Pages/BannersAndCrouser";
-import PendingApprovalUser from "@/features/PendingApproveUsers/Page/PendingApprovalUser";
-import ApprovalUserPage from "@/features/PendingApproveUsers/Components/ApprovalUserPage";
-import ProductInfoPage from "@/features/Products/Components/ProductInfoPage/ProductInfoPage";
-import Contactus from "@/features/ContactUsPage/Page/Contactus";
-import TagPages from "@/features/TagSection/Pages/TagPages";
-import TrendPage from "@/features/SetTrends/Pages/TrendPage";
-import TrendManagementPage from "@/features/TrendManagement/Pages/TrendManagementPage";
-import TrendModulePage from "@/features/TrendManagement/Pages/TrendModulePage";
-import OrderDetailPage from "@/features/OrderDetailPage/Page/OrderDetailPage";
-import DeliveredOrdersPage from "@/features/OrderDetailPage/Components/DeliveredOrdersPage";
+
+const Dashboard = lazy(() => import("@/features/Dashboard/Pages/Dashboard"));
+const ProductPage = lazy(() => import("@/features/Products/Pages/ProductPage"));
+const CategoriesContainer = lazy(() => import("@/features/Cateogory/Page/CategoriesContainer"));
+const UnitPage = lazy(() => import("@/features/Units/Pages/UnitPage"));
+const BrandPage = lazy(() => import("@/features/Brand/Pages/BrandPage"));
+const ApproveUserPage = lazy(() => import("@/features/ApproveUsers/Page/ApproveUserPage"));
+const UserDetailsPage = lazy(() => import("@/features/ApproveUsers/Components/UserDetailsPage"));
+const CartInfoPage = lazy(() => import("@/features/ApproveUsers/Components/CartInfo/CartInfoPage"));
+const OrderInfoPage = lazy(() => import("@/features/ApproveUsers/Components/OrderInfo/OrderInfoPage"));
+const ShopInfoPage = lazy(() => import("@/features/ApproveUsers/Components/ShopInfo/ShopInfoPage"));
+const BuildingHomePage = lazy(() => import("@/features/BuildingHomepage/Page/BuildingHomePage"));
+const BannersAndCrouser = lazy(() => import("@/features/BannersAndCarosuls/Pages/BannersAndCrouser"));
+const PendingApprovalUser = lazy(() => import("@/features/PendingApproveUsers/Page/PendingApprovalUser"));
+const ApprovalUserPage = lazy(() => import("@/features/PendingApproveUsers/Components/ApprovalUserPage"));
+const ProductInfoPage = lazy(() => import("@/features/Products/Components/ProductInfoPage/ProductInfoPage"));
+const Contactus = lazy(() => import("@/features/ContactUsPage/Page/Contactus"));
+const TagPages = lazy(() => import("@/features/TagSection/Pages/TagPages"));
+const TrendPage = lazy(() => import("@/features/SetTrends/Pages/TrendPage"));
+const TrendModulePage = lazy(() => import("@/features/TrendManagement/Pages/TrendModulePage"));
+const OrderDetailPage = lazy(() => import("@/features/OrderDetailPage/Page/OrderDetailPage"));
+const DeliveredOrdersPage = lazy(() => import("@/features/OrderDetailPage/Components/DeliveredOrdersPage"));
 
 const AppRoutes = () => {
   return (
+    <Suspense fallback={<AppLoader />}>
     <Routes>
       <Route element={<AdminLayout />}>
         <Route path="/" element={<Navigate to="/dashboard" />} />
@@ -55,6 +57,7 @@ const AppRoutes = () => {
         <Route path="/trendmanagement" element={<TrendModulePage />}></Route>
       </Route>
     </Routes>
+    </Suspense>
   );
 };
 
