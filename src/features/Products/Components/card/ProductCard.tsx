@@ -22,6 +22,7 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
     categoryId,
     subcategoryId,
     brandId,
+    offPercentage,
   } = product as any;
 
   return (
@@ -70,8 +71,8 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
           </div>
 
           <div className="price-item">
-            <span className="price-label">Market Price</span>
-            <span className="price-value market">₹{marketPrice}</span>
+            <span className="price-label">off Percentage</span>
+            <span className="price-value market">{offPercentage}%</span>
           </div>
 
           <div className="price-item highlight">

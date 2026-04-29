@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./ProductModal.css";
 import {
   useCreateProductMutation,
   useGetUnitsQuery,
@@ -9,7 +10,6 @@ import {
 } from "@/redux/services/productsApi";
 
 import SearchableDropdown from "../../../../assets/UI/SearchableDropdown";
-import "./ProductModal.css";
 import ConfirmAlert from "@/assets/UI/ConfirmAlert/ConfirmAlert";
 import { useGetallTagsForDashboardQuery } from "@/redux/services/UnitBrandApi";
 
@@ -18,20 +18,22 @@ interface ModalProps {
   onClose: (success?: boolean) => void;
 }
 
-/* ✅ MOVE OUTSIDE (IMPORTANT) */
 const InputField = ({
   value,
   onChange,
   label,
+  type = "text",
 }: {
   value: string;
   onChange: (e: any) => void;
   label: string;
+  type?: string;
 }) => {
   return (
     <div className="form-group">
       <input
         placeholder=" "
+        type={type}
         value={value || ""}
         onChange={onChange}
       />
@@ -41,6 +43,8 @@ const InputField = ({
 };
 
 const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
+  const [loading, setLoading] = useState(false);
+
   const [createProduct] = useCreateProductMutation();
   const [editProduct] = useEditProductCategoryMutation();
 
@@ -61,7 +65,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     tag: "",
   });
 
-  /* ✅ SIMPLE UPDATE (NO CALLBACK) */
   const update = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
@@ -70,7 +73,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
 
-  /* ✅ FIXED: ONLY RUN WHEN PRODUCT ID CHANGES */
   useEffect(() => {
     if (product?._id) {
       setForm({
@@ -79,30 +81,30 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
         categoryId:
           typeof product.categoryId === "object"
             ? product.categoryId._id
-            : product.categoryId ?? "",
+            : (product.categoryId ?? ""),
         subcategoryId:
           typeof product.subcategoryId === "object"
             ? product.subcategoryId._id
-            : product.subcategoryId ?? "",
+            : (product.subcategoryId ?? ""),
         brandId:
           typeof product.brandId === "object"
             ? product.brandId._id
-            : product.brandId ?? "",
+            : (product.brandId ?? ""),
         mrp: String(product.mrp ?? ""),
         marketPrice: String(product.marketPrice ?? ""),
         sellingPrice: String(product.sellingPrice ?? ""),
         unit:
           typeof product.unit === "object"
             ? product.unit.name
-            : product.unit ?? "",
+            : (product.unit ?? ""),
         quantityPerUnit: String(product.quantityPerUnit ?? ""),
         offPercentage: String(product.offPercentage ?? ""),
         tag: product.tag ?? "",
       });
 
       setPreview(product.image ? [product.image] : []);
+      setExistingImages(product.images ? [product.images[0]] : []);
     } else {
-      /* ✅ RESET ONLY ON ADD */
       setForm({
         name: "",
         sku: "",
@@ -150,6 +152,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
 
   const handleConfirmSave = async () => {
     setShowConfirm(false);
+    setLoading(true);
 
     const fd = new FormData();
 
@@ -180,8 +183,23 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     } catch (err) {
       console.log(err);
       alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const mrp = parseFloat(form.mrp);
+    const sp = parseFloat(form.sellingPrice);
+
+    if (mrp && sp && mrp > 0) {
+      const off = (((mrp - sp) / mrp) * 100).toFixed(2);
+      setForm((prev) => ({
+        ...prev,
+        offPercentage: off,
+      }));
+    }
+  }, [form.mrp, form.sellingPrice]);
 
   return (
     <>
@@ -202,17 +220,12 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
 
       <div className="product-modal-overlay">
         <div className="product-modal">
-
-          {/* HEADER */}
           <div className="modal-header">
             <h3>{isEdit ? "Edit Product" : "Add Product"}</h3>
             <button onClick={() => onClose(false)}>✕</button>
           </div>
 
-          {/* BODY */}
           <div className="modal-body">
-
-            {/* IMAGE */}
             <div className="image-upload">
               <label>
                 {preview.length > 0 ? (
@@ -231,7 +244,6 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
               </label>
             </div>
 
-            {/* FORM */}
             <div className="modal-grid">
               <InputField
                 label="Product Name"
@@ -240,6 +252,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
               />
               <InputField
                 label="SKU"
+                type="number"
                 value={form.sku}
                 onChange={(e: any) => update("sku", e.target.value)}
               />
@@ -277,16 +290,13 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
 
               <InputField
                 label="MRP"
+                type="number"
                 value={form.mrp}
                 onChange={(e: any) => update("mrp", e.target.value)}
               />
               <InputField
-                label="Market Price"
-                value={form.marketPrice}
-                onChange={(e: any) => update("marketPrice", e.target.value)}
-              />
-              <InputField
                 label="Selling Price"
+                type="number"
                 value={form.sellingPrice}
                 onChange={(e: any) => update("sellingPrice", e.target.value)}
               />
@@ -302,13 +312,14 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
 
               <InputField
                 label="Quantity Per Unit"
+                type="number"
                 value={form.quantityPerUnit}
                 onChange={(e: any) => update("quantityPerUnit", e.target.value)}
               />
               <InputField
                 label="Off Percentage"
                 value={form.offPercentage}
-                onChange={(e: any) => update("offPercentage", e.target.value)}
+                onChange={() => {}}
               />
 
               <SearchableDropdown
@@ -320,20 +331,31 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
                 onSelect={(item) => update("tag", item?.name)}
               />
             </div>
-
           </div>
 
-          {/* ACTIONS */}
           <div className="modal-actions">
-            <button className="add-btns" onClick={openConfirm}>
-              {isEdit ? "Update Product" : "Save Product"}
+            <button
+              className="add-btns"
+              onClick={openConfirm}
+              disabled={loading}
+            >
+              {loading
+                ? isEdit
+                  ? "Updating..."
+                  : "Saving..."
+                : isEdit
+                  ? "Update Product"
+                  : "Save Product"}
             </button>
 
-            <button className="add-btns" onClick={() => onClose(false)}>
+            <button
+              className="add-btns"
+              onClick={() => onClose(false)}
+              disabled={loading}
+            >
               Cancel
             </button>
           </div>
-
         </div>
       </div>
     </>

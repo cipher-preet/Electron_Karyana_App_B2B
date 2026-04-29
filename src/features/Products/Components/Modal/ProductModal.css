@@ -59,6 +59,8 @@
 
 .product-modal .image-upload {
   margin-bottom: 16px;
+  justify-content: center;
+  display: flex;
 }
 
 .product-modal .image-upload label {

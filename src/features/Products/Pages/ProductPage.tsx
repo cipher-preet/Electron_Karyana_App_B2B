@@ -1,8 +1,8 @@
+import "./ProductPage.css";
 import React, { useState, useEffect, useCallback } from "react";
 import { Product } from "../../../shared/types/types";
 import ProductCard from "../Components/card/ProductCard";
 import ProductModal from "../Components/Modal/ProductModal";
-import "./ProductPage.css";
 import { useGetAllProductsQuery } from "@/redux/services/productsApi";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +19,8 @@ const ProductPage: React.FC = () => {
 
   const products = data?.products ?? [];
   const nextCursor = data?.nextCursor ?? null;
+
+  console.log("this is product images ", products);
 
   useEffect(() => {
     if (!isFetching && data) {
@@ -54,7 +56,7 @@ const ProductPage: React.FC = () => {
       <div className="product-grid">
         {products.map((p) => (
           <div
-            key={p._id} // ✅ FIX HERE
+            key={p._id}
             onClick={() => navigate(`/productInfo/${p._id}`)}
             style={{ cursor: "pointer" }}
           >

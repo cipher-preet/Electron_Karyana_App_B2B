@@ -24,7 +24,7 @@ export const baseApi = createApi({
     "contactquerydetail",
     "tag",
     "trend",
-    "orders"
+    "orders",
   ],
   endpoints: () => ({}),
 });

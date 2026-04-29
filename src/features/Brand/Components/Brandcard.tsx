@@ -1,5 +1,4 @@
 import "../../Units/Components/unitcard.css";
-
 interface Brand {
   _id: string;
   name: string;
