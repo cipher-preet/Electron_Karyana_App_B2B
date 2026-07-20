@@ -1,10 +1,10 @@
-.unit-page {
+.tag-page {
   min-height: 100%;
   padding: 18px;
   background: #f6f8fb;
 }
 
-.unit-page-header {
+.tag-page-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -17,7 +17,7 @@
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
 }
 
-.unit-page-header span {
+.tag-page-header span {
   display: block;
   margin-bottom: 5px;
   color: #2563eb;
@@ -26,7 +26,7 @@
   text-transform: uppercase;
 }
 
-.unit-page-header h2 {
+.tag-page-header h2 {
   margin: 0;
   color: #0f172a;
   font-size: 24px;
@@ -34,7 +34,7 @@
   line-height: 1.2;
 }
 
-.unit-page-header p {
+.tag-page-header p {
   max-width: 620px;
   margin: 8px 0 0;
   color: #64748b;
@@ -43,7 +43,7 @@
   line-height: 1.5;
 }
 
-.unit-add-btn {
+.tag-add-btn {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -61,11 +61,10 @@
   box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
   transition:
     background 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.18s ease;
 }
 
-.unit-add-btn span {
+.tag-add-btn span {
   display: grid;
   place-items: center;
   width: 22px;
@@ -78,19 +77,19 @@
   font-weight: 900;
 }
 
-.unit-add-btn:hover {
+.tag-add-btn:hover {
   background: #1d4ed8;
   transform: translateY(-1px);
 }
 
-.unit-grid {
+.tag-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 16px;
 }
 
-.unit-state-card,
-.unit-empty-state {
+.tag-state-card,
+.tag-empty-state {
   min-height: 86px;
   display: grid;
   place-items: center;
@@ -102,27 +101,27 @@
   font-weight: 750;
 }
 
-.unit-state-card.error {
+.tag-state-card.error {
   border-color: #fecaca;
   background: #fff1f2;
   color: #be123c;
 }
 
-.unit-empty-state {
+.tag-empty-state {
   grid-column: 1 / -1;
 }
 
 @media (max-width: 760px) {
-  .unit-page {
+  .tag-page {
     padding: 16px;
   }
 
-  .unit-page-header {
+  .tag-page-header {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .unit-add-btn {
+  .tag-add-btn {
     width: 100%;
   }
 }

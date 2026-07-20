@@ -7,6 +7,7 @@ import {
   useAddProductCaresolsAndbannersMutation,
 } from "@/redux/services/carosolsAndBanner";
 import { MediaItem } from "../../../shared/types/types";
+import CustomAlert from "@/assets/UI/CustomAlert/CustomAlert";
 
 const BannersAndCrouser = () => {
   const { data, error, isLoading } = useGetBannersAndCaroselsQuery();
@@ -20,6 +21,11 @@ const BannersAndCrouser = () => {
 
   const [banners, setBanners] = useState<MediaItem[]>([]);
   const [carousels, setCarousels] = useState<MediaItem[]>([]);
+  const [alertInfo, setAlertInfo] = useState<{
+    title: string;
+    message: string;
+    variant: "success" | "error" | "warning" | "info";
+  } | null>(null);
 
   useEffect(() => {
     const item = data?.data?.[0];
@@ -43,7 +49,19 @@ const BannersAndCrouser = () => {
   }, [data]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="bc-container">
+        <div className="bc-state-card">Loading media...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bc-container">
+        <div className="bc-state-card error">Failed to load media.</div>
+      </div>
+    );
   }
 
   const handleProceed = async () => {
@@ -65,15 +83,44 @@ const BannersAndCrouser = () => {
       }
     });
 
-    await updateMedia(formData);
-    alert("Updated successfully");
+    try {
+      await updateMedia(formData).unwrap();
+      setAlertInfo({
+        title: "Media Saved",
+        message: "Banners and carousel images have been updated successfully.",
+        variant: "success",
+      });
+    } catch (error) {
+      console.error(error);
+      setAlertInfo({
+        title: "Save Failed",
+        message: "Something went wrong while updating the media.",
+        variant: "error",
+      });
+    }
   };
 
   return (
     <div className="bc-container">
+      {alertInfo && (
+        <CustomAlert
+          title={alertInfo.title}
+          message={alertInfo.message}
+          variant={alertInfo.variant}
+          onClose={() => setAlertInfo(null)}
+        />
+      )}
+
       <div className="bc-header">
-        <h1>Banners & Carousels</h1>
-        <p>Upload, view and delete promotional visuals</p>
+        <div>
+          <span className="bc-eyebrow">Storefront media</span>
+          <h1>Banners & Carousels</h1>
+          <p>Upload, review, and arrange promotional visuals for the app.</p>
+        </div>
+        <div className="bc-summary">
+          <span>{banners.length} banners</span>
+          <span>{carousels.length} carousels</span>
+        </div>
       </div>
 
       <div className="bc-switch">
@@ -100,7 +147,7 @@ const BannersAndCrouser = () => {
 
       <div className="bc-proceed">
         <button onClick={handleProceed} disabled={isSaving}>
-          {isSaving ? "Saving..." : "Proceed"}
+          {isSaving ? "Saving..." : "Save Media"}
         </button>
       </div>
     </div>

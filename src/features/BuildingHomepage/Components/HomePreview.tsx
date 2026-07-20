@@ -18,36 +18,47 @@ const HomePreview = ({
   onBuildHome,
   isLoading,
 }: HomePreviewProps) => {
-  return (
-    <>
-      <h2>Homepage Preview</h2>
+  const productCount = sections.reduce(
+    (total, section) => total + section.products.length,
+    0,
+  );
 
-      {sections.length === 0 && (
-        <p style={{ opacity: 0.6 }}>
-          No sections added yet
-        </p>
+  return (
+    <aside className="build-home-preview-panel">
+      <div className="build-home-preview-header">
+        <div>
+          <span>Live Preview</span>
+          <h2>Homepage Preview</h2>
+          <p>{sections.length} sections · {productCount} products selected</p>
+        </div>
+      </div>
+
+      {sections.length === 0 ? (
+        <div className="build-home-preview-empty">
+          Add categories and products to create a homepage layout.
+        </div>
+      ) : (
+        sections.map((section) => (
+          <PreviewSection
+            key={section.categoryId}
+            categoryId={section.categoryId}
+            title={section.categoryName}
+            products={section.products}
+            onRemoveProduct={onRemoveProduct}
+          />
+        ))
       )}
 
-      {sections.map((section) => (
-        <PreviewSection
-          key={section.categoryId}
-          categoryId={section.categoryId}
-          title={section.categoryName}
-          products={section.products}
-          onRemoveProduct={onRemoveProduct}
-        />
-      ))}
-
-      <div className="footer_home">
+      <div className="build-home-preview-actions">
         <button
-          className="button-43"
+          className="build-home-publish-btn"
           onClick={onBuildHome}
           disabled={isLoading || sections.length === 0}
         >
           {isLoading ? "Saving..." : "Build Home"}
         </button>
       </div>
-    </>
+    </aside>
   );
 };
 

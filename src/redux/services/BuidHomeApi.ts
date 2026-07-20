@@ -15,7 +15,7 @@ type getproductsBasic = {
   _id: string;
   name: string;
   mrp: number;
-  images?: string;
+  images?: string | string[];
 };
 
 type GetUserProfileCardInDashboardResponse = {

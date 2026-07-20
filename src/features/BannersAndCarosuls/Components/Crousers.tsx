@@ -22,9 +22,13 @@ const Carousels = ({ carousels, setCarousels }: Props) => {
   };
 
   return (
-    <>
+    <section className="bc-panel">
       <div className="bc-upload-zone" onClick={() => inputRef.current?.click()}>
-        <p>Click or drag image here to upload carousel</p>
+        <span className="bc-upload-icon">+</span>
+        <div>
+          <h3>Upload carousels</h3>
+          <p>Choose carousel images for rotating storefront placements.</p>
+        </div>
         <input
           ref={inputRef}
           type="file"
@@ -35,22 +39,31 @@ const Carousels = ({ carousels, setCarousels }: Props) => {
         />
       </div>
 
-      <div className="bc-grid">
-        {carousels.map((c, i) => (
-          <div className="bc-card" key={i}>
-            <button
-              className="bc-delete-icon"
-              onClick={() =>
-                setCarousels((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              ✕
-            </button>
-            <img src={c.url} />
-          </div>
-        ))}
-      </div>
-    </>
+      {carousels.length === 0 ? (
+        <div className="bc-empty-state">No carousel images uploaded yet.</div>
+      ) : (
+        <div className="bc-grid">
+          {carousels.map((c, i) => (
+            <div className="bc-card" key={i}>
+              <button
+                className="bc-delete-icon"
+                aria-label="Delete carousel"
+                onClick={() =>
+                  setCarousels((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              >
+                x
+              </button>
+              <img src={c.url} alt={`Carousel ${i + 1}`} />
+              <div className="bc-card-footer">
+                <span>Carousel {i + 1}</span>
+                <small>{c.type === "existing" ? "Saved" : "New"}</small>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   );
 };
 

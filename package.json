@@ -1,5 +1,5 @@
 {
-  "name": "electron-kariyana-app",
+  "name": "ambemart",
   "private": true,
   "version": "0.0.0",
   "main": "electron/main.js",
@@ -39,11 +39,14 @@
     "wait-on": "^9.0.3"
   },
   "build": {
-  "files": [
-    "dist/**/*",
-    "electron/**/*",
-    "package.json"
-  ],
-  "asar": true
-}
+    "win": {
+      "icon": "assets/favicon.ico"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true
+  }
 }

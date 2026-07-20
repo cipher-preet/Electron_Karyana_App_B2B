@@ -1,35 +1,110 @@
-.trend-form {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  margin-bottom: 25px;
+.set-trend-form-card {
+  box-sizing: border-box;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
 }
 
-.trend-form h2 {
-  margin-bottom: 15px;
-  font-size: 22px;
+.set-trend-form-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.trend-form input {
+.set-trend-form-heading span {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.set-trend-form-heading h2 {
+  margin: 5px 0 0;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.set-trend-form-heading p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.set-trend-form-heading strong {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.set-trend-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.set-trend-field span {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.set-trend-field input {
+  box-sizing: border-box;
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  margin-bottom: 15px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
   font-size: 14px;
+  font-weight: 700;
+  pointer-events: auto;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.save-btn {
-  background: #111827;
-  color: white;
-  padding: 12px 20px;
+.set-trend-field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.set-trend-save-btn {
+  box-sizing: border-box;
+  min-height: 42px;
+  margin-top: 14px;
+  padding: 0 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
   cursor: pointer;
-  transition: 0.3s;
+  font-size: 13px;
+  font-weight: 850;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
 }
 
-.save-btn:hover {
-  background: #1f2937;
+.set-trend-save-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .set-trend-form-heading {
+    flex-direction: column;
+  }
 }

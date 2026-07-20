@@ -1,9 +1,11 @@
 import "./ApprovalUserPage.css";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import {
   useGetUserAdditionalProfileDetailsQuery,
   useApproveshopMutation,
 } from "@/redux/services/BuidHomeApi";
+import CustomAlert from "@/assets/UI/CustomAlert/CustomAlert";
 
 type ShopData = {
   _id: string;
@@ -28,6 +30,11 @@ const ApprovalUserPage = () => {
   } = useGetUserAdditionalProfileDetailsQuery(id!);
 
   const data = ShopDetail?.data;
+  const [alertInfo, setAlertInfo] = useState<{
+    title: string;
+    message: string;
+    variant: "success" | "error" | "warning" | "info";
+  } | null>(null);
 
   const [approveShop, { isLoading }] = useApproveshopMutation();
 
@@ -35,14 +42,26 @@ const ApprovalUserPage = () => {
     try {
       await approveShop(data._id).unwrap();
 
-      alert("Shop approved successfully");
+      setAlertInfo({
+        title: "Shop Approved",
+        message: "This shop has been approved successfully.",
+        variant: "success",
+      });
     } catch (error: any) {
-      alert(error?.data?.message || "Failed to approve shop");
+      setAlertInfo({
+        title: "Approval Failed",
+        message: error?.data?.message || "Failed to approve shop.",
+        variant: "error",
+      });
     }
   };
 
   const handleReject = () => {
-    alert("Reject flow coming soon ");
+    setAlertInfo({
+      title: "Reject Flow Pending",
+      message: "Reject flow is coming soon.",
+      variant: "info",
+    });
   };
 
   if (loading || isError) {
@@ -51,6 +70,15 @@ const ApprovalUserPage = () => {
 
   return (
     <div className="approval-wrapper">
+      {alertInfo && (
+        <CustomAlert
+          title={alertInfo.title}
+          message={alertInfo.message}
+          variant={alertInfo.variant}
+          onClose={() => setAlertInfo(null)}
+        />
+      )}
+
       <div className="approval-header">
         <div>
           <h1>Shop Verification</h1>

@@ -18,13 +18,13 @@ const SetTrendPage = () => {
   };
 
   return (
-    <div className="trend-container">
-      <div className="trend-left">
+    <div className="set-trend-workspace">
+      <div className="set-trend-main">
         <TrendForm selectedProducts={selectedProducts} />
         <ProductSelector addProduct={addProduct} />
       </div>
 
-      <div className="trend-right">
+      <div className="set-trend-aside">
         <SelectedProductsPanel
           products={selectedProducts}
           removeProduct={removeProduct}

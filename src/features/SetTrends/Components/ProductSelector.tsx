@@ -29,7 +29,7 @@ const ProductSelector: React.FC<Props> = ({ addProduct }) => {
         return [...prev, ...newProducts];
       });
     }
-  }, [data]);
+  }, [data, cursor]);
 
   const handleSearch = (value: string) => {
     setSearch(value);
@@ -43,38 +43,58 @@ const ProductSelector: React.FC<Props> = ({ addProduct }) => {
     }
   };
 
+  const getProductImage = (product: any) => {
+    if (Array.isArray(product.images)) return product.images[0] ?? "";
+    return product.images || "";
+  };
+
   return (
-    <div className="product-selector">
-      <h3>Select Products</h3>
+    <section className="trend-product-selector">
+      <div className="trend-product-selector-header">
+        <div>
+          <span>Step 2</span>
+          <h3>Select Products</h3>
+        </div>
+        <strong>{products.length} loaded</strong>
+      </div>
 
       <input
         type="text"
         placeholder="Search products..."
-        className="search-input"
+        className="trend-product-search"
         value={search}
         onChange={(e) => handleSearch(e.target.value)}
       />
 
-      <div className="product-list">
+      <div className="trend-product-list">
         {products.map((product) => (
-          <div
+          <button
             key={product._id}
-            className="product-card"
+            type="button"
+            className="trend-product-option"
             onClick={() => addProduct(product)}
           >
+            <span className="trend-product-option-image">
+              {getProductImage(product) ? (
+                <img src={getProductImage(product)} alt={product.name} />
+              ) : (
+                product.name?.charAt(0) || "P"
+              )}
+            </span>
+
             <div>
               <h4>{product.name}</h4>
-              <p>₹ {product.mrp}</p>
+              <p>Rs {product.mrp ?? product.price ?? "-"}</p>
             </div>
 
-            <button>Add</button>
-          </div>
+            <span className="trend-product-add">Add</span>
+          </button>
         ))}
       </div>
 
       {data?.data?.nextCursor && (
         <button
-          className="load-more-btn"
+          className="trend-load-more-btn"
           onClick={loadMore}
           disabled={isFetching}
         >
@@ -82,8 +102,8 @@ const ProductSelector: React.FC<Props> = ({ addProduct }) => {
         </button>
       )}
 
-      {isLoading && <p>Loading products...</p>}
-    </div>
+      {isLoading && <p className="trend-product-loading">Loading products...</p>}
+    </section>
   );
 };
 

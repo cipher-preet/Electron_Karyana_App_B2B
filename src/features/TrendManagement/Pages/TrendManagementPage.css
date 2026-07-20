@@ -1,21 +1,81 @@
 .trend-page {
-  padding: 30px;
-  background: #f4f6f9;
-  min-height: 100vh;
+  min-width: 0;
 }
 
 .trend-header {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
 }
 
-.trend-header button {
-  padding: 10px 18px;
-  background: #111827;
-  color: white;
-  border: none;
+.trend-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.trend-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.trend-header > span {
+  flex: 0 0 auto;
+  padding: 7px 10px;
   border-radius: 8px;
-  cursor: pointer;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.trend-state-card,
+.trend-empty-state {
+  display: grid;
+  min-height: 180px;
+  place-items: center;
+  padding: 24px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.trend-state-card.error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.trend-empty-state {
+  gap: 6px;
+}
+
+.trend-empty-state strong {
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.trend-empty-state p {
+  margin: 0;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .trend-header {
+    flex-direction: column;
+  }
 }

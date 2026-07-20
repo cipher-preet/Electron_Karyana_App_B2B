@@ -1,5 +1,83 @@
-.hp-layout {
-padding: 32px;
-background: #f9fafb;
-font-family: Inter, sans-serif;
+.build-home-page {
+  min-height: 100%;
+  padding: 18px;
+  background: #f6f8fb;
+}
+
+.build-home-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.build-home-builder-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.build-home-card {
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+}
+
+.build-home-empty-guide {
+  display: grid;
+  min-height: 92px;
+  place-items: center;
+  border-style: dashed;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.build-home-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.build-home-section-heading h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 850;
+}
+
+.build-home-section-heading p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.build-home-section-heading > span {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+@media (max-width: 1180px) {
+  .build-home-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .build-home-page {
+    padding: 16px;
+  }
+
+  .build-home-section-heading {
+    flex-direction: column;
+  }
 }

@@ -16,7 +16,9 @@ interface Product {
 
 interface Trend {
   _id: string;
-  name: string;
+  name?: string;
+  TrendName?: string;
+  trendname?: string;
   products: Product[];
 }
 
@@ -27,7 +29,6 @@ const TrendManagementPage = () => {
   const [deleteTrendApi] = useDeleteTrendsMutation();
 
   const [trends, setTrends] = useState<Trend[]>([]);
-  const [showTrends, setShowTrends] = useState(false);
   const [editingTrend, setEditingTrend] = useState<Trend | null>(null);
 
   useEffect(() => {
@@ -61,24 +62,43 @@ const TrendManagementPage = () => {
     setEditingTrend(null);
   };
 
-  if (isLoading) return <p>Loading trends...</p>;
-  if (isError) return <p>Failed to load trends</p>;
+  if (isLoading) {
+    return (
+      <div className="trend-page">
+        <div className="trend-state-card">Loading trends...</div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="trend-page">
+        <div className="trend-state-card error">Failed to load trends.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="trend-page">
       <div className="trend-header">
-        <h2>Trend Management</h2>
-        <button onClick={() => setShowTrends(!showTrends)}>
-          {showTrends ? "Hide Trends" : "View Existing Trends"}
-        </button>
+        <div>
+          <h2>Manage Trends</h2>
+          <p>Review live trend sections and remove products that no longer fit.</p>
+        </div>
+        <span>{trends.length} trends</span>
       </div>
 
-      {showTrends && (
+      {trends.length > 0 ? (
         <TrendList
           trends={trends}
           onEdit={setEditingTrend}
           onDelete={deleteTrend}
         />
+      ) : (
+        <div className="trend-empty-state">
+          <strong>No trends created yet</strong>
+          <p>Create a trend first, then it will appear here for editing.</p>
+        </div>
       )}
 
       {editingTrend && (

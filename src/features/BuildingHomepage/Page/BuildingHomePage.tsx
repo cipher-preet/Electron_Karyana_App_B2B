@@ -10,6 +10,7 @@ import {
   useCreateHomePageMutation,
   useGetHomePageDetailsForDashboardQuery,
 } from "@/redux/services/BuidHomeApi";
+import CustomAlert from "@/assets/UI/CustomAlert/CustomAlert";
 
 /* ---------------- TYPES ---------------- */
 
@@ -42,6 +43,11 @@ const BuildingHomePage = () => {
   );
 
   const [isHydrated, setIsHydrated] = useState(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    title: string;
+    message: string;
+    variant: "success" | "error" | "warning" | "info";
+  } | null>(null);
 
   useEffect(() => {
     if (!homePageDetails?.data || isHydrated) return;
@@ -125,33 +131,61 @@ const BuildingHomePage = () => {
 
       await createHomePage(payload).unwrap();
 
-      alert("Homepage built successfully");
+      setAlertInfo({
+        title: "Homepage Built",
+        message: "Homepage sections and products have been saved successfully.",
+        variant: "success",
+      });
     } catch (error) {
       console.error(error);
-      alert("Failed to build homepage");
+      setAlertInfo({
+        title: "Build Failed",
+        message: "Something went wrong while saving the homepage layout.",
+        variant: "error",
+      });
     }
   };
 
   return (
-    <div className="hp-layout">
-      <HomePageBuilderHeader />
-
-      <CategoryPicker onCategoryAdd={handleCategoryAdd} />
-
-      {activeCategory && (
-        <ProductPicker
-          categoryId={activeCategory.id}
-          categoryName={activeCategory.name}
-          onProductAdd={handleProductAdd}
+    <div className="build-home-page">
+      {alertInfo && (
+        <CustomAlert
+          title={alertInfo.title}
+          message={alertInfo.message}
+          variant={alertInfo.variant}
+          onClose={() => setAlertInfo(null)}
         />
       )}
 
-      <HomePreview
-        sections={previewSections}
-        onRemoveProduct={handleProductRemove}
-        onBuildHome={handleBuildHome}
-        isLoading={isLoading || isHomePageDetailsLoading}
-      />
+      <HomePageBuilderHeader />
+
+      <div className="build-home-workspace">
+        <div className="build-home-builder-panel">
+          <CategoryPicker
+            activeCategoryId={activeCategory?.id ?? null}
+            onCategoryAdd={handleCategoryAdd}
+          />
+
+          {activeCategory ? (
+            <ProductPicker
+              categoryId={activeCategory.id}
+              categoryName={activeCategory.name}
+              onProductAdd={handleProductAdd}
+            />
+          ) : (
+            <section className="build-home-card build-home-empty-guide">
+              Select a category to choose homepage products.
+            </section>
+          )}
+        </div>
+
+        <HomePreview
+          sections={previewSections}
+          onRemoveProduct={handleProductRemove}
+          onBuildHome={handleBuildHome}
+          isLoading={isLoading || isHomePageDetailsLoading}
+        />
+      </div>
     </div>
   );
 };

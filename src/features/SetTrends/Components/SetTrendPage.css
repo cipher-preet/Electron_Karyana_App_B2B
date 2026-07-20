@@ -1,15 +1,23 @@
-.trend-container {
-  display: flex;
-  gap: 30px;
-  padding: 30px;
-  background: #f4f6f9;
-  min-height: 100vh;
+.set-trend-workspace {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 16px;
+  align-items: start;
 }
 
-.trend-left {
-  flex: 2;
+.set-trend-main {
+  display: grid;
+  min-width: 0;
+  gap: 16px;
 }
 
-.trend-right {
-  flex: 1;
+.set-trend-aside {
+  min-width: 0;
+}
+
+@media (max-width: 1040px) {
+  .set-trend-workspace {
+    grid-template-columns: 1fr;
+  }
 }

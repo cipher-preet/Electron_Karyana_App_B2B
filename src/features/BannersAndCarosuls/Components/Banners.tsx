@@ -22,9 +22,13 @@ const Banners = ({ banners, setBanners }: Props) => {
   };
 
   return (
-    <>
+    <section className="bc-panel">
       <div className="bc-upload-zone" onClick={() => inputRef.current?.click()}>
-        <p>Click or drag image here to upload banner</p>
+        <span className="bc-upload-icon">+</span>
+        <div>
+          <h3>Upload banners</h3>
+          <p>Choose one or more wide promotional images.</p>
+        </div>
         <input
           ref={inputRef}
           type="file"
@@ -35,22 +39,31 @@ const Banners = ({ banners, setBanners }: Props) => {
         />
       </div>
 
-      <div className="bc-grid">
-        {banners.map((b, i) => (
-          <div className="bc-card" key={i}>
-            <button
-              className="bc-delete-icon"
-              onClick={() =>
-                setBanners((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              ✕
-            </button>
-            <img src={b.url} />
-          </div>
-        ))}
-      </div>
-    </>
+      {banners.length === 0 ? (
+        <div className="bc-empty-state">No banners uploaded yet.</div>
+      ) : (
+        <div className="bc-grid">
+          {banners.map((b, i) => (
+            <div className="bc-card" key={i}>
+              <button
+                className="bc-delete-icon"
+                aria-label="Delete banner"
+                onClick={() =>
+                  setBanners((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              >
+                x
+              </button>
+              <img src={b.url} alt={`Banner ${i + 1}`} />
+              <div className="bc-card-footer">
+                <span>Banner {i + 1}</span>
+                <small>{b.type === "existing" ? "Saved" : "New"}</small>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   );
 };
 

@@ -13,7 +13,6 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
     image,
     sku,
     mrp,
-    marketPrice,
     sellingPrice,
     unit,
     rating,
@@ -26,20 +25,21 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
   } = product as any;
 
   return (
-    <div className="product-card-professional">
-      <div className="card-left">
-        <div className="product-image">
-          {image ? (
-            <img src={image} alt={name} />
-          ) : (
-            <div className="image-placeholder">No Image</div>
-          )}
-        </div>
+    <article className="product-card-professional">
+      <div className="product-image">
+        {image ? (
+          <img src={image} alt={name || "Product"} />
+        ) : (
+          <div className="image-placeholder">No Image</div>
+        )}
       </div>
 
       <div className="card-right">
         <div className="card-header">
-          <h4 title={name}>{name}</h4>
+          <div className="title-group">
+            <h4 title={name}>{name || "Unnamed Product"}</h4>
+            <span title={sku}>SKU: {sku || "-"}</span>
+          </div>
           <span className={`status ${isActive ? "active" : "inactive"}`}>
             {isActive ? "Active" : "Inactive"}
           </span>
@@ -47,48 +47,49 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
 
         <div className="card-meta">
           <div>
-            <span className="meta-label">SKU</span>
-            <span>{sku}</span>
-          </div>
-          <div>
             <span className="meta-label">Brand</span>
-            <span>{brandId?.name ?? "-"}</span>
+            <span title={brandId?.name}>{brandId?.name ?? "-"}</span>
           </div>
           <div>
             <span className="meta-label">Category</span>
-            <span>{categoryId?.name ?? "-"}</span>
+            <span title={categoryId?.name}>{categoryId?.name ?? "-"}</span>
           </div>
           <div>
             <span className="meta-label">Subcategory</span>
-            <span>{subcategoryId?.name ?? "-"}</span>
+            <span title={subcategoryId?.name}>{subcategoryId?.name ?? "-"}</span>
+          </div>
+          <div>
+            <span className="meta-label">Unit</span>
+            <span title={unit}>{unit || "-"}</span>
           </div>
         </div>
 
         <div className="price-box">
           <div className="price-item">
             <span className="price-label">MRP</span>
-            <span className="price-value mrp-bold">₹{mrp}</span>
+            <span className="price-value">Rs {mrp ?? "-"}</span>
           </div>
 
           <div className="price-item">
-            <span className="price-label">off Percentage</span>
-            <span className="price-value market">{offPercentage}%</span>
+            <span className="price-label">Discount</span>
+            <span className="price-value discount">
+              {offPercentage ? `${offPercentage}%` : "-"}
+            </span>
           </div>
 
           <div className="price-item highlight">
-            <span className="price-label">Selling Price</span>
-            <span className="price-value selling">₹{sellingPrice}</span>
+            <span className="price-label">Selling</span>
+            <span className="price-value selling">Rs {sellingPrice ?? "-"}</span>
           </div>
-
-          <div className="unit">Unit: {unit}</div>
-        </div>
-
-        <div className="card-rating">
-          ⭐ {rating} <span>({reviewCount} reviews)</span>
         </div>
 
         <div className="card-footer">
-          <span className="stock">Stock: {sku}</span>
+          <div className="card-rating">
+            <span className="rating-star">★</span>
+            <span>{rating ?? 0}</span>
+            <small>({reviewCount ?? 0} reviews)</small>
+          </div>
+
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -99,7 +100,7 @@ const ProductCard: React.FC<Props> = ({ product, onEdit }) => {
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

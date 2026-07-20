@@ -1,10 +1,12 @@
-import "../../Units/Components/unitcard.css";
-interface Brand {
+import "./Brandcard.css";
+
+export interface Brand {
   _id: string;
   name: string;
   description: string;
   isActive: boolean;
 }
+
 interface BrandCardProps {
   brand: Brand;
   onEdit: () => void;
@@ -17,32 +19,41 @@ const Brandcard: React.FC<BrandCardProps> = ({
   onStatusToggle,
 }) => {
   return (
-    <div className="unit-card">
-      <div className="unit-card-header">
-        <h3>{brand.name}</h3>
-        <button className="unit-edit-btn" onClick={onEdit}>
-          Edit
-        </button>
+    <article className="brand-card">
+      <div className="brand-icon" aria-hidden="true">
+        {brand.name?.charAt(0)?.toUpperCase() || "B"}
       </div>
-      <div className="unit-status-row">
-        <span
-          className={`status-text ${brand.isActive ? "active" : "inactive"}`}
-        >
-          {brand.isActive ? "Active" : "Inactive"}
-        </span>
 
-        <button
-          type="button"
-          className={`switch-btn ${brand.isActive ? "on" : "off"}`}
-          onClick={onStatusToggle}
-          aria-pressed={brand.isActive}
-          aria-label="Toggle unit status"
-        >
-          <span className="switch-thumb" />
-        </button>
+      <div className="brand-card-content">
+        <div className="brand-card-header">
+          <div>
+            <h3 title={brand.name}>{brand.name}</h3>
+            <p title={brand.description}>{brand.description || "No description"}</p>
+          </div>
+
+          <span className={`brand-status ${brand.isActive ? "active" : "inactive"}`}>
+            {brand.isActive ? "Active" : "Inactive"}
+          </span>
+        </div>
+
+        <div className="brand-card-footer">
+          <label className="brand-switch">
+            <input
+              type="checkbox"
+              checked={brand.isActive}
+              onChange={onStatusToggle}
+              aria-label={`Turn ${brand.name} ${brand.isActive ? "off" : "on"}`}
+            />
+            <span className="brand-switch-slider" />
+            <small>{brand.isActive ? "On" : "Off"}</small>
+          </label>
+
+          <button className="brand-edit-btn" onClick={onEdit}>
+            Edit
+          </button>
+        </div>
       </div>
-      <p className="unit-short">Short Name: {brand.description}</p>
-    </div>
+    </article>
   );
 };
 

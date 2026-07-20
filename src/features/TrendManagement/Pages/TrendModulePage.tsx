@@ -4,20 +4,23 @@ import SetTrendPage from "@/features/SetTrends/Components/SetTrendPage";
 import TrendManagementPage from "./TrendManagementPage";
 
 const TrendModulePage = () => {
-  const [activeView, setActiveView] = useState<"create" | "manage">("create");
+  const [activeView, setActiveView] = useState<"create" | "manage">("manage");
 
   return (
     <div className="trend-module-container">
-      
       <div className="trend-module-header">
-        <h2>Trend Module</h2>
+        <div>
+          <span className="trend-module-eyebrow">Merchandising</span>
+          <h2>Trend Management</h2>
+          <p>Create, review, and refine the product groups shown as trends.</p>
+        </div>
 
         <div className="trend-toggle-buttons">
           <button
             className={activeView === "create" ? "active-btn" : ""}
             onClick={() => setActiveView("create")}
           >
-            Set Trend
+            Create Trend
           </button>
 
           <button

@@ -1,13 +1,34 @@
-.hp-header {
-margin-bottom: 24px;
+.build-home-header {
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
 }
 
-
-.hp-header h1 {
-font-size: 28px;
+.build-home-header span {
+  display: block;
+  margin-bottom: 5px;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
 }
 
+.build-home-header h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 850;
+  line-height: 1.2;
+}
 
-.hp-header p {
-color: #6b7280;
+.build-home-header p {
+  max-width: 680px;
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
 }

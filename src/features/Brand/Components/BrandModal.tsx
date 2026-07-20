@@ -1,8 +1,9 @@
-import "../../Units/Components/UnitModal.css";
+import "./BrandModal.css";
 import {
   useCreateBrandMutation,
   useEditBrandMutation,
 } from "@/redux/services/UnitBrandApi";
+import CustomAlert from "@/assets/UI/CustomAlert/CustomAlert";
 import React, { useState } from "react";
 
 interface Brand {
@@ -11,6 +12,7 @@ interface Brand {
   description: string;
   isActive?: boolean;
 }
+
 interface BrandModalProps {
   initialData: Brand | null;
   onClose: () => void;
@@ -23,8 +25,7 @@ const BrandModal: React.FC<BrandModalProps> = ({
   initialData,
 }) => {
   const [createBrand, { isLoading: creating }] = useCreateBrandMutation();
-
-  const [EditBrand, { isLoading: updating }] = useEditBrandMutation();
+  const [editBrand, { isLoading: updating }] = useEditBrandMutation();
 
   const isEditMode = Boolean(initialData?._id);
 
@@ -32,61 +33,118 @@ const BrandModal: React.FC<BrandModalProps> = ({
   const [description, setDescription] = useState(
     initialData?.description || "",
   );
+  const [isActive, setIsActive] = useState(initialData?.isActive ?? true);
+  const [alertInfo, setAlertInfo] = useState<{
+    title: string;
+    message: string;
+    variant: "success" | "error" | "warning" | "info";
+  } | null>(null);
+
+  const saving = creating || updating;
 
   const handleSubmit = async () => {
-    if (!name || !description) return;
+    if (!name.trim() || !description.trim()) {
+      setAlertInfo({
+        title: "Required Fields Missing",
+        message: "Please enter brand name and description before saving.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    const payload = {
+      ...(isEditMode && initialData?._id ? { _id: initialData._id } : {}),
+      name: name.trim(),
+      description: description.trim(),
+      isActive,
+    };
 
     try {
-      let response: Brand;
-
-      if (isEditMode && initialData?._id) {
-        response = await EditBrand({
-          _id: initialData._id,
-          name,
-          description,
-          isActive: true,
-        }).unwrap();
-      } else {
-        response = await createBrand({
-          name,
-          description,
-          isActive: true,
-        }).unwrap();
-      }
+      const response = isEditMode
+        ? await editBrand(payload).unwrap()
+        : await createBrand(payload).unwrap();
 
       onSave(response);
       onClose();
     } catch (err) {
       console.error("Failed to save brand:", err);
+      setAlertInfo({
+        title: "Save Failed",
+        message: "Something went wrong while saving the brand.",
+        variant: "error",
+      });
     }
   };
+
   return (
-    <div className="unit-modal-backdrop">
-      <div className="unit-modal">
-        <h3>{isEditMode ? "Edit Brand" : "Add Brand"}</h3>
-
-        <input
-          placeholder="Brand Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+    <div className="brand-modal-backdrop">
+      {alertInfo && (
+        <CustomAlert
+          title={alertInfo.title}
+          message={alertInfo.message}
+          variant={alertInfo.variant}
+          onClose={() => setAlertInfo(null)}
         />
+      )}
 
-        <input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+      <div className="brand-modal">
+        <div className="brand-modal-header">
+          <div>
+            <span>Brand Setup</span>
+            <h3>{isEditMode ? "Edit Brand" : "Add Brand"}</h3>
+          </div>
+          <button onClick={onClose} aria-label="Close brand modal">
+            X
+          </button>
+        </div>
 
-        <div className="unit-modal-actions">
-          <button className="unit-cancel-btn" onClick={onClose}>
+        <div className="brand-modal-body">
+          <label className="brand-modal-field">
+            <span>Brand Name</span>
+            <input
+              placeholder="Ambe Mart"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+
+          <label className="brand-modal-field">
+            <span>Description</span>
+            <textarea
+              placeholder="Short brand description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </label>
+
+          <div className="brand-modal-status">
+            <div>
+              <strong>Brand Status</strong>
+              <p>Turn this brand on or off for product forms.</p>
+            </div>
+
+            <label className="brand-modal-switch">
+              <input
+                type="checkbox"
+                checked={isActive}
+                onChange={() => setIsActive((prev) => !prev)}
+              />
+              <span className="brand-modal-switch-slider" />
+              <small>{isActive ? "On" : "Off"}</small>
+            </label>
+          </div>
+        </div>
+
+        <div className="brand-modal-actions">
+          <button className="brand-cancel-btn" onClick={onClose}>
             Cancel
           </button>
           <button
-            className="unit-save-btn"
+            className="brand-save-btn"
             onClick={handleSubmit}
-            disabled={creating || updating}
+            disabled={saving}
           >
-            {creating || updating ? "Saving..." : "Save"}
+            {saving ? "Saving..." : "Save Brand"}
           </button>
         </div>
       </div>

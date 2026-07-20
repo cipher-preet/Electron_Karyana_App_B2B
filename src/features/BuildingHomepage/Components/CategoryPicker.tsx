@@ -8,29 +8,37 @@ type Category = {
 };
 
 type CategoryPickerProps = {
+  activeCategoryId?: string | null;
   onCategoryAdd: (id: string, name: string) => void;
 };
 
-const CategoryPicker = ({ onCategoryAdd }: CategoryPickerProps) => {
+const CategoryPicker = ({ activeCategoryId, onCategoryAdd }: CategoryPickerProps) => {
   
   const { data, isLoading } = useGetAllCategoriesQuery();
 
   const categoryData: Category[] = data?.data ?? [];
 
   if (isLoading) {
-    return <div>Loading categories...</div>;
+    return <section className="build-home-card">Loading categories...</section>;
   }
 
   return (
-    <section className="hp-card">
-      <h2>Select Categories (Max 6)</h2>
+    <section className="build-home-card">
+      <div className="build-home-section-heading">
+        <div>
+          <h2>Select Category</h2>
+          <p>Pick the category you want to configure.</p>
+        </div>
+        <span>{categoryData.length} available</span>
+      </div>
 
-      <div className="hp-grid">
+      <div className="build-home-category-grid">
         {categoryData.map((c) => (
           <CategoryCard
             key={c._id}
             id={c._id}
             name={c.name}
+            isActive={activeCategoryId === c._id}
             onAdd={onCategoryAdd}
           />
         ))}

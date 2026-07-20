@@ -22,10 +22,16 @@ const ConfirmAlert: React.FC<Props> = ({
     <div className="confirm-overlay" onClick={onCancel}>
       <div
         className="confirm-box"
-        onClick={(e) => e.stopPropagation()} // IMPORTANT FIX
+        onClick={(e) => e.stopPropagation()}
       >
-        <h3>{title}</h3>
-        <p>{message}</p>
+        <div className="confirm-icon" aria-hidden="true">
+          !
+        </div>
+
+        <div className="confirm-content">
+          <h3>{title}</h3>
+          <p>{message}</p>
+        </div>
 
         <div className="confirm-actions">
           <button className="btn cancel" onClick={onCancel}>
@@ -35,8 +41,7 @@ const ConfirmAlert: React.FC<Props> = ({
           <button
             className="btn confirm"
             onClick={() => {
-              console.log("CONFIRM CLICKED"); // debug
-              onConfirm(); // trigger API
+              onConfirm();
             }}
           >
             {confirmText}

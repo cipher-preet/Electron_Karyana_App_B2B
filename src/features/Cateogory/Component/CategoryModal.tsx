@@ -8,6 +8,7 @@ import {
   useEditParentCategoryMutation,
 } from "@/redux/services/productsApi";
 import ConfirmAlert from "@/assets/UI/ConfirmAlert/ConfirmAlert";
+import CustomAlert from "@/assets/UI/CustomAlert/CustomAlert";
 
 interface Props {
   category: Category | null;
@@ -17,43 +18,83 @@ interface Props {
   parentId?: string;
 }
 
+const sanitizeImageFileName = (fileName: string) => {
+  const lastDot = fileName.lastIndexOf(".");
+  const rawName = lastDot > 0 ? fileName.slice(0, lastDot) : fileName;
+  const extension = lastDot > 0 ? fileName.slice(lastDot).toLowerCase() : "";
+  const safeName = rawName
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return `${safeName || "category-image"}-${Date.now()}${extension}`;
+};
+
+const normalizeImageFile = (file: File) => {
+  return new File([file], sanitizeImageFileName(file.name), {
+    type: file.type,
+    lastModified: file.lastModified,
+  });
+};
+
 const CategoryModal: React.FC<Props> = ({
   category,
-  parentOptions,
   onClose,
   formName,
   parentId,
 }) => {
   const isChild = formName === "childCategory";
+  const isEdit = Boolean(category?._id);
 
   const [name, setName] = useState(category?.name || "");
-
   const [imagePreview, setImagePreview] = useState<string | undefined>(
     category?.images,
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    title: string;
+    message: string;
+    variant: "success" | "error" | "warning" | "info";
+  } | null>(null);
 
   const [createParentCategory] = useCreateParentCategoryMutation();
   const [createChildCategory] = useCreateChildCategoryMutation();
-  const [showConfirm, setShowConfirm] = useState(false);
-  const isEdit = Boolean(category?._id);
-
   const [editParentCategory] = useEditParentCategoryMutation();
   const [editChildCategory] = useEditChildCategoryMutation();
 
+  const modalTitle = isEdit
+    ? isChild
+      ? "Edit Child Category"
+      : "Edit Parent Category"
+    : isChild
+      ? "Add Child Category"
+      : "Add Parent Category";
+
   const handleSaveClick = () => {
+    if (!name.trim()) {
+      setAlertInfo({
+        title: "Category Name Required",
+        message: "Please enter a category name before saving.",
+        variant: "warning",
+      });
+      return;
+    }
+
     setShowConfirm(true);
   };
 
   const handleImageChange = (file: File) => {
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    const normalizedFile = normalizeImageFile(file);
+    setImageFile(normalizedFile);
+    setImagePreview(URL.createObjectURL(normalizedFile));
   };
 
   const handleConfirmSave = async () => {
     try {
       const formData = new FormData();
-      formData.append("name", name);
+      formData.append("name", name.trim());
 
       if (isEdit && category?._id) {
         formData.append("id", category._id);
@@ -70,7 +111,6 @@ const CategoryModal: React.FC<Props> = ({
       if (isChild) {
         if (isEdit) {
           await editChildCategory(formData).unwrap();
-          console.log("Edit Child Hit");
         } else {
           await createChildCategory(formData).unwrap();
         }
@@ -86,73 +126,87 @@ const CategoryModal: React.FC<Props> = ({
       onClose();
     } catch (error) {
       console.error("Category save failed", error);
+      setShowConfirm(false);
+      setAlertInfo({
+        title: "Save Failed",
+        message: "Something went wrong while saving the category.",
+        variant: "error",
+      });
     }
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="category-modal-overlay">
+      {alertInfo && (
+        <CustomAlert
+          title={alertInfo.title}
+          message={alertInfo.message}
+          variant={alertInfo.variant}
+          onClose={() => setAlertInfo(null)}
+        />
+      )}
+
       <div className="category-modal">
-        <div className="modal-header">
-          <h3>
-            {isEdit
-              ? isChild
-                ? "Edit Child Category"
-                : "Edit Parent Category"
-              : isChild
-                ? "Add Child Category"
-                : "Add Parent Category"}
-          </h3>
+        <div className="category-modal-header">
+          <div>
+            <span>{isChild ? "Child Category" : "Parent Category"}</span>
+            <h3>{modalTitle}</h3>
+          </div>
 
-          <button onClick={onClose}>✕</button>
+          <button onClick={onClose} aria-label="Close category modal">
+            X
+          </button>
         </div>
 
-        {/* IMAGE */}
-        <div className="image-upload">
-          <label>
-            {imagePreview ? (
-              <img src={imagePreview} alt="preview" />
-            ) : (
-              <span>Upload Image</span>
-            )}
+        <div className="category-modal-body">
+          <div className="category-modal-image-upload">
+            <label>
+              {imagePreview ? (
+                <img src={imagePreview} alt="Category preview" />
+              ) : (
+                <span>
+                  <strong>Upload image</strong>
+                  <small>PNG, JPG or WEBP</small>
+                </span>
+              )}
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={(e) =>
+                  e.target.files && handleImageChange(e.target.files[0])
+                }
+              />
+            </label>
+          </div>
+
+          <div className="category-modal-field">
+            <label>Category Name</label>
             <input
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={(e) =>
-                e.target.files && handleImageChange(e.target.files[0])
-              }
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter category name"
             />
-          </label>
+          </div>
         </div>
 
-        <div className="form-group">
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter category name"
-          />
-        </div>
-
-        <div className="modal-actions">
-          <button className="primary-btn" onClick={handleSaveClick}>
+        <div className="category-modal-actions">
+          <button className="category-modal-save-btn" onClick={handleSaveClick}>
             Save
           </button>
-          <button className="cancel-btn" onClick={onClose}>
+          <button className="category-modal-cancel-btn" onClick={onClose}>
             Cancel
           </button>
         </div>
       </div>
+
       {showConfirm && (
         <ConfirmAlert
           title={isEdit ? "Update Category" : "Create Category"}
           message={
             isEdit
-              ? isChild
-                ? "Are you sure you want to update this child category?"
-                : "Are you sure you want to update this parent category?"
-              : isChild
-                ? "Are you sure you want to create this child category?"
-                : "Are you sure you want to create this parent category?"
+              ? `Are you sure you want to update ${name.trim()}?`
+              : `Are you sure you want to create ${name.trim()}?`
           }
           confirmText={isEdit ? "Update" : "Create"}
           cancelText="Cancel"

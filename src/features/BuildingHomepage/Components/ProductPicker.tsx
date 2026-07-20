@@ -1,3 +1,4 @@
+import "./ProductPicker.css";
 import ProductCard from "./ProductCard";
 import { useGetProductBasicInfoByChildCategoryIdQuery } from "@/redux/services/BuidHomeApi";
 
@@ -22,8 +23,13 @@ const ProductPicker = ({
   const { data, isLoading } =
     useGetProductBasicInfoByChildCategoryIdQuery(categoryId);
 
+  const getImageUrl = (images?: string | string[]) => {
+    if (Array.isArray(images)) return images[0] ?? "";
+    return images ?? "";
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <section className="build-home-card">Loading products...</section>;
   }
 
   const products: Product[] =
@@ -31,14 +37,20 @@ const ProductPicker = ({
       _id: p._id,
       name: p.name,
       mrp: p.mrp,
-      images: p.images?.[0] ?? "",
+      images: getImageUrl(p.images),
     })) ?? [];
 
   return (
-    <section className="hp-card">
-      <h2>{categoryName} → Select Products (Max 6)</h2>
+    <section className="build-home-card">
+      <div className="build-home-section-heading">
+        <div>
+          <h2>{categoryName}</h2>
+          <p>Select up to 6 products for this homepage section.</p>
+        </div>
+        <span>{products.length} products</span>
+      </div>
 
-      <div className="hp-grid">
+      <div className="build-home-product-grid">
         {products.map((p) => (
           <ProductCard key={p._id} {...p} onAdd={() => onProductAdd(p)} />
         ))}
