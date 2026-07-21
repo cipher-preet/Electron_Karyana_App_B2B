@@ -1,10 +1,10 @@
-.approved-users-page {
+.pending-users-page {
   min-height: 100%;
   padding: 18px;
   background: #f6f8fb;
 }
 
-.approved-users-header {
+.pending-users-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -17,16 +17,16 @@
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
 }
 
-.approved-users-header span {
+.pending-users-header span {
   display: block;
   margin-bottom: 5px;
-  color: #16a34a;
+  color: #2563eb;
   font-size: 11px;
   font-weight: 850;
   text-transform: uppercase;
 }
 
-.approved-users-header h2 {
+.pending-users-header h2 {
   margin: 0;
   color: #0f172a;
   font-size: 24px;
@@ -34,7 +34,7 @@
   line-height: 1.2;
 }
 
-.approved-users-header p {
+.pending-users-header p {
   max-width: 620px;
   margin: 8px 0 0;
   color: #64748b;
@@ -43,25 +43,25 @@
   line-height: 1.5;
 }
 
-.approved-users-count {
+.pending-users-count {
   flex: 0 0 auto;
   min-width: 142px;
   padding: 12px 14px;
-  border: 1px solid #bbf7d0;
+  border: 1px solid #dbeafe;
   border-radius: 8px;
-  background: #f0fdf4;
+  background: #eff6ff;
   text-align: right;
 }
 
-.approved-users-count strong {
+.pending-users-count strong {
   display: block;
-  color: #15803d;
+  color: #1d4ed8;
   font-size: 26px;
   font-weight: 900;
   line-height: 1;
 }
 
-.approved-users-count small {
+.pending-users-count small {
   display: block;
   margin-top: 6px;
   color: #475569;
@@ -69,28 +69,28 @@
   font-weight: 750;
 }
 
-.approved-summary-grid {
+.pending-summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 16px;
 }
 
-.approved-summary-item {
+.pending-summary-item {
   padding: 14px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #ffffff;
 }
 
-.approved-summary-item span {
+.pending-summary-item span {
   display: block;
   color: #64748b;
   font-size: 12px;
   font-weight: 750;
 }
 
-.approved-summary-item strong {
+.pending-summary-item strong {
   display: block;
   margin-top: 6px;
   color: #0f172a;
@@ -98,13 +98,13 @@
   font-weight: 850;
 }
 
-.approved-user-grid {
+.pending-user-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 16px;
 }
 
-.approved-state-card {
+.pending-state-card {
   min-height: 110px;
   display: grid;
   place-items: center;
@@ -116,7 +116,7 @@
   font-weight: 750;
 }
 
-.approved-state-card.error {
+.pending-state-card.error {
   border-color: #fecaca;
   background: #fff1f2;
   color: #be123c;
@@ -154,20 +154,20 @@
 }
 
 @media (max-width: 760px) {
-  .approved-users-page {
+  .pending-users-page {
     padding: 16px;
   }
 
-  .approved-users-header {
+  .pending-users-header {
     flex-direction: column;
   }
 
-  .approved-users-count {
+  .pending-users-count {
     width: 100%;
     text-align: left;
   }
 
-  .approved-summary-grid {
+  .pending-summary-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -1,6 +1,7 @@
 import { useGetPendingUserProfileCardInDashboardSectionQuery } from "@/redux/services/BuidHomeApi";
 import { useEffect, useState } from "react";
 import PendingUserCard from "../Components/PendingUserCard";
+import "./PendingApprovalUser.css";
 
 const PendingApprovalUser = () => {
   const [cursor, setCursor] = useState<string | undefined>(undefined);
@@ -35,28 +36,66 @@ const PendingApprovalUser = () => {
     };
   }, []);
 
-  if (isLoading && users.length === 0) {
-    return <div className="loading">Loading user profiles...</div>;
-  }
-
-  if (isError) {
-    return <div className="error">Error loading user profiles.</div>;
-  }
-
   return (
-    <div className="page-container">
-      <div className="user-grid">
-        {data?.data?.users?.map((user: any) => (
-          <PendingUserCard
-            key={user._id}
-            userId={user._id}
-            shopName={user.shopName}
-            ownerName={user.ownerName}
-            address={user.address}
-            image={user.image}
-          />
-        ))}
+    <div className="pending-users-page">
+      <div className="pending-users-header">
+        <div>
+          <span>Approvals</span>
+          <h2>Pending Shop Requests</h2>
+          <p>Review seller profiles waiting for account verification.</p>
+        </div>
+
+        <div className="pending-users-count">
+          <strong>{users.length}</strong>
+          <small>Pending profiles</small>
+        </div>
       </div>
+
+      <div className="pending-summary-grid">
+        <div className="pending-summary-item">
+          <span>Queue Status</span>
+          <strong>{isFetching ? "Refreshing" : "Ready"}</strong>
+        </div>
+        <div className="pending-summary-item">
+          <span>Next Page</span>
+          <strong>{data?.data?.hasNextPage ? "Available" : "Complete"}</strong>
+        </div>
+        <div className="pending-summary-item">
+          <span>Action Needed</span>
+          <strong>{users.length > 0 ? "Review" : "None"}</strong>
+        </div>
+      </div>
+
+      {isLoading && users.length === 0 && (
+        <div className="pending-state-card">Loading user profiles...</div>
+      )}
+
+      {isError && (
+        <div className="pending-state-card error">
+          Error loading user profiles.
+        </div>
+      )}
+
+      {!isLoading && !isError && users.length === 0 && (
+        <div className="pending-state-card">
+          No pending users found right now.
+        </div>
+      )}
+
+      {!isError && users.length > 0 && (
+        <div className="pending-user-grid">
+          {users.map((user: any) => (
+            <PendingUserCard
+              key={user._id}
+              userId={user._id}
+              shopName={user.shopName}
+              ownerName={user.ownerName}
+              address={user.address}
+              image={user.image}
+            />
+          ))}
+        </div>
+      )}
 
       {data?.data?.hasNextPage && (
         <div className="load-more-wrapper">

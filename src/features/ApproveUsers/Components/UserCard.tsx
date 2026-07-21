@@ -20,27 +20,32 @@ const UserCard = ({
 }: UserCardProps) => {
   const navigate = useNavigate();
   return (
-    <div
-      className="user-card"
+    <article
+      className="approved-user-card"
       onClick={() => navigate(`/users/${userId}/${actualUserId}`)}
     >
-      <div className="card-header">
-        <div className="avatar">
+      <div className="approved-card-top">
+        <div className="approved-avatar">
           {image ? (
             <img src={image} alt={`${shopName} avatar`} />
           ) : (
-            <div className="placeholder-avatar">{shopName.charAt(0)}</div>
+            <span>{shopName?.charAt(0)?.toUpperCase() || "S"}</span>
           )}
         </div>
+
+        <span className="approved-pill">Approved</span>
       </div>
 
-      <h3 className="user-name">{shopName}</h3>
-      <p className="user-email">{ownerName}</p>
-
-      <div className="card-footer">
-        <span className="role">{address}</span>
+      <div className="approved-card-body">
+        <h3 title={shopName}>{shopName || "Unnamed Shop"}</h3>
+        <p title={ownerName}>{ownerName || "Owner not available"}</p>
       </div>
-    </div>
+
+      <div className="approved-card-footer">
+        <span title={address}>{address || "Address not available"}</span>
+        <button type="button">View</button>
+      </div>
+    </article>
   );
 };
 

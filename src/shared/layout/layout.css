@@ -1,7 +1,14 @@
 :root {
-  --sidebar-width: 180px;
-  --sidebar-collapsed-width: 90px;
-  --header-height: 64px;
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 104px;
+  --header-height: 72px;
+  --shell-bg: #f5f7fb;
+  --shell-border: #e5e7eb;
+  --shell-text: #111827;
+  --shell-muted: #6b7280;
+  --shell-primary: #047857;
+  --shell-primary-dark: #065f46;
+  --shell-primary-soft: #ecfdf5;
 }
 
 html,
@@ -14,11 +21,15 @@ body,
   font-family: Inter, system-ui, sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .admin-root {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background: #f4f6f8;
+  background: var(--shell-bg);
 }
 
 .main-area {
@@ -32,7 +43,7 @@ body,
 .page-content {
   margin-top: var(--header-height);
   height: calc(100vh - var(--header-height));
-  padding: 4px;
+  padding: 18px;
   overflow-y: auto;
 }
 

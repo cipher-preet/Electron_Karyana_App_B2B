@@ -35,29 +35,67 @@ const ApproveUserPage = () => {
     };
   }, []);
 
-  if (isLoading && users.length === 0) {
-    return <div className="loading">Loading user profiles...</div>;
-  }
-
-  if (isError) {
-    return <div className="error">Error loading user profiles.</div>;
-  }
-
   return (
-    <div className="page-container">
-      <div className="user-grid">
-        {data?.data?.users?.map((user: any) => (
-          <UserCard
-            key={user._id}
-            userId={user._id}
-            actualUserId={user.userId}
-            shopName={user.shopName}
-            ownerName={user.ownerName}
-            address={user.address}
-            image={user.image}
-          />
-        ))}
+    <div className="approved-users-page">
+      <div className="approved-users-header">
+        <div>
+          <span>Customers</span>
+          <h2>Approved Shops</h2>
+          <p>Browse verified shop accounts and open their complete profile activity.</p>
+        </div>
+
+        <div className="approved-users-count">
+          <strong>{users.length}</strong>
+          <small>Approved profiles</small>
+        </div>
       </div>
+
+      <div className="approved-summary-grid">
+        <div className="approved-summary-item">
+          <span>Directory Status</span>
+          <strong>{isFetching ? "Refreshing" : "Ready"}</strong>
+        </div>
+        <div className="approved-summary-item">
+          <span>Next Page</span>
+          <strong>{data?.data?.hasNextPage ? "Available" : "Complete"}</strong>
+        </div>
+        <div className="approved-summary-item">
+          <span>Profile Access</span>
+          <strong>{users.length > 0 ? "Open" : "Empty"}</strong>
+        </div>
+      </div>
+
+      {isLoading && users.length === 0 && (
+        <div className="approved-state-card">Loading user profiles...</div>
+      )}
+
+      {isError && (
+        <div className="approved-state-card error">
+          Error loading user profiles.
+        </div>
+      )}
+
+      {!isLoading && !isError && users.length === 0 && (
+        <div className="approved-state-card">
+          No approved users found right now.
+        </div>
+      )}
+
+      {!isError && users.length > 0 && (
+        <div className="approved-user-grid">
+          {users.map((user: any) => (
+            <UserCard
+              key={user._id}
+              userId={user._id}
+              actualUserId={user.userId}
+              shopName={user.shopName}
+              ownerName={user.ownerName}
+              address={user.address}
+              image={user.image}
+            />
+          ))}
+        </div>
+      )}
 
       {data?.data?.hasNextPage && (
         <div className="load-more-wrapper">

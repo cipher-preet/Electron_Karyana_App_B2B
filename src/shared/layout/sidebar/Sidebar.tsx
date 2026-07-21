@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { FiMenu, FiSidebar } from "react-icons/fi";
 import "./Sidebar.css";
 
 interface Props {
@@ -6,44 +7,50 @@ interface Props {
   onToggle: (v: boolean) => void;
 }
 
+const navItems = [
+  { to: "/dashboard", label: "Dashboard", shortLabel: "DB" },
+  { to: "/orderdetail", label: "Orders", shortLabel: "OR" },
+  { to: "/products", label: "Products", shortLabel: "PR" },
+  { to: "/category", label: "Categories", shortLabel: "CA" },
+  { to: "/unit", label: "Units", shortLabel: "UN" },
+  { to: "/brandpage", label: "Brands", shortLabel: "BR" },
+  { to: "/tags", label: "Tags", shortLabel: "TG" },
+  { to: "/approveusers", label: "Approved Users", shortLabel: "AU" },
+  { to: "/pendingapprovaluser", label: "Pending Users", shortLabel: "PU" },
+  { to: "/buildHomepage", label: "Homepage Builder", shortLabel: "HB" },
+  { to: "/trendmanagement", label: "Manage Trends", shortLabel: "MT" },
+  { to: "/bannersAndCrouser", label: "Banners", shortLabel: "BN" },
+  { to: "/contactus", label: "Contact Us", shortLabel: "CU" },
+];
+
 const Sidebar = ({ collapsed, onToggle }: Props) => {
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-top">
-        <span className="brand">LALA</span>
+        <div className="brand-wrap">
+          <div className="brand-mark">K</div>
+          {!collapsed && (
+            <div>
+              <span className="brand">Kariyana</span>
+              <span className="brand-subtitle">Admin console</span>
+            </div>
+          )}
+        </div>
 
-        <button className="hamburger" onClick={() => onToggle(!collapsed)}>
-          ☰
+        <button
+          className="hamburger"
+          onClick={() => onToggle(!collapsed)}
+          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+          title={collapsed ? "Expand navigation" : "Collapse navigation"}
+        >
+          {collapsed ? <FiMenu /> : <FiSidebar />}
         </button>
       </div>
 
       <nav className="nav">
-        <NavItem to="/dashboard" label="Dashboard" collapsed={collapsed} />
-        <NavItem to="/orderdetail" label="Orders" collapsed={collapsed} />
-        <NavItem to="/products" label="Products" collapsed={collapsed} />
-        <NavItem to="/category" label="Category" collapsed={collapsed} />
-        <NavItem to="/unit" label="Unit" collapsed={collapsed} />
-        <NavItem to="/brandpage" label="Brand" collapsed={collapsed} />
-        <NavItem to="/tags" label="Tag" collapsed={collapsed} />
-        <NavItem to="/approveusers" label="ApproveUser" collapsed={collapsed} />
-        <NavItem
-          to="/pendingapprovaluser"
-          label="PendingUser"
-          collapsed={collapsed}
-        />
-        <NavItem to="/buildHomepage" label="BuildHome" collapsed={collapsed} />
-        {/* <NavItem to="/settrends" label="BuildTrends" collapsed={collapsed} /> */}
-        <NavItem
-          to="/trendmanagement"
-          label="Manage Trends"
-          collapsed={collapsed}
-        />
-        <NavItem
-          to="/bannersAndCrouser"
-          label="Banners"
-          collapsed={collapsed}
-        />
-        <NavItem to="/contactus" label="Contact Us" collapsed={collapsed} />
+        {navItems.map((item) => (
+          <NavItem key={item.to} {...item} />
+        ))}
       </nav>
     </aside>
   );
@@ -52,17 +59,19 @@ const Sidebar = ({ collapsed, onToggle }: Props) => {
 const NavItem = ({
   to,
   label,
-  collapsed,
+  shortLabel,
 }: {
   to: string;
   label: string;
-  collapsed: boolean;
+  shortLabel: string;
 }) => (
   <NavLink
     to={to}
     className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+    title={label}
   >
-    {!collapsed && label}
+    <span className="nav-icon">{shortLabel}</span>
+    <span className="nav-label">{label}</span>
   </NavLink>
 );
 

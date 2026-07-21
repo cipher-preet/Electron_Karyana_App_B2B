@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiCheck, FiPrinter, FiTruck, FiX } from "react-icons/fi";
 import "./OrderDetailPage.css";
 import {
   useGetOrdersForDashboardQuery,
   useUpdateOrderStatusMutation,
 } from "@/redux/services/OrderManagementApi";
-import { useNavigate } from "react-router-dom";
 import { printInvoice } from "@/shared/utils/helper";
 
 type OrderStatus =
@@ -29,6 +30,7 @@ interface Order {
   total: number;
   items: OrderItem[];
 }
+
 const statusFlow: OrderStatus[] = [
   "Recieved",
   "packing",
@@ -37,10 +39,11 @@ const statusFlow: OrderStatus[] = [
   "Delivered",
 ];
 
+const filters = ["All", "packing", "packed", "outForDelivery"];
+
 const OrderPage: React.FC = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetOrdersForDashboardQuery({});
-
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
   const orders: Order[] =
@@ -51,7 +54,6 @@ const OrderPage: React.FC = () => {
       time: order.time,
       status: order.status === "Recieved" ? "packing" : order.status,
       total: order.total,
-
       items: order.items.map((item: any) => ({
         name: item.name,
         qty: item.quantity,
@@ -62,132 +64,76 @@ const OrderPage: React.FC = () => {
   const [filter, setFilter] = useState<string>("All");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
+  const filteredOrders =
+    filter === "All"
+      ? orders.filter((order) => order.status !== "Delivered")
+      : orders.filter((order) => order.status === filter);
+
+  const activeOrders = orders.filter(
+    (order) => order.status !== "Delivered",
+  ).length;
+  const deliveryOrders = orders.filter(
+    (order) => order.status === "outForDelivery",
+  ).length;
+  const activeValue = orders
+    .filter((order) => order.status !== "Delivered")
+    .reduce((sum, order) => sum + order.total, 0);
+
+  const getCount = (type: string) => {
+    if (type === "All") return activeOrders;
+    return orders.filter((order) => order.status === type).length;
+  };
+
   const handleStatusChange = async (id: string, status: OrderStatus) => {
     try {
-      const data = {
-        id,
-        status,
-      };
-      await updateOrderStatus(data).unwrap();
+      await updateOrderStatus({ id, status }).unwrap();
     } catch (err) {
       console.error("Failed to update status", err);
     }
   };
-  const filteredOrders =
-    filter === "All"
-      ? orders.filter((o) => o.status !== "Delivered")
-      : orders.filter((o) => o.status === filter);
 
-  const getCount = (type: string) => {
-    if (type === "All") return orders.length;
-    return orders.filter((o) => o.status === type).length;
-  };
-
-  const OrderDrawer = ({
-    order,
-    onClose,
-    onComplete,
-  }: {
-    order: Order | null;
-    onClose: () => void;
-    onComplete: () => void;
-  }) => {
-    const [checkedItems, setCheckedItems] = useState<number[]>([]);
-
-    if (!order) return null;
-
-    const toggleItem = (index: number) => {
-      setCheckedItems((prev) =>
-        prev.includes(index)
-          ? prev.filter((i) => i !== index)
-          : [...prev, index],
-      );
-    };
-
-    const allChecked = checkedItems.length === order.items.length;
-
-    if (isLoading) {
-      return <div style={{ padding: 20 }}>Loading orders...</div>;
-    }
-
-    return (
-      <div className="order-drawer-overlay" onClick={onClose}>
-        <div className="order-drawer" onClick={(e) => e.stopPropagation()}>
-          <div className="order-drawer-header">
-            <div>
-              <h3>{order.customer}</h3>
-              <p>
-                #{order.id.slice(0, 6).toUpperCase()} • {order.type}
-              </p>
-            </div>
-            <button className="order-drawer-close" onClick={onClose}>
-              <span style={{ fontSize: 18 }}>×</span>
-            </button>
-          </div>
-
-          <div className="order-table-header">
-            <span>✔</span>
-            <span>Item</span>
-            <span>Qty</span>
-            <span>Price</span>
-          </div>
-
-          <div className="order-drawer-content">
-            {order.items.map((item, i) => (
-              <div key={i} className="order-row">
-                <input
-                  type="checkbox"
-                  checked={checkedItems.includes(i)}
-                  onChange={() => toggleItem(i)}
-                />
-
-                <span className="item-name">{item.name}</span>
-                <span className="item-qty">{item.qty}</span>
-                <span className="item-price">₹{item.price}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="order-drawer-footer">
-            <div className="total">Total: ₹{order.total}</div>
-
-            <button
-              className={`complete-btn ${allChecked ? "active" : ""}`}
-              disabled={!allChecked}
-              onClick={onComplete}
-            >
-              Move to Next Step →
-            </button>
-
-            <button className="print-btn" onClick={() => printInvoice(order)}>
-              🖨 Print Invoice
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  if (isLoading) {
+    return <div className="order-state-card">Loading orders...</div>;
+  }
 
   return (
     <div className="order-page">
       <div className="order-header">
-        <h1>Orders</h1>
-        <span
+        <div>
+          <p className="order-kicker">Fulfillment queue</p>
+          <h1>Orders</h1>
+        </div>
+        <button
           className="delivered-link"
           onClick={() => navigate("/delivered-orders")}
         >
-          Delivered
-        </span>
+          Delivered Orders
+        </button>
+      </div>
+
+      <div className="order-stats">
+        <div className="order-stat-card">
+          <p>Active Orders</p>
+          <h3>{activeOrders}</h3>
+        </div>
+        <div className="order-stat-card">
+          <p>Out For Delivery</p>
+          <h3>{deliveryOrders}</h3>
+        </div>
+        <div className="order-stat-card highlight">
+          <p>Active Order Value</p>
+          <h3>{"\u20B9"}{activeValue}</h3>
+        </div>
       </div>
 
       <div className="order-filters">
-        {["All", "packing", "packed", "outForDelivery"].map((f) => (
+        {filters.map((item) => (
           <button
-            key={f}
-            className={filter === f ? "active" : ""}
-            onClick={() => setFilter(f)}
+            key={item}
+            className={filter === item ? "active" : ""}
+            onClick={() => setFilter(item)}
           >
-            {f} ({getCount(f)})
+            {getFilterLabel(item)} <span>{getCount(item)}</span>
           </button>
         ))}
       </div>
@@ -210,21 +156,23 @@ const OrderPage: React.FC = () => {
                     #{order.id.slice(0, 6).toUpperCase()} • {order.type}
                   </p>
                 </div>
-                <span className={`status ${order.status}`}>{order.status}</span>
+                <span className={`status ${order.status}`}>
+                  {formatStatus(order.status)}
+                </span>
               </div>
 
               <div className="item-row">
-                {order.items[0]?.name} × {order.items[0]?.qty}
+                {order.items[0]?.name} x {order.items[0]?.qty}
               </div>
 
-              <div className="total">₹{order.total}</div>
+              <div className="total">{"\u20B9"}{order.total}</div>
 
               <div className="progress">
-                {statusFlow.map((step, i) => (
+                {statusFlow.map((step, index) => (
                   <div
                     key={step}
                     className={`step ${
-                      i <= statusFlow.indexOf(order.status) ? "active" : ""
+                      index <= statusFlow.indexOf(order.status) ? "active" : ""
                     }`}
                   />
                 ))}
@@ -233,27 +181,26 @@ const OrderPage: React.FC = () => {
               {nextStatus && (
                 <button
                   className="primary-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setSelectedOrder(order);
                   }}
                 >
-                  Process Order →
+                  <FiTruck /> Process Order
                 </button>
               )}
             </div>
           );
         })}
       </div>
+
       <OrderDrawer
         order={selectedOrder}
         onClose={() => setSelectedOrder(null)}
         onComplete={() => {
           if (!selectedOrder) return;
 
-          const nextIndex = statusFlow.indexOf(selectedOrder.status) + 1;
-
-          const nextStatus = statusFlow[nextIndex];
+          const nextStatus = statusFlow[statusFlow.indexOf(selectedOrder.status) + 1];
 
           if (nextStatus) {
             handleStatusChange(selectedOrder.id, nextStatus);
@@ -263,6 +210,105 @@ const OrderPage: React.FC = () => {
       />
     </div>
   );
+};
+
+const OrderDrawer = ({
+  order,
+  onClose,
+  onComplete,
+}: {
+  order: Order | null;
+  onClose: () => void;
+  onComplete: () => void;
+}) => {
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+
+  if (!order) return null;
+
+  const toggleItem = (index: number) => {
+    setCheckedItems((prev) =>
+      prev.includes(index)
+        ? prev.filter((item) => item !== index)
+        : [...prev, index],
+    );
+  };
+
+  const allChecked = checkedItems.length === order.items.length;
+
+  return (
+    <div className="order-drawer-overlay" onClick={onClose}>
+      <div className="order-drawer" onClick={(event) => event.stopPropagation()}>
+        <div className="order-drawer-header">
+          <div>
+            <h3>{order.customer}</h3>
+            <p>
+              #{order.id.slice(0, 6).toUpperCase()} • {order.type}
+            </p>
+          </div>
+          <button className="order-drawer-close" onClick={onClose}>
+            <FiX />
+          </button>
+        </div>
+
+        <div className="order-table-header">
+          <span>
+            <FiCheck />
+          </span>
+          <span>Item</span>
+          <span>Qty</span>
+          <span>Price</span>
+        </div>
+
+        <div className="order-drawer-content">
+          {order.items.map((item, index) => (
+            <div key={index} className="order-row">
+              <input
+                type="checkbox"
+                checked={checkedItems.includes(index)}
+                onChange={() => toggleItem(index)}
+              />
+              <span className="item-name">{item.name}</span>
+              <span className="item-qty">{item.qty}</span>
+              <span className="item-price">{"\u20B9"}{item.price}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="order-drawer-footer">
+          <div className="total">Total: {"\u20B9"}{order.total}</div>
+
+          <button
+            className={`complete-btn ${allChecked ? "active" : ""}`}
+            disabled={!allChecked}
+            onClick={onComplete}
+          >
+            Move to Next Step
+          </button>
+
+          <button className="print-btn" onClick={() => printInvoice(order)}>
+            <FiPrinter /> Print Invoice
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const getFilterLabel = (filter: string) => {
+  if (filter === "All") return "All";
+  return formatStatus(filter as OrderStatus);
+};
+
+const formatStatus = (status: OrderStatus) => {
+  const labels: Record<OrderStatus, string> = {
+    Recieved: "Received",
+    packing: "Packing",
+    packed: "Packed",
+    outForDelivery: "Out for Delivery",
+    Delivered: "Delivered",
+  };
+
+  return labels[status] || status;
 };
 
 export default OrderPage;

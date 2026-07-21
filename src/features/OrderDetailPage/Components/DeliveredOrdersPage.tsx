@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FiX } from "react-icons/fi";
 import "../Components/DeliveredOrderPage.css";
 import { useGetOrdersForDashboardQuery } from "@/redux/services/OrderManagementApi";
 
@@ -16,37 +17,57 @@ const DeliveredOrdersPage = () => {
       })),
     })) || [];
 
-  const deliveredOrders = orders.filter((o: any) => o.status === "Delivered");
+  const deliveredOrders = orders.filter((order: any) => order.status === "Delivered");
+  const deliveredValue = deliveredOrders.reduce(
+    (sum: number, order: any) => sum + (order.total || 0),
+    0,
+  );
 
   if (isLoading) {
-    return <div style={{ padding: 20 }}>Loading...</div>;
+    return <div className="delivered-state">Loading delivered orders...</div>;
   }
 
   return (
     <div className="delivered-page">
-      <h2 className="page-title">Delivered Orders</h2>
+      <div className="delivered-header">
+        <div>
+          <p>Completed fulfillment</p>
+          <h2>Delivered Orders</h2>
+        </div>
+      </div>
 
-      <div className="order-grid">
+      <div className="delivered-stats">
+        <div className="delivered-stat">
+          <p>Delivered Orders</p>
+          <h3>{deliveredOrders.length}</h3>
+        </div>
+        <div className="delivered-stat highlight">
+          <p>Delivered Value</p>
+          <h3>{"\u20B9"}{deliveredValue}</h3>
+        </div>
+      </div>
+
+      <div className="delivered-grid">
         {deliveredOrders.map((order: any) => (
-          <div key={order.id} className="order-card delivered">
-            <div className="card-header">
+          <div key={order.id} className="delivered-card">
+            <div className="delivered-card-header">
               <div>
                 <h3>{order.customer}</h3>
                 <p>
                   #{order.id.slice(0, 6).toUpperCase()} • {order.type}
                 </p>
               </div>
-              <span className="status delivered">Delivered</span>
+              <span className="delivered-status">Delivered</span>
             </div>
 
-            <div className="item-row">
+            <div className="delivered-item-row">
               {order.items[0]?.name}
               {order.items.length > 1 && (
                 <span> +{order.items.length - 1} more</span>
               )}
             </div>
 
-            <div className="total">₹{order.total}</div>
+            <div className="delivered-total">{"\u20B9"}{order.total}</div>
 
             <button
               className="details-btn"
@@ -60,28 +81,33 @@ const DeliveredOrdersPage = () => {
 
       {selectedOrder && (
         <div className="modal-overlay" onClick={() => setSelectedOrder(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal" onClick={(event) => event.stopPropagation()}>
             <div className="modal-header">
-              <h3>{selectedOrder.customer}</h3>
-              <button onClick={() => setSelectedOrder(null)}>✕</button>
+              <div>
+                <h3>{selectedOrder.customer}</h3>
+                <p className="modal-sub">
+                  #{selectedOrder.id.slice(0, 6).toUpperCase()} •{" "}
+                  {selectedOrder.type}
+                </p>
+              </div>
+              <button onClick={() => setSelectedOrder(null)}>
+                <FiX />
+              </button>
             </div>
 
-            <p className="modal-sub">
-              #{selectedOrder.id.slice(0, 6).toUpperCase()} •{" "}
-              {selectedOrder.type}
-            </p>
-
             <div className="modal-items">
-              {selectedOrder.items.map((item: any, i: number) => (
-                <div key={i} className="modal-row">
+              {selectedOrder.items.map((item: any, index: number) => (
+                <div key={index} className="modal-row">
                   <span>{item.name}</span>
-                  <span>× {item.qty}</span>
-                  <span>₹{item.price}</span>
+                  <span>x {item.qty}</span>
+                  <span>{"\u20B9"}{item.price}</span>
                 </div>
               ))}
             </div>
 
-            <div className="modal-footer">Total: ₹{selectedOrder.total}</div>
+            <div className="modal-footer">
+              Total: {"\u20B9"}{selectedOrder.total}
+            </div>
           </div>
         </div>
       )}
