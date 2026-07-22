@@ -11,7 +11,7 @@ export const SetTrendApi = baseApi.injectEndpoints({
 
     createTrend: builder.mutation<any, any>({
       query: (trendData) => ({
-        url: "/dashboard/creteTrends",
+        url: "/dashboard/createTrends",
         method: "POST",
         body: trendData,
       }),
@@ -21,9 +21,9 @@ export const SetTrendApi = baseApi.injectEndpoints({
     getTrendsForDashboard: builder.query<any, void>({
       query: () => ({
         url: "/dashboard/getTrendsForDashboard",
-        keepUnusedDataFor: 300,
-        providesTags: ["trend"],
       }),
+      keepUnusedDataFor: 300,
+      providesTags: ["trend"],
     }),
 
     deleteTrends: builder.mutation<any, any>({

@@ -3,6 +3,24 @@ import { FiX } from "react-icons/fi";
 import "../Components/DeliveredOrderPage.css";
 import { useGetOrdersForDashboardQuery } from "@/redux/services/OrderManagementApi";
 
+const normalizeOrderStatus = (status?: string | null) => {
+  const value = String(status || "").trim().toLowerCase();
+
+  if (
+    ["delivered", "complete", "completed", "done", "orders", "rated"].includes(
+      value,
+    )
+  ) {
+    return "Delivered";
+  }
+
+  if (["cancelled", "canceled"].includes(value)) {
+    return "cancelled";
+  }
+
+  return status || "Recieved";
+};
+
 const DeliveredOrdersPage = () => {
   const { data, isLoading } = useGetOrdersForDashboardQuery({});
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -10,6 +28,7 @@ const DeliveredOrdersPage = () => {
   const orders =
     data?.data?.map((order: any) => ({
       ...order,
+      status: normalizeOrderStatus(order.orderStatus || order.status),
       items: order.items.map((item: any) => ({
         name: item.name,
         qty: item.quantity,
@@ -17,7 +36,9 @@ const DeliveredOrdersPage = () => {
       })),
     })) || [];
 
-  const deliveredOrders = orders.filter((order: any) => order.status === "Delivered");
+  const deliveredOrders = orders.filter(
+    (order: any) => normalizeOrderStatus(order.status) === "Delivered",
+  );
   const deliveredValue = deliveredOrders.reduce(
     (sum: number, order: any) => sum + (order.total || 0),
     0,

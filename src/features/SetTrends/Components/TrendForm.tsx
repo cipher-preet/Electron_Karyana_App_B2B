@@ -13,7 +13,7 @@ const TrendForm: React.FC<{ selectedProducts: any[] }> = ({
     variant: "success" | "error" | "warning" | "info";
   } | null>(null);
 
-  const [createTrend] = useCreateTrendMutation();
+  const [createTrend, { isLoading }] = useCreateTrendMutation();
 
   const handleSaveTrend = async () => {
     if (!trendName.trim()) {
@@ -47,9 +47,14 @@ const TrendForm: React.FC<{ selectedProducts: any[] }> = ({
       setTrendName("");
     } catch (error) {
       console.error("Error creating trend:", error);
+      const message =
+        (error as any)?.data?.message ||
+        (error as any)?.data?.data?.message ||
+        "Something went wrong while creating the trend.";
+
       setAlertInfo({
         title: "Create Failed",
-        message: "Something went wrong while creating the trend.",
+        message,
         variant: "error",
       });
     }
@@ -85,8 +90,12 @@ const TrendForm: React.FC<{ selectedProducts: any[] }> = ({
         />
       </label>
 
-      <button className="set-trend-save-btn" onClick={handleSaveTrend}>
-        Save Trend
+      <button
+        className="set-trend-save-btn"
+        onClick={handleSaveTrend}
+        disabled={isLoading}
+      >
+        {isLoading ? "Saving..." : "Save Trend"}
       </button>
     </section>
   );

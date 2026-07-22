@@ -13,7 +13,8 @@ type OrderStatus =
   | "packing"
   | "packed"
   | "outForDelivery"
-  | "Delivered";
+  | "Delivered"
+  | "cancelled";
 
 interface OrderItem {
   name: string;
@@ -41,6 +42,47 @@ const statusFlow: OrderStatus[] = [
 
 const filters = ["All", "packing", "packed", "outForDelivery"];
 
+const isActiveOrder = (status: OrderStatus) =>
+  status !== "Delivered" && status !== "cancelled";
+
+const normalizeOrderStatus = (status?: string | null): OrderStatus => {
+  const value = String(status || "").trim().toLowerCase();
+
+  switch (value) {
+    case "received":
+    case "recieved":
+    case "order":
+    case "placed":
+    case "created":
+      return "Recieved";
+    case "packing":
+    case "processing":
+    case "inprogress":
+    case "in_progress":
+      return "packing";
+    case "packed":
+    case "confirmed":
+      return "packed";
+    case "outfordelivery":
+    case "out_for_delivery":
+    case "out for delivery":
+    case "dispatched":
+      return "outForDelivery";
+    case "delivered":
+    case "complete":
+    case "completed":
+    case "done":
+    case "orders":
+    case "rated":
+      return "Delivered";
+    case "cancelled":
+    case "canceled":
+      return "cancelled";
+    default:
+      return "Recieved";
+  }
+};
+
 const OrderPage: React.FC = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetOrdersForDashboardQuery({});
@@ -52,7 +94,7 @@ const OrderPage: React.FC = () => {
       customer: order.customer,
       type: order.type,
       time: order.time,
-      status: order.status === "Recieved" ? "packing" : order.status,
+      status: normalizeOrderStatus(order.orderStatus || order.status),
       total: order.total,
       items: order.items.map((item: any) => ({
         name: item.name,
@@ -66,17 +108,15 @@ const OrderPage: React.FC = () => {
 
   const filteredOrders =
     filter === "All"
-      ? orders.filter((order) => order.status !== "Delivered")
+      ? orders.filter((order) => isActiveOrder(order.status))
       : orders.filter((order) => order.status === filter);
 
-  const activeOrders = orders.filter(
-    (order) => order.status !== "Delivered",
-  ).length;
+  const activeOrders = orders.filter((order) => isActiveOrder(order.status)).length;
   const deliveryOrders = orders.filter(
     (order) => order.status === "outForDelivery",
   ).length;
   const activeValue = orders
-    .filter((order) => order.status !== "Delivered")
+    .filter((order) => isActiveOrder(order.status))
     .reduce((sum, order) => sum + order.total, 0);
 
   const getCount = (type: string) => {
@@ -141,7 +181,8 @@ const OrderPage: React.FC = () => {
       <div className="order-grid">
         {filteredOrders.map((order) => {
           const nextIndex = statusFlow.indexOf(order.status) + 1;
-          const nextStatus = statusFlow[nextIndex];
+          const nextStatus =
+            order.status === "cancelled" ? undefined : statusFlow[nextIndex];
 
           return (
             <div
@@ -306,6 +347,7 @@ const formatStatus = (status: OrderStatus) => {
     packed: "Packed",
     outForDelivery: "Out for Delivery",
     Delivered: "Delivered",
+    cancelled: "Cancelled",
   };
 
   return labels[status] || status;
